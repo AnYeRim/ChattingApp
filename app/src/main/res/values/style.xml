@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="txtTitle1">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">32dp</item>
+    </style>
+
+    <style name="txtContents1">
+        <item name="android:textColor">@color/dimgray</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="txtTitle2">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="txtContents2">
+        <item name="android:textColor">@color/dimgray</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="txtButton">
+        <item name="android:textSize">18dp</item>
+        <item name="android:padding">18dp</item>
+    </style>
+
+</resources>
