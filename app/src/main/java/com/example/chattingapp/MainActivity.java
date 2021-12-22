@@ -12,7 +12,12 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*
+        PermissionActivity p = new PermissionActivity();
+        if(p.chkPermission()){
 
+        }
+        */
         Intent intent = new Intent(this, PermissionActivity.class);
         startActivity(intent);
 
