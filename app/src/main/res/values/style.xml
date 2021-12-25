@@ -27,7 +27,6 @@
     </style>
 
     <style name="edtTitle">
-        <item name="android:textColor">@color/gray</item>
         <item name="android:textSize">24dp</item>
     </style>
 
