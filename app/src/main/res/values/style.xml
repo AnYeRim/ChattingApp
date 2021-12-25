@@ -21,6 +21,11 @@
         <item name="android:textSize">16dp</item>
     </style>
 
+    <style name="txtTitle3">
+    <item name="android:textColor">@color/black</item>
+    <item name="android:textSize">18dp</item>
+    </style>
+
     <style name="txtButton">
         <item name="android:textSize">18dp</item>
         <item name="android:padding">18dp</item>
