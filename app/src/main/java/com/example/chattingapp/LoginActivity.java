@@ -2,103 +2,69 @@ package com.example.chattingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+import com.example.chattingapp.databinding.ActivityLoginBinding;
 
-    Context mContext;
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
+
+    private ActivityLoginBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        mContext = this;
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        EditText edtID, edtPW;
-        Button btnLogin, btnJoin;
-        TextView txtFind_ID_PW;
+        binding.edtID.addTextChangedListener(this);
+        binding.edtPW.addTextChangedListener(this);
 
-        edtID = findViewById(R.id.edtID);
-        edtPW = findViewById(R.id.edtPW);
+        binding.btnLogin.setOnClickListener(this);
+        binding.btnJoin.setOnClickListener(this);
 
-        btnLogin = findViewById(R.id.btnLogin);
-        btnJoin = findViewById(R.id.btnJoin);
+        binding.txtFindIDPW.setOnClickListener(this);
+    }
 
-        txtFind_ID_PW = findViewById(R.id.txtFind_ID_PW);
+    @Override
+    public void onClick(View view) {
 
-        edtID.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(edtID.length() > 0 && edtPW.length() > 0){
-                    btnLogin.setEnabled(true);
-                }else{
-                    btnLogin.setEnabled(false);
-                }
-            }
-        });
-
-        edtPW.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(edtID.length() > 0 && edtPW.length() > 0){
-                    btnLogin.setEnabled(true);
-                }else{
-                    btnLogin.setEnabled(false);
-                }
-            }
-        });
-
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnLogin:
                 //DB와 비교하여 로그인 하는 기능 구현
-            }
-        });
-
-        btnJoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btnJoin:
                 finish();
 
-                Intent join = new Intent(mContext, AuthPhoneActivity.class);
-                startActivity(join);
-            }
-        });
+                Intent authPhone = new Intent(getApplicationContext(), AuthPhoneActivity.class);
+                startActivity(authPhone);
+                break;
+            case R.id.txtFind_ID_PW:
+                //아이디 비번 찾는 화면으로 이동
+                break;
+        }
+    }
 
-        txtFind_ID_PW.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 아이디 비밀번호 찾는 창 띄우기
-            }
-        });
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if(binding.edtID.length() > 0 && binding.edtPW.length() > 0){
+            binding.btnLogin.setEnabled(true);
+        }else{
+            binding.btnLogin.setEnabled(false);
+        }
     }
 }
