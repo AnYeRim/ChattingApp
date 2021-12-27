@@ -26,13 +26,19 @@
     <item name="android:textSize">18dp</item>
     </style>
 
-    <style name="txtButton">
+    <style name="edtTitle">
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="btnEnabled">
         <item name="android:textSize">18dp</item>
         <item name="android:padding">18dp</item>
     </style>
 
-    <style name="edtTitle">
-        <item name="android:textSize">24dp</item>
+    <style name="btnDisabled">
+        <item name="android:textSize">18dp</item>
+        <item name="android:padding">18dp</item>
+        <item name="android:enabled">false</item>
     </style>
 
     <style name="btnDetail">

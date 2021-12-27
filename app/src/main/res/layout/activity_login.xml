@@ -42,14 +42,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="로그인"
-        style="@style/txtButton"/>
+        style="@style/btnDisabled"/>
 
     <Button
         android:id="@+id/btnJoin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="회원가입"
-        style="@style/txtButton"/>
+        style="@style/btnEnabled"/>
 
     <TextView
         android:id="@+id/txtFind_ID_PW"

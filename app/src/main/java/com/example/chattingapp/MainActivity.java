@@ -18,8 +18,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
         */
-        Intent intent = new Intent(this, PermissionActivity.class);
-        startActivity(intent);
+        Intent permission = new Intent(this, PermissionActivity.class);
+        startActivity(permission);
+
+        Intent login = new Intent(this, LoginActivity.class);
+        startActivity(login);
 
     }
 
