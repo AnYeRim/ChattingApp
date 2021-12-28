@@ -38,11 +38,14 @@
             android:padding="20dp"/>
 
         <Spinner
+            android:id="@+id/spnGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/txtTitle2"/>
+            style="@style/txtTitle2"
+            android:entries="@array/gender"/>
 
         <CheckBox
+            android:id="@+id/chkAutoAddFriend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="주소록 친구 자동 추가"

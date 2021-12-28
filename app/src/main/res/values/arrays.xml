@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="gender">
+        <item>성별</item>
         <item>여성</item>
         <item>남성</item>
     </string-array>
