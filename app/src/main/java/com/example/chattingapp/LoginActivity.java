@@ -40,8 +40,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btnJoin:
                 finish();
 
-                Intent authPhone = new Intent(this, AuthPhoneActivity.class);
-                startActivity(authPhone);
+                Intent terms = new Intent(this, TermsActivity.class);
+                startActivity(terms);
                 break;
             case R.id.txtFind_ID_PW:
                 //아이디 비번 찾는 화면으로 이동
