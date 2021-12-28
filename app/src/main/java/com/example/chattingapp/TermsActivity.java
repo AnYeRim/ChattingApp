@@ -56,6 +56,8 @@ public class TermsActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btnAgree:
                 // 필수 약관 동의 체크 후 휴대폰 인증화면으로 이동 구현해야함.
                 if(adapterTerms.checkRequired()){
+                    finish();
+
                     Intent authPhone = new Intent(this, AuthPhoneActivity.class);
                     startActivity(authPhone);
                 }else {

@@ -34,6 +34,8 @@ public class JoinInfoActivity extends AppCompatActivity implements View.OnClickL
                 if(binding.edtNikname.length() > 0
                         && binding.edtBirthDay.length() > 0
                         && !binding.spnGender.getSelectedItem().toString().equals("성별")){
+                    finish();
+
                     Intent authEmail = new Intent(this, AuthEmailActivity.class);
                     startActivity(authEmail);
                 }else {

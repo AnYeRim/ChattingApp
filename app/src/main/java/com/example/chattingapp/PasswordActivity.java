@@ -41,6 +41,8 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
 
                 if(pw.equals(chkPW)){
                     //폰번호 비밀번호 기억하며 다음 회원가입 경로로 이동 구현해야함
+                    finish();
+
                     Intent joinInfo = new Intent(this, JoinInfoActivity.class);
                     startActivity(joinInfo);
 

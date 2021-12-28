@@ -44,7 +44,7 @@ public class AuthPhoneActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.btnOK:
                 //인증번호 확인하는 기능 구현
-
+                finish();
 
                 Intent pw = new Intent(this, PasswordActivity.class);
                 startActivity(pw);
