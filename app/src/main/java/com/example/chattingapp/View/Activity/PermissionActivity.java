@@ -1,31 +1,23 @@
-package com.example.chattingapp;
+package com.example.chattingapp.View.Activity;
 
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
+import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Utils.PermissionUtils;
 import com.example.chattingapp.databinding.ActivityPermissionBinding;
 
 public class PermissionActivity extends AppCompatActivity {
 
-    private PermissionUtil permissionUtil;
-    private ActivityUtil activityUtil;
+    private PermissionUtils permissionUtils;
+    private ActivityUtils activityUtils;
     private ActivityPermissionBinding binding;
 
     private String[] initPms = {
@@ -41,8 +33,8 @@ public class PermissionActivity extends AppCompatActivity {
         binding = ActivityPermissionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        permissionUtil = new PermissionUtil();
-        activityUtil = new ActivityUtil();
+        permissionUtils = new PermissionUtils();
+        activityUtils = new ActivityUtils();
 
         binding.btnPermission.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,9 +50,9 @@ public class PermissionActivity extends AppCompatActivity {
         super.onStart();
 
         // 시작하거나 권한설정창으로 나갔다 들어와서 다시 실행될 때, 권한 필요 여부 확인
-        if (permissionUtil.checkNeedPermission(this, initPms) != true) {
+        if (permissionUtils.checkNeedPermission(this, initPms) != true) {
             finish();
-            activityUtil.newActivity(this, LoginActivity.class);
+            activityUtils.newActivity(this, LoginActivity.class);
         }
     }
 
@@ -70,7 +62,7 @@ public class PermissionActivity extends AppCompatActivity {
                 || ActivityCompat.shouldShowRequestPermissionRationale(this, initPms[2])) {
             // 사용자가 권한 거부한 적 있을 때, 권한 필요한 이유 설명.
             // 거부 2번이상시 더이상 권한 창이 안뜨게 되어있어서 거부한 적 있으면 권한 설정창으로 이동하게 구현. (카톡도 이렇게 했길래)
-            permissionUtil.requestPermissionMessage(this);
+            permissionUtils.requestPermissionMessage(this);
         } else {
             // 첫 권한 요청 (요청 거부한 적 없을 때)
             requestPermissions(initPms, 0);
@@ -87,16 +79,16 @@ public class PermissionActivity extends AppCompatActivity {
 
                 for (int i = 0; i < grantResults.length; i++) {
                     if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        permissionUtil.requestPermissionMessage(this);
+                        permissionUtils.requestPermissionMessage(this);
                         break;
                     }
                 }
 
                 finish();
-                activityUtil.newActivity(this, LoginActivity.class);
+                activityUtils.newActivity(this, LoginActivity.class);
 
             } else {
-                permissionUtil.requestPermissionMessage(this);
+                permissionUtils.requestPermissionMessage(this);
             }
         }
 

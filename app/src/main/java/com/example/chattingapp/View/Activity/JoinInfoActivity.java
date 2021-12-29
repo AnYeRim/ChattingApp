@@ -1,20 +1,19 @@
-package com.example.chattingapp;
+package com.example.chattingapp.View.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.databinding.ActivityJoinInfoBinding;
 
 public class JoinInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityJoinInfoBinding binding;
-    private ActivityUtil activityUtil;
+    private ActivityUtils activityUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class JoinInfoActivity extends AppCompatActivity implements View.OnClickL
         binding = ActivityJoinInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        activityUtil = new ActivityUtil();
+        activityUtils = new ActivityUtils();
 
         binding.btnOK.setOnClickListener(this);
     }
@@ -39,7 +38,7 @@ public class JoinInfoActivity extends AppCompatActivity implements View.OnClickL
                         && !binding.spnGender.getSelectedItem().toString().equals("성별")){
 
                     finish();
-                    activityUtil.newActivity(this, AuthEmailActivity.class);
+                    activityUtils.newActivity(this, AuthEmailActivity.class);
 
                 }else {
                     Toast.makeText(this,"정보를 모두 입력해주세요.", Toast.LENGTH_SHORT).show();

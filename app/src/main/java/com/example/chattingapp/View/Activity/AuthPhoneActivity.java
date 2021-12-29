@@ -1,20 +1,20 @@
-package com.example.chattingapp;
+package com.example.chattingapp.View.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 
+import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.databinding.ActivityAuthPhoneBinding;
 
 public class AuthPhoneActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
     private ActivityAuthPhoneBinding binding;
-    private ActivityUtil activityUtil;
+    private ActivityUtils activityUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class AuthPhoneActivity extends AppCompatActivity implements View.OnClick
         binding = ActivityAuthPhoneBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        activityUtil = new ActivityUtil();
+        activityUtils = new ActivityUtils();
 
         binding.edtPhone.addTextChangedListener(this);
         binding.edtAuthNum.addTextChangedListener(this);
@@ -48,12 +48,12 @@ public class AuthPhoneActivity extends AppCompatActivity implements View.OnClick
             case R.id.btnOK:
                 //인증번호 확인하는 기능 구현
                 finish();
-                activityUtil.newActivity(this,PasswordActivity.class);
+                activityUtils.newActivity(this,PasswordActivity.class);
                 break;
             case R.id.txtBackBegin:
                 //로그인 화면으로 되돌아가기
                 finish();
-                activityUtil.newActivity(this,LoginActivity.class);
+                activityUtils.newActivity(this,LoginActivity.class);
                 break;
         }
     }

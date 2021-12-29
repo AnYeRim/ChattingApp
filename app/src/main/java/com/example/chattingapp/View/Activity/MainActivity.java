@@ -1,10 +1,10 @@
-package com.example.chattingapp;
+package com.example.chattingapp.View.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.content.Intent;
 import android.os.Bundle;
+
+import com.example.chattingapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

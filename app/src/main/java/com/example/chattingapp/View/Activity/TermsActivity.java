@@ -1,14 +1,17 @@
-package com.example.chattingapp;
+package com.example.chattingapp.View.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.example.chattingapp.View.Adapter.AdapterTerms;
+import com.example.chattingapp.Model.DataTerms;
+import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.databinding.ActivityTermsBinding;
 
 import java.util.ArrayList;
@@ -16,7 +19,7 @@ import java.util.ArrayList;
 public class TermsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityTermsBinding binding;
-    private ActivityUtil activityUtil;
+    private ActivityUtils activityUtils;
 
     private ArrayList<DataTerms> data = new ArrayList<DataTerms>();
     private AdapterTerms adapterTerms;
@@ -28,7 +31,7 @@ public class TermsActivity extends AppCompatActivity implements View.OnClickList
         binding = ActivityTermsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        activityUtil = new ActivityUtil();
+        activityUtils = new ActivityUtils();
 
         binding.txtBackBegin.setOnClickListener(this);
         binding.btnAgree.setOnClickListener(this);
@@ -61,7 +64,7 @@ public class TermsActivity extends AppCompatActivity implements View.OnClickList
                 // 필수 약관 동의 체크 후 휴대폰 인증화면으로 이동 구현해야함.
                 if(adapterTerms.checkRequired()){
                     finish();
-                    activityUtil.newActivity(this,AuthPhoneActivity.class);
+                    activityUtils.newActivity(this,AuthPhoneActivity.class);
                 }else {
                     Toast.makeText(this,"필수 약관을 모두 동의해주세요", Toast.LENGTH_SHORT).show();
                 }
@@ -69,7 +72,7 @@ public class TermsActivity extends AppCompatActivity implements View.OnClickList
             case R.id.txtBackBegin:
                 //로그인 화면으로 되돌아가기
                 finish();
-                activityUtil.newActivity(this,LoginActivity.class);
+                activityUtils.newActivity(this,LoginActivity.class);
                 break;
         }
     }

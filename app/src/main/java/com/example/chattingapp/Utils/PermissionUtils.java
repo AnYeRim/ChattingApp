@@ -1,4 +1,4 @@
-package com.example.chattingapp;
+package com.example.chattingapp.Utils;
 
 import android.Manifest;
 import android.app.Activity;
@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-public class PermissionUtil {
+public class PermissionUtils {
 
     public boolean checkNeedPermission(Context mContext, String[] pmsList) {
 

@@ -1,19 +1,20 @@
-package com.example.chattingapp;
+package com.example.chattingapp.View.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
+import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
     private ActivityLoginBinding binding;
-    private ActivityUtil activityUtil;
+    private ActivityUtils activityUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        activityUtil = new ActivityUtil();
+        activityUtils = new ActivityUtils();
 
         binding.edtID.addTextChangedListener(this);
         binding.edtPW.addTextChangedListener(this);
@@ -44,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btnJoin:
                 finish();
-                activityUtil.newActivity(this, TermsActivity.class);
+                activityUtils.newActivity(this, TermsActivity.class);
                 break;
             case R.id.txtFind_ID_PW:
                 //아이디 비번 찾는 화면으로 이동

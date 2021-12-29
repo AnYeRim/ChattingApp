@@ -1,4 +1,4 @@
-package com.example.chattingapp;
+package com.example.chattingapp.Model;
 
 public class DataTerms {
     private String title, contents;

@@ -1,16 +1,17 @@
-package com.example.chattingapp;
+package com.example.chattingapp.View.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.chattingapp.Model.DataTerms;
+import com.example.chattingapp.R;
 import com.example.chattingapp.databinding.ItemTermsBinding;
 
 import java.util.ArrayList;

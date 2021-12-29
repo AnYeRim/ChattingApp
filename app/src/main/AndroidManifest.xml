@@ -14,28 +14,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChattingApp">
         <activity
-            android:name=".AuthEmailActivity"
+            android:name=".View.Activity.AuthEmailActivity"
             android:exported="false" />
         <activity
-            android:name=".JoinInfoActivity"
+            android:name=".View.Activity.JoinInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".PasswordActivity"
+            android:name=".View.Activity.PasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthPhoneActivity"
+            android:name=".View.Activity.AuthPhoneActivity"
             android:exported="false" />
         <activity
-            android:name=".TermsActivity"
+            android:name=".View.Activity.TermsActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".View.Activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".View.Activity.MainActivity"
             android:exported="false"/>
         <activity
-            android:name=".PermissionActivity"
+            android:name=".View.Activity.PermissionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
