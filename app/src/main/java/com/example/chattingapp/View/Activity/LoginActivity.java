@@ -42,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.btnLogin:
                 //DB와 비교하여 로그인 하는 기능 구현
+                finish();
+                activityUtils.newActivity(this, MainActivity.class);
                 break;
             case R.id.btnJoin:
                 finish();
