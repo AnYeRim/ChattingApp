@@ -14,12 +14,16 @@ import com.example.chattingapp.databinding.ActivityPasswordBinding;
 public class PasswordActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
     private ActivityPasswordBinding binding;
+    private ActivityUtil activityUtil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        activityUtil = new ActivityUtil();
 
         binding.txtPhone.setText("010-1111-2222");
 
@@ -42,10 +46,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                 if(pw.equals(chkPW)){
                     //폰번호 비밀번호 기억하며 다음 회원가입 경로로 이동 구현해야함
                     finish();
-
-                    Intent joinInfo = new Intent(this, JoinInfoActivity.class);
-                    startActivity(joinInfo);
-
+                    activityUtil.newActivity(this, JoinInfoActivity.class);
                     break;
                 }else {
                     Toast.makeText(this,"비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
@@ -54,9 +55,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
             case R.id.txtBackBegin:
                 //로그인 화면으로 되돌아가기
                 finish();
-
-                Intent login = new Intent(this, LoginActivity.class);
-                startActivity(login);
+                activityUtil.newActivity(this, LoginActivity.class);
                 break;
         }
     }

@@ -14,6 +14,7 @@ import com.example.chattingapp.databinding.ActivityJoinInfoBinding;
 public class JoinInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityJoinInfoBinding binding;
+    private ActivityUtil activityUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,8 @@ public class JoinInfoActivity extends AppCompatActivity implements View.OnClickL
 
         binding = ActivityJoinInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        activityUtil = new ActivityUtil();
 
         binding.btnOK.setOnClickListener(this);
     }
@@ -34,10 +37,10 @@ public class JoinInfoActivity extends AppCompatActivity implements View.OnClickL
                 if(binding.edtNikname.length() > 0
                         && binding.edtBirthDay.length() > 0
                         && !binding.spnGender.getSelectedItem().toString().equals("성별")){
-                    finish();
 
-                    Intent authEmail = new Intent(this, AuthEmailActivity.class);
-                    startActivity(authEmail);
+                    finish();
+                    activityUtil.newActivity(this, AuthEmailActivity.class);
+
                 }else {
                     Toast.makeText(this,"정보를 모두 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }

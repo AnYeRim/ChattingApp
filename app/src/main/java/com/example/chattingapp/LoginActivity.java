@@ -13,6 +13,7 @@ import com.example.chattingapp.databinding.ActivityLoginBinding;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
     private ActivityLoginBinding binding;
+    private ActivityUtil activityUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        activityUtil = new ActivityUtil();
+
         binding.edtID.addTextChangedListener(this);
         binding.edtPW.addTextChangedListener(this);
 
@@ -28,6 +31,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         binding.btnJoin.setOnClickListener(this);
 
         binding.txtFindIDPW.setOnClickListener(this);
+        
+        // 로그인 되어있으면 main화면으로 넘어가기
     }
 
     @Override
@@ -39,9 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btnJoin:
                 finish();
-
-                Intent terms = new Intent(this, TermsActivity.class);
-                startActivity(terms);
+                activityUtil.newActivity(this, TermsActivity.class);
                 break;
             case R.id.txtFind_ID_PW:
                 //아이디 비번 찾는 화면으로 이동

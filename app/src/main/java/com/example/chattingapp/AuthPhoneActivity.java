@@ -13,7 +13,8 @@ import com.example.chattingapp.databinding.ActivityAuthPhoneBinding;
 
 public class AuthPhoneActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
-    ActivityAuthPhoneBinding binding;
+    private ActivityAuthPhoneBinding binding;
+    private ActivityUtil activityUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,8 @@ public class AuthPhoneActivity extends AppCompatActivity implements View.OnClick
 
         binding = ActivityAuthPhoneBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        activityUtil = new ActivityUtil();
 
         binding.edtPhone.addTextChangedListener(this);
         binding.edtAuthNum.addTextChangedListener(this);
@@ -45,16 +48,12 @@ public class AuthPhoneActivity extends AppCompatActivity implements View.OnClick
             case R.id.btnOK:
                 //인증번호 확인하는 기능 구현
                 finish();
-
-                Intent pw = new Intent(this, PasswordActivity.class);
-                startActivity(pw);
+                activityUtil.newActivity(this,PasswordActivity.class);
                 break;
             case R.id.txtBackBegin:
                 //로그인 화면으로 되돌아가기
                 finish();
-
-                Intent login = new Intent(this, LoginActivity.class);
-                startActivity(login);
+                activityUtil.newActivity(this,LoginActivity.class);
                 break;
         }
     }
