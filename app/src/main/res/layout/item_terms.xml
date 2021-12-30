@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="약관 title"
-        style="@style/txtTitle2"
+        style="@style/txtTitle3"
         android:padding="7dp"
         android:layout_weight="1"/>
 

@@ -12,28 +12,29 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ChattingApp">
+        android:theme="@style/Theme.ChattingApp.NoActionBar">
         <activity
             android:name=".View.Activity.AuthEmailActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".View.Activity.JoinInfoActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".View.Activity.PasswordActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".View.Activity.AuthPhoneActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".View.Activity.TermsActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".View.Activity.LoginActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".View.Activity.MainActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:theme="@style/Theme.ChattingApp"/>
         <activity
             android:name=".View.Activity.PermissionActivity"
             android:exported="true">
