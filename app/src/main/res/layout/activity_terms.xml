@@ -35,7 +35,7 @@
             android:padding="7dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerTerm"
+            android:id="@+id/recycler_term"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ChattingApp</string>
+
+    <string name="friends">친구</string>
+    <string name="chat">채팅</string>
+    <string name="etc">더보기</string>
 </resources>
