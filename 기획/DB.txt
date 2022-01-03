@@ -1,43 +1,43 @@
 - Terms (약관)
 id (PK)
 title
-contents
+content
 required
 
 - AgreeTerms (약관 동의)
 terms_id (FK)
 user_id (FK)
-agree_yn
+agree
 agree_date
 
 - User
 id (PK - 아님 연락처를 PK로 할까?)
 phone (ID로 사용)
-password
+password (8~16자, 특수기호, 영문 대소문자, 숫자 포함)
 nikname
 birthday
 gender
 email (선택 - ID로 사용가능)
 profile_url
 background_url
-createAt
-updateAt
+created_at
+updated_at
 
 - Friend
 (userID, frendID) (PK)
 user_id (FK)
 friend_id (FK)
 friend_name (default 연락처 저장된 이름)
-favorites_yn
+favorites
 status (차단/숨김 상태)
 
 - Room
 id (PK)
 title (defalt 참여자 이름들)
 alarm
-favorites_yn
-createAt
-updateAt
+favorites
+created_at
+updated_at
 
 - Member
 (roomID, memberID) (PK)
@@ -50,5 +50,5 @@ user_id (FK)
 room_id (FK)
 message
 type
-createAt
-updateAt
+created_at
+updated_at
