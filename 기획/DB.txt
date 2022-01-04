@@ -24,7 +24,6 @@ created_at
 updated_at
 
 - Friend
-(userID, frendID) (PK)
 user_id (FK)
 friend_id (FK)
 friend_name (default 연락처 저장된 이름)
@@ -40,7 +39,6 @@ created_at
 updated_at
 
 - Member
-(roomID, memberID) (PK)
 room_id (FK)
 member_id (FK)
 
