@@ -34,6 +34,19 @@ android {
 dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    // retrofit2 + okhttp3 : 응답속도와 같은 성능, 간단한 구현방식 + 모니터링 및 인터셉트 처리
+    implementation('com.squareup.retrofit2:retrofit:2.9.0') {
+        exclude module: 'okhttp'
+    }
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+
+    //rxjava : 반응형. 순서대로 흐르기보다 주변환경이 변하는 것에 반응하여 이벤트 발생.
+   implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.7'
+
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
