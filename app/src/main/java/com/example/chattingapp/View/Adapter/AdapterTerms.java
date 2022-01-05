@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chattingapp.Model.DataTerms;
+import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.R;
 import com.example.chattingapp.databinding.ItemTermsBinding;
 
@@ -19,9 +19,9 @@ import java.util.ArrayList;
 public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<DataTerms> data;
+    private ArrayList<Terms> data;
 
-    public AdapterTerms(Context mContext, ArrayList<DataTerms> data) {
+    public AdapterTerms(Context mContext, ArrayList<Terms> data) {
         this.mContext = mContext;
         this.data = data;
     }
@@ -53,7 +53,7 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
 
     public boolean checkRequired() {
         for(int i = 0; i<getItemCount(); i++){
-            if(data.get(i).isRequired() == true && data.get(i).isChecked() == false){
+            if(data.get(i).isRequired() == "Y" && data.get(i).isChecked() == false){
                 return false;
             }
         }
@@ -73,7 +73,7 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
 
         }
 
-        void setItemTermsBinding(DataTerms data) {
+        void setItemTermsBinding(Terms data) {
             itemTermsBinding.chkTerm.setText(data.getTitle());
             itemTermsBinding.chkTerm.setChecked(data.isChecked());
         }

@@ -1,10 +1,25 @@
-package com.example.chattingapp.Model;
+package com.example.chattingapp.Model.DTO;
 
-public class DataTerms {
-    private String title, contents;
-    private boolean required, checked;
+import com.google.gson.annotations.SerializedName;
 
-    public DataTerms(String title, String contents, boolean required, boolean checked) {
+public class Terms {
+
+    @SerializedName("id")
+    private int id;
+
+    @SerializedName("title")
+    private String title;
+
+    @SerializedName("content")
+    private String contents;
+
+    @SerializedName("required")
+    private String required;
+
+    private boolean checked;
+
+    public Terms(int id, String title, String contents, String required, boolean checked) {
+        this.id = id;
         this.title = title;
         this.contents = contents;
         this.checked = checked;
@@ -27,11 +42,11 @@ public class DataTerms {
         this.contents = contents;
     }
 
-    public boolean isRequired() {
+    public String isRequired() {
         return required;
     }
 
-    public void setRequired(boolean required) {
+    public void setRequired(String required) {
         this.required = required;
     }
 

@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chattingapp.Model.DataFriends;
+import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.R;
 import com.example.chattingapp.databinding.ItemFriendsBinding;
 
@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<DataFriends> data;
+    private ArrayList<Friends> data;
 
-    public AdapterFriends(Context mContext, ArrayList<DataFriends> data) {
+    public AdapterFriends(Context mContext, ArrayList<Friends> data) {
         this.mContext = mContext;
         this.data = data;
     }
@@ -52,7 +52,7 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
             itemFriendsBinding.linearFriends.setOnClickListener(this);
         }
 
-        void setItemTermsBinding(DataFriends data) {
+        void setItemTermsBinding(Friends data) {
             //Glide.with(mContext).load(data.getImageURL()).into(itemFriendsBinding.imgProfile);
             itemFriendsBinding.txtNicName.setText(data.getNikName());
             itemFriendsBinding.txtMessage.setText(data.getMessage());

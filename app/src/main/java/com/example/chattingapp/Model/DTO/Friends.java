@@ -1,10 +1,10 @@
-package com.example.chattingapp.Model;
+package com.example.chattingapp.Model.DTO;
 
-public class DataFriends {
+public class Friends {
 
     private String imageURL, nikName, message;
 
-    public DataFriends(String imageURL, String nikName, String message) {
+    public Friends(String imageURL, String nikName, String message) {
         this.imageURL = imageURL;
         this.nikName = nikName;
         this.message = message;
