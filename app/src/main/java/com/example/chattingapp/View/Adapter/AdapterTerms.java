@@ -53,7 +53,7 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
 
     public boolean checkRequired() {
         for(int i = 0; i<getItemCount(); i++){
-            if(data.get(i).isRequired() == "Y" && data.get(i).isChecked() == false){
+            if(data.get(i).getRequired().equals("Y") && data.get(i).isChecked() == false){
                 return false;
             }
         }
@@ -76,6 +76,9 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
         void setItemTermsBinding(Terms data) {
             itemTermsBinding.chkTerm.setText(data.getTitle());
             itemTermsBinding.chkTerm.setChecked(data.isChecked());
+            if(data.getContents() == null) {
+                itemTermsBinding.btnDetail.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -88,11 +91,11 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
 
                     data.get(position).setChecked(checked);
 
-                    Toast.makeText(mContext,data.get(position).getTitle().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,data.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.btnDetail:
-                    Toast.makeText(mContext,data.get(position).getContents().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,data.get(position).getContents(), Toast.LENGTH_SHORT).show();
                     break;
             }
 

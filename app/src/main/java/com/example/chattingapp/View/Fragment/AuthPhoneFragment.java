@@ -1,29 +1,27 @@
-package com.example.chattingapp.View.Activity;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.chattingapp.View.Fragment;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
-import com.example.chattingapp.databinding.ActivityAuthPhoneBinding;
+import com.example.chattingapp.databinding.FragmentAuthPhoneBinding;
 
-public class AuthPhoneActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
+public class AuthPhoneFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
-    private ActivityAuthPhoneBinding binding;
-    private ActivityUtils activityUtils;
+    private FragmentAuthPhoneBinding binding;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        binding = ActivityAuthPhoneBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        activityUtils = new ActivityUtils();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentAuthPhoneBinding.inflate(inflater, container, false);
 
         binding.edtPhone.addTextChangedListener(this);
         binding.edtAuthNum.addTextChangedListener(this);
@@ -31,6 +29,8 @@ public class AuthPhoneActivity extends AppCompatActivity implements View.OnClick
         binding.btnAuth.setOnClickListener(this);
         binding.btnOK.setOnClickListener(this);
         binding.txtBackBegin.setOnClickListener(this);
+
+        return binding.getRoot();
     }
 
     @Override
@@ -47,13 +47,12 @@ public class AuthPhoneActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.btnOK:
                 //인증번호 확인하는 기능 구현
-                finish();
-                activityUtils.newActivity(this,PasswordActivity.class);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new PasswordFragment()).commit();
                 break;
             case R.id.txtBackBegin:
                 //로그인 화면으로 되돌아가기
-                finish();
-                activityUtils.newActivity(this,LoginActivity.class);
+                //지금까지 데이터 지우기
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new LoginFragment()).commit();
                 break;
         }
     }

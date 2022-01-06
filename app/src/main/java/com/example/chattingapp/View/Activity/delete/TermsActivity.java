@@ -1,4 +1,4 @@
-package com.example.chattingapp.View.Activity;
+package com.example.chattingapp.View.Activity.delete;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -29,8 +29,7 @@ public class TermsActivity extends AppCompatActivity implements View.OnClickList
     private ActivityUtils activityUtils;
 
     private APIInterface apiInterface;
-    private Terms resTerms;
-    private ArrayList<Terms> data;
+    private ArrayList<Terms> resTerms;
     private AdapterTerms adapterTerms;
 
     @Override
@@ -40,48 +39,48 @@ public class TermsActivity extends AppCompatActivity implements View.OnClickList
         binding = ActivityTermsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<Terms> call = apiInterface.doGetTermsList();
-        System.out.println("------------ call ----------------");
-        call.enqueue(new Callback<Terms>() {
-            @Override
-            public void onResponse(Call<Terms> call, Response<Terms> response) {
-                System.out.println("------------ response ----------------");
-                Log.d("TAG", response.code() + "");
-                resTerms = response.body();
-
-                data = new ArrayList<Terms>();
-                data.add(resTerms);
-
-                binding.recyclerTerm.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                adapterTerms = new AdapterTerms(getApplicationContext(), data);
-                binding.recyclerTerm.setAdapter(adapterTerms);
-            }
-
-            @Override
-            public void onFailure(Call<Terms> call, Throwable t) {
-                System.out.println("------------ fail ----------------");
-                Log.d("TAG", t.getMessage());
-                call.cancel();
-            }
-        });
-
         activityUtils = new ActivityUtils();
 
         binding.txtBackBegin.setOnClickListener(this);
         binding.btnAgree.setOnClickListener(this);
         binding.chkAll.setOnClickListener(this);
 
-        setRecyclerTerm();
+        setTermsData();
 
     }
 
-    private void setRecyclerTerm() {
-/*
-        binding.recyclerTerm.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,0);
+    }
+    
+    private void setTermsData() {
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<ArrayList<Terms>> call = apiInterface.doGetTermsList();
+        call.enqueue(new Callback<ArrayList<Terms>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Terms>> call, Response<ArrayList<Terms>> response) {
+                if(response.isSuccessful()){
+                    Log.d("TAG", response.code() + "");
+                    resTerms = response.body();
+                    setRecyclerTerm();
+                }else {
+                }
+            }
 
-        adapterTerms = new AdapterTerms(this, data);
-        binding.recyclerTerm.setAdapter(adapterTerms);*/
+            @Override
+            public void onFailure(Call<ArrayList<Terms>> call, Throwable t) {
+                Log.d("TAG", t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
+    private void setRecyclerTerm() {
+        binding.recyclerTerm.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapterTerms = new AdapterTerms(getApplicationContext(), resTerms);
+        binding.recyclerTerm.setAdapter(adapterTerms);
     }
 
     @Override

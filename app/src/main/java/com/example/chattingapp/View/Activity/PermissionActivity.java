@@ -46,6 +46,12 @@ public class PermissionActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,0);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 

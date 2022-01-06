@@ -1,12 +1,12 @@
-package com.example.chattingapp.View.Activity;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.chattingapp.View.Activity.delete;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
@@ -34,6 +34,12 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         binding.edtPW.addTextChangedListener(this);
         binding.edtCheckPW.addTextChangedListener(this);
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,0);
     }
 
     @Override

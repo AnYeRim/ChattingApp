@@ -1,13 +1,14 @@
-package com.example.chattingapp.View.Activity;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.chattingapp.View.Activity.delete;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.View.Activity.MainActivity;
 import com.example.chattingapp.databinding.ActivityAuthEmailBinding;
 
 public class AuthEmailActivity extends AppCompatActivity implements View.OnClickListener {
@@ -27,6 +28,12 @@ public class AuthEmailActivity extends AppCompatActivity implements View.OnClick
         binding.txtLater.setOnClickListener(this);
         binding.btnSend.setOnClickListener(this);
         binding.btnOK.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,0);
     }
 
     @Override

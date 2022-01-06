@@ -1,10 +1,10 @@
-package com.example.chattingapp.View.Activity;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.chattingapp.View.Activity.delete;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
@@ -25,6 +25,12 @@ public class JoinInfoActivity extends AppCompatActivity implements View.OnClickL
         activityUtils = new ActivityUtils();
 
         binding.btnOK.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,0);
     }
 
     @Override

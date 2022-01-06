@@ -42,7 +42,7 @@ public class Terms {
         this.contents = contents;
     }
 
-    public String isRequired() {
+    public String getRequired() {
         return required;
     }
 

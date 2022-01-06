@@ -3,7 +3,7 @@
 
     <style name="txtTitle1">
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">30dp</item>
+        <item name="android:textSize">22dp</item>
     </style>
 
     <style name="txtContents1">
@@ -13,17 +13,17 @@
 
     <style name="txtTitle2">
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">22dp</item>
+        <item name="android:textSize">16dp</item>
     </style>
 
     <style name="txtContents2">
         <item name="android:textColor">@color/gray</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
     <style name="txtTitle3">
     <item name="android:textColor">@color/black</item>
-    <item name="android:textSize">18dp</item>
+    <item name="android:textSize">15dp</item>
     </style>
 
     <style name="txtContents3">
@@ -32,24 +32,26 @@
     </style>
 
     <style name="edtTitle">
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:paddingLeft">7dp</item>
+        <item name="android:paddingVertical">16dp</item>
     </style>
 
     <style name="btnEnabled">
-        <item name="android:textSize">16dp</item>
-        <item name="android:padding">14dp</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:padding">12dp</item>
     </style>
 
     <style name="btnDisabled">
-        <item name="android:textSize">16dp</item>
-        <item name="android:padding">14dp</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:padding">12dp</item>
         <item name="android:enabled">false</item>
     </style>
 
     <style name="btnDetail">
-        <item name="android:background">@color/black</item>
-        <item name="android:layout_width">16dp</item>
-        <item name="android:layout_height">16dp</item>
+        <item name="android:background">@drawable/arrow_right</item>
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
     </style>
 
 </resources>
