@@ -6,18 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chattingapp.R;
 import com.example.chattingapp.View.Fragment.LoginFragment;
-import com.example.chattingapp.databinding.ActivityTestBinding;
+import com.example.chattingapp.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private ActivityTestBinding binding;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        binding = ActivityTestBinding.inflate(getLayoutInflater());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new LoginFragment()).commit();
