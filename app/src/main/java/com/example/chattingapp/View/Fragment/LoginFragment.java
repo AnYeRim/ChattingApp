@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
-import com.example.chattingapp.View.Activity.MainActivity;
+import com.example.chattingapp.View.Activity.SplashActivity;
 import com.example.chattingapp.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment implements View.OnClickListener, TextWatcher {
@@ -47,8 +47,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
         switch (view.getId()) {
             case R.id.btnLogin:
                 //DB와 비교하여 로그인 하는 기능 구현
+                activityUtils.newActivity(getActivity(), SplashActivity.class);
                 getActivity().finish();
-                activityUtils.newActivity(getActivity(), MainActivity.class);
                 break;
             case R.id.btnJoin:
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new TermsFragment()).commit();

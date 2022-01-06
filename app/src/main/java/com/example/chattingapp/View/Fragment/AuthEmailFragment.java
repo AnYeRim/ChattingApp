@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
-import com.example.chattingapp.View.Activity.MainActivity;
+import com.example.chattingapp.View.Activity.SplashActivity;
 import com.example.chattingapp.databinding.FragmentAuthEmailBinding;
 
 public class AuthEmailFragment extends Fragment implements View.OnClickListener {
@@ -39,8 +39,8 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()){
             case R.id.txtLater:
                 // 서버로 회원가입 정보 넘겨서 추가하고 메인화면 띄우기
+                activityUtils.newActivity(getActivity(), SplashActivity.class);
                 getActivity().finish();
-                activityUtils.newActivity(getActivity(), MainActivity.class);
                 break;
             case R.id.btnSend:
                 if(binding.chkTerm.isChecked() == true){
@@ -54,8 +54,8 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
             case R.id.btnOK:
                 // 인증번호 입력된 값과 보낸 값이 같은지 비교하고 맞으면 회원가입 완료하기
                 if(true) {
+                    activityUtils.newActivity(getActivity(), SplashActivity.class);
                     getActivity().finish();
-                    activityUtils.newActivity(getActivity(), MainActivity.class);
                 }
                 break;
         }

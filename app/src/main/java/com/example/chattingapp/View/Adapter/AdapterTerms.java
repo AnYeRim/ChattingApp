@@ -74,8 +74,12 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
         }
 
         void setItemTermsBinding(Terms data) {
-            itemTermsBinding.chkTerm.setText(data.getTitle());
             itemTermsBinding.chkTerm.setChecked(data.isChecked());
+            if(data.getRequired().equals("Y")){
+                itemTermsBinding.chkTerm.setText("[필수] "+data.getTitle());
+            }else {
+                itemTermsBinding.chkTerm.setText("[선택] "+data.getTitle());
+            }
             if(data.getContents() == null) {
                 itemTermsBinding.btnDetail.setVisibility(View.GONE);
             }
