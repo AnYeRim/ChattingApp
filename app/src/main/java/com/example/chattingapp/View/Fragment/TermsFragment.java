@@ -17,6 +17,7 @@ import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.FragmentUtil;
 import com.example.chattingapp.View.Adapter.AdapterTerms;
 import com.example.chattingapp.databinding.FragmentTermsBinding;
 
@@ -33,6 +34,7 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
     private AdapterTerms adapterTerms;
 
     private FragmentTermsBinding binding;
+    private FragmentUtil fragmentUtil;
 
     @Nullable
     @Override
@@ -43,6 +45,7 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
         binding.btnAgree.setOnClickListener(this);
         binding.chkAll.setOnClickListener(this);
 
+        fragmentUtil = new FragmentUtil();
         setTermsData();
 
         return binding.getRoot();
@@ -87,15 +90,15 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
             case R.id.btnAgree:
                 // 필수 약관 동의 체크 후 휴대폰 인증화면으로 이동 구현해야함.
                 if (adapterTerms.checkRequired()) {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new AuthPhoneFragment()).commit();
+                    fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new AuthPhoneFragment(),
+                            "Terms", adapterTerms.getData());
                 } else {
                     Toast.makeText(getActivity(), "필수 약관을 모두 동의해주세요", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.txtBackBegin:
                 //로그인 화면으로 되돌아가기
-                // 지금까지 데이터 지우기
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new LoginFragment()).commit();
+                fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new LoginFragment());
                 break;
         }
     }

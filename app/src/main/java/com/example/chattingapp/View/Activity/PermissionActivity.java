@@ -86,12 +86,12 @@ public class PermissionActivity extends AppCompatActivity {
                 for (int i = 0; i < grantResults.length; i++) {
                     if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                         permissionUtils.requestPermissionMessage(this);
-                        break;
+                        return;
                     }
                 }
 
-                finish();
                 activityUtils.newActivity(this, LoginActivity.class);
+                finish();
 
             } else {
                 permissionUtils.requestPermissionMessage(this);

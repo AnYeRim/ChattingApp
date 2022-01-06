@@ -60,6 +60,10 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
         return true;
     }
 
+    public ArrayList<Terms> getData(){
+        return data;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ItemTermsBinding itemTermsBinding;
 
@@ -92,10 +96,7 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
             switch (view.getId()){
                 case R.id.chkTerm:
                     boolean checked = ((CheckBox)view).isChecked();
-
                     data.get(position).setChecked(checked);
-
-                    Toast.makeText(mContext,data.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.btnDetail:

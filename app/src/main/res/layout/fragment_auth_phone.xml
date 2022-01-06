@@ -35,23 +35,21 @@
                     style="@style/edtTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
+                    android:layout_weight="1"
                     android:hint="전화번호" />
 
                 <Button
                     android:id="@+id/btnAuth"
                     style="@style/btnDisabled"
-                    android:layout_width="50dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="인증" />
 
                 <Button
                     android:id="@+id/btnReAuth"
                     style="@style/btnEnabled"
-                    android:layout_width="50dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="재인증"
                     android:visibility="gone" />
             </LinearLayout>

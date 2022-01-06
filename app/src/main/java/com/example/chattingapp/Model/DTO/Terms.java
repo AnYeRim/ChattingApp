@@ -2,7 +2,9 @@ package com.example.chattingapp.Model.DTO;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Terms {
+import java.io.Serializable;
+
+public class Terms implements Serializable {
 
     @SerializedName("id")
     private int id;
@@ -24,6 +26,14 @@ public class Terms {
         this.contents = contents;
         this.checked = checked;
         this.required = required;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

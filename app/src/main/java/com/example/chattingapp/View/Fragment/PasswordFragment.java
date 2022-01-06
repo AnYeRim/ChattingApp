@@ -12,19 +12,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.FragmentUtil;
 import com.example.chattingapp.databinding.FragmentPasswordBinding;
 
 public class PasswordFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
     private FragmentPasswordBinding binding;
+    private FragmentUtil fragmentUtil;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPasswordBinding.inflate(inflater, container, false);
 
-        binding.txtPhone.setText("010-1111-2222");
+        fragmentUtil = new FragmentUtil();
+        User user = (User) getArguments().getSerializable("User");
+        binding.txtPhone.setText(user.getPhone());
 
         binding.btnOK.setOnClickListener(this);
         binding.txtBackBegin.setOnClickListener(this);
