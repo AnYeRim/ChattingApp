@@ -1,6 +1,7 @@
 package com.example.chattingapp.View.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.chattingapp.Model.APIClient;
+import com.example.chattingapp.Model.APIInterface;
+import com.example.chattingapp.Model.DTO.Terms;
+import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Activity.SplashActivity;
 import com.example.chattingapp.databinding.FragmentAuthEmailBinding;
 
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AuthEmailFragment extends Fragment implements View.OnClickListener {
 
     private ActivityUtils activityUtils;
     private FragmentAuthEmailBinding binding;
+    private User user;
+    private ArrayList<Terms> terms;
+    private APIInterface apiInterface;
 
     @Nullable
     @Override
@@ -27,6 +41,11 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
 
         activityUtils = new ActivityUtils();
 
+        user = (User) getArguments().getSerializable("User");
+        terms = (ArrayList<Terms>) getArguments().getSerializable("Terms");
+
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+
         binding.txtLater.setOnClickListener(this);
         binding.btnSend.setOnClickListener(this);
         binding.btnOK.setOnClickListener(this);
@@ -34,13 +53,53 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         return binding.getRoot();
     }
 
+    private void doPostUserData() {
+        Call<User> call = apiInterface.doCreateUser(user);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()){
+                    Log.d("TAG", response.code() + "");
+                    doPostAgreeTermsData();
+                }else {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d("TAG", t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
+    private void doPostAgreeTermsData() {
+        Call<ArrayList<Terms>> call = apiInterface.doCreateAgreeTerms(terms);
+        call.enqueue(new Callback<ArrayList<Terms>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Terms>> call, Response<ArrayList<Terms>> response) {
+                if(response.isSuccessful()){
+                    Log.d("TAG", response.code() + "");
+                    activityUtils.newActivity(getActivity(), SplashActivity.class);
+                    getActivity().finish();
+                }else {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Terms>> call, Throwable t) {
+                Log.d("TAG", t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.txtLater:
                 // 서버로 회원가입 정보 넘겨서 추가하고 메인화면 띄우기
-                activityUtils.newActivity(getActivity(), SplashActivity.class);
-                getActivity().finish();
+                doPostUserData();
                 break;
             case R.id.btnSend:
                 if(binding.chkTerm.isChecked() == true){

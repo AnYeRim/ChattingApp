@@ -16,16 +16,20 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.FragmentUtil;
 import com.example.chattingapp.databinding.FragmentAuthPhoneBinding;
+
+import java.util.ArrayList;
 
 public class AuthPhoneFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
     private FragmentAuthPhoneBinding binding;
     private FragmentUtil fragmentUtil;
     private User user;
+    private ArrayList<Terms> terms;
 
     @Nullable
     @Override
@@ -41,6 +45,7 @@ public class AuthPhoneFragment extends Fragment implements View.OnClickListener,
 
         fragmentUtil = new FragmentUtil();
         user = new User();
+        terms = (ArrayList<Terms>) getArguments().getSerializable("Terms");
 
         setPhoneNumber();
 
@@ -51,14 +56,14 @@ public class AuthPhoneFragment extends Fragment implements View.OnClickListener,
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-        return;
+            return;
         }
 
         String phoneNum = "";
         TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
 
         phoneNum = telephonyManager.getLine1Number().toString();
-        if(phoneNum.startsWith("+82")) {
+        if (phoneNum.startsWith("+82")) {
             phoneNum = phoneNum.replace("+82", "0");
         }
         binding.edtPhone.setText(phoneNum);
@@ -79,8 +84,12 @@ public class AuthPhoneFragment extends Fragment implements View.OnClickListener,
             case R.id.btnOK:
                 //인증번호 확인하는 기능 구현
                 user.setPhone(binding.edtPhone.getText().toString());
-                fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new PasswordFragment(),
-                        "User", user);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Terms", terms);
+                bundle.putSerializable("User", user);
+                fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container,
+                        new PasswordFragment(), bundle);
                 break;
             case R.id.txtBackBegin:
                 //로그인 화면으로 되돌아가기
@@ -101,15 +110,15 @@ public class AuthPhoneFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if(binding.edtPhone.isEnabled() == false && binding.edtAuthNum.length() > 0){
+        if (binding.edtPhone.isEnabled() == false && binding.edtAuthNum.length() > 0) {
             binding.btnOK.setEnabled(true);
-        }else if(binding.edtPhone.isEnabled() == true && binding.edtPhone.length() >= 10){
+        } else if (binding.edtPhone.isEnabled() == true && binding.edtPhone.length() >= 10) {
             binding.btnAuth.setEnabled(true);
-        }else if(binding.edtPhone.isEnabled() == true && binding.edtPhone.length() < 10){
+        } else if (binding.edtPhone.isEnabled() == true && binding.edtPhone.length() < 10) {
             binding.btnAuth.setEnabled(false);
-        }else if(binding.edtPhone.length() == 0){
+        } else if (binding.edtPhone.length() == 0) {
             binding.btnAuth.setEnabled(false);
-        }else if(binding.edtAuthNum.length() == 0){
+        } else if (binding.edtAuthNum.length() == 0) {
             binding.btnOK.setEnabled(false);
         }
     }

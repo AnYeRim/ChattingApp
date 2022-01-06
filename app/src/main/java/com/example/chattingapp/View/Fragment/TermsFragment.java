@@ -29,7 +29,6 @@ import retrofit2.Response;
 
 public class TermsFragment extends Fragment implements View.OnClickListener {
 
-    private APIInterface apiInterface;
     private ArrayList<Terms> resTerms;
     private AdapterTerms adapterTerms;
 
@@ -52,16 +51,16 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setTermsData() {
-        apiInterface = APIClient.getClient().create(APIInterface.class);
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<ArrayList<Terms>> call = apiInterface.doGetTermsList();
         call.enqueue(new Callback<ArrayList<Terms>>() {
             @Override
             public void onResponse(Call<ArrayList<Terms>> call, Response<ArrayList<Terms>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     Log.d("TAG", response.code() + "");
                     resTerms = response.body();
                     setRecyclerTerm();
-                }else {
+                } else {
                 }
             }
 
@@ -90,8 +89,10 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
             case R.id.btnAgree:
                 // 필수 약관 동의 체크 후 휴대폰 인증화면으로 이동 구현해야함.
                 if (adapterTerms.checkRequired()) {
-                    fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new AuthPhoneFragment(),
-                            "Terms", adapterTerms.getData());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Terms", adapterTerms.getData());
+                    fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container,
+                            new AuthPhoneFragment(), bundle);
                 } else {
                     Toast.makeText(getActivity(), "필수 약관을 모두 동의해주세요", Toast.LENGTH_SHORT).show();
                 }

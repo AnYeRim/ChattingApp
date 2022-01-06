@@ -12,16 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.FragmentUtil;
 import com.example.chattingapp.databinding.FragmentPasswordBinding;
+
+import java.util.ArrayList;
 
 public class PasswordFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
     private FragmentPasswordBinding binding;
     private FragmentUtil fragmentUtil;
     private User user;
+    private ArrayList<Terms> terms;
 
     @Nullable
     @Override
@@ -30,6 +34,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
 
         fragmentUtil = new FragmentUtil();
 
+        terms = (ArrayList<Terms>) getArguments().getSerializable("Terms");
         user = (User) getArguments().getSerializable("User");
         binding.txtPhone.setText(user.getPhone());
 
@@ -41,14 +46,18 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
 
         return binding.getRoot();
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnOK:
                 //비밀번호 규정에 맞게 입력했는지 체크 후 화면전환
-                if(checkPassword()){
-                    fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new JoinInfoFragment(),
-                            "User", user);
+                if (checkPassword()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Terms", terms);
+                    bundle.putSerializable("User", user);
+                    fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container,
+                            new JoinInfoFragment(), bundle);
                 }
                 break;
             case R.id.txtBackBegin:
@@ -62,18 +71,18 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
         String pw = binding.edtPW.getText().toString();
         String chkPW = binding.edtCheckPW.getText().toString();
 
-        if(pw.length() < 8 || pw.length() > 16
-                || chkPW.length() < 8 || chkPW.length() > 16){
+        if (pw.length() < 8 || pw.length() > 16
+                || chkPW.length() < 8 || chkPW.length() > 16) {
             Toast.makeText(getActivity(), "비밀번호는 8~16자로 적어주세요.", Toast.LENGTH_SHORT).show();
-            return  false;
+            return false;
         }
 
-        if(pw.equals(chkPW)){
+        if (pw.equals(chkPW)) {
             user.setPassword(pw);
-            return  true;
-        }else {
+            return true;
+        } else {
             Toast.makeText(getActivity(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
-            return  false;
+            return false;
         }
     }
 
@@ -89,9 +98,9 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if(binding.edtPW.length() >= 8 && binding.edtCheckPW.length() >= 8){
+        if (binding.edtPW.length() >= 8 && binding.edtCheckPW.length() >= 8) {
             binding.btnOK.setEnabled(true);
-        }else {
+        } else {
             binding.btnOK.setEnabled(false);
         }
     }

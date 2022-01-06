@@ -18,6 +18,7 @@ public class Terms implements Serializable {
     @SerializedName("required")
     private String required;
 
+    @SerializedName("agree")
     private boolean checked;
 
     public Terms(int id, String title, String contents, String required, boolean checked) {
