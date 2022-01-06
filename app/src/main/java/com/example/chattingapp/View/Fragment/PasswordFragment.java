@@ -47,7 +47,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
             case R.id.btnOK:
                 //비밀번호 규정에 맞게 입력했는지 체크 후 화면전환
                 if(checkPassword()){
-                    user.setPassword(binding.edtPW.getText().toString());
                     fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new JoinInfoFragment(),
                             "User", user);
                 }
@@ -70,6 +69,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
         }
 
         if(pw.equals(chkPW)){
+            user.setPassword(pw);
             return  true;
         }else {
             Toast.makeText(getActivity(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();

@@ -3,7 +3,6 @@ package com.example.chattingapp.Model.DTO;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class User implements Serializable {
 
@@ -16,7 +15,7 @@ public class User implements Serializable {
     private String nikname;
 
     @SerializedName("birthday")
-    private Date birthday;
+    private String birthday;
 
     @SerializedName("gender")
     private String gender;
@@ -26,6 +25,17 @@ public class User implements Serializable {
 
     @SerializedName("profile_url")
     private String profile_url;
+
+    @SerializedName("auto_add_friend")
+    private boolean autoAddFriend;
+
+    public boolean isAuto_add_friend() {
+        return autoAddFriend;
+    }
+
+    public void setAuto_add_friend(boolean autoAddFriend) {
+        this.autoAddFriend = autoAddFriend;
+    }
 
     public String getPhone() {
         return phone;
@@ -51,11 +61,11 @@ public class User implements Serializable {
         this.nikname = nikname;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

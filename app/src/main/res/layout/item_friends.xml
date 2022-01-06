@@ -11,7 +11,7 @@
         android:id="@+id/imgProfile"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@color/main"
+        android:background="@drawable/profile_default"
         android:layout_marginRight="10dp"/>
 
     <LinearLayout
