@@ -21,6 +21,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
 
     private FragmentPasswordBinding binding;
     private FragmentUtil fragmentUtil;
+    private User user;
 
     @Nullable
     @Override
@@ -28,7 +29,8 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
         binding = FragmentPasswordBinding.inflate(inflater, container, false);
 
         fragmentUtil = new FragmentUtil();
-        User user = (User) getArguments().getSerializable("User");
+
+        user = (User) getArguments().getSerializable("User");
         binding.txtPhone.setText(user.getPhone());
 
         binding.btnOK.setOnClickListener(this);
@@ -43,23 +45,35 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnOK:
-                //입력한 번호로 인증번호 보내는 기능 구현
-                String pw = String.valueOf(binding.edtPW.getText());
-                String chkPW = String.valueOf(binding.edtCheckPW.getText());
-
-                if(pw.equals(chkPW)){
-                    //폰번호 비밀번호 기억하며 다음 회원가입 경로로 이동 구현해야함
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new JoinInfoFragment()).commit();
-                    break;
-                }else {
-                    Toast.makeText(getActivity(),"비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                //비밀번호 규정에 맞게 입력했는지 체크 후 화면전환
+                if(checkPassword()){
+                    user.setPassword(binding.edtPW.getText().toString());
+                    fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new JoinInfoFragment(),
+                            "User", user);
                 }
                 break;
             case R.id.txtBackBegin:
                 //로그인 화면으로 되돌아가기
-                // 지금까지 데이터 지우기
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new LoginFragment()).commit();
+                fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new LoginFragment());
                 break;
+        }
+    }
+
+    private boolean checkPassword() {
+        String pw = binding.edtPW.getText().toString();
+        String chkPW = binding.edtCheckPW.getText().toString();
+
+        if(pw.length() < 8 || pw.length() > 16
+                || chkPW.length() < 8 || chkPW.length() > 16){
+            Toast.makeText(getActivity(), "비밀번호는 8~16자로 적어주세요.", Toast.LENGTH_SHORT).show();
+            return  false;
+        }
+
+        if(pw.equals(chkPW)){
+            return  true;
+        }else {
+            Toast.makeText(getActivity(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+            return  false;
         }
     }
 
@@ -75,8 +89,10 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if(binding.edtPW.length() > 0 && binding.edtCheckPW.length() > 0){
+        if(binding.edtPW.length() >= 8 && binding.edtCheckPW.length() >= 8){
             binding.btnOK.setEnabled(true);
+        }else {
+            binding.btnOK.setEnabled(false);
         }
     }
 
