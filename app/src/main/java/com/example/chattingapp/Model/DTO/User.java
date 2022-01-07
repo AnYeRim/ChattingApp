@@ -9,6 +9,7 @@ public class User implements Serializable {
     @SerializedName("phone")
     private String phone;
 
+    @SerializedName("password")
     private String password;
 
     @SerializedName("nikname")
@@ -26,8 +27,18 @@ public class User implements Serializable {
     @SerializedName("profile_url")
     private String profile_url;
 
-    /*@SerializedName("auto_add_friend")
+    @SerializedName("auto_add_friend")
     private boolean autoAddFriend;
+
+    public User() {
+    }
+
+    public User(String phone, String email, String password) {
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+    }
+
 
     public boolean isAuto_add_friend() {
         return autoAddFriend;
@@ -35,7 +46,7 @@ public class User implements Serializable {
 
     public void setAuto_add_friend(boolean autoAddFriend) {
         this.autoAddFriend = autoAddFriend;
-    }*/
+    }
 
     public String getPhone() {
         return phone;

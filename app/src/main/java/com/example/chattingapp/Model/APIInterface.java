@@ -1,5 +1,6 @@
 package com.example.chattingapp.Model;
 
+import com.example.chattingapp.Model.DTO.AgreeTerms;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
 
@@ -12,15 +13,18 @@ import retrofit2.http.POST;
 
 public interface APIInterface {
 
-    @GET("Terms")
+    @GET("terms")
     Call<ArrayList<Terms>> doGetTermsList();
 
-    @POST("Terms")
-    Call<ArrayList<Terms>> doCreateAgreeTerms(@Body ArrayList<Terms> terms);
+    @POST("agree-terms")
+    Call<AgreeTerms> doCreateAgreeTerms(@Body AgreeTerms agreeTerms);
 
-    @POST("User")
+    // https + get으로 해야함. http일때는 get은 위험하니 post로
+    @POST("user/login")
+    Call<User> doGetUser(@Body User user);
+
+    @POST("user")
     Call<User> doCreateUser(@Body User user);
-
 
 
 }

@@ -64,7 +64,7 @@ public class JoinInfoFragment extends Fragment implements View.OnClickListener {
         String nikname = binding.edtNikname.getText().toString();
         String birthday = binding.edtBirthDay.getText().toString();
         String gender = binding.spnGender.getSelectedItem().toString();
-        //boolean autoAddFriend = binding.chkAutoAddFriend.isChecked();
+        boolean autoAddFriend = binding.chkAutoAddFriend.isChecked();
 
         if(nikname.length() == 0){
             Toast.makeText(getActivity(),"닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show();
@@ -84,7 +84,7 @@ public class JoinInfoFragment extends Fragment implements View.OnClickListener {
             }else {
                 user.setGender("M");
             }
-            //user.setAuto_add_friend(autoAddFriend);
+            user.setAuto_add_friend(autoAddFriend);
             return true;
         }
     }

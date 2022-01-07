@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
+import com.example.chattingapp.Model.DTO.AgreeTerms;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.R;
@@ -53,14 +54,14 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         return binding.getRoot();
     }
 
-    private void doPostUserData() {
+    private void doCreateUser() {
         Call<User> call = apiInterface.doCreateUser(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()){
                     Log.d("TAG", response.code() + "");
-                    doPostAgreeTermsData();
+                    doCreateAgreeTerms();
                 }else {
                 }
             }
@@ -73,13 +74,36 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         });
     }
 
-    private void doPostAgreeTermsData() {
-        Call<ArrayList<Terms>> call = apiInterface.doCreateAgreeTerms(terms);
-        call.enqueue(new Callback<ArrayList<Terms>>() {
+    private void doCreateAgreeTerms() {
+        AgreeTerms agreeTerms = new AgreeTerms(terms,user.getPhone());
+
+        Call<AgreeTerms> call = apiInterface.doCreateAgreeTerms(agreeTerms);
+        call.enqueue(new Callback<AgreeTerms>() {
             @Override
-            public void onResponse(Call<ArrayList<Terms>> call, Response<ArrayList<Terms>> response) {
+            public void onResponse(Call<AgreeTerms> call, Response<AgreeTerms> response) {
                 if(response.isSuccessful()){
                     Log.d("TAG", response.code() + "");
+                    doLogin();
+                }else {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AgreeTerms> call, Throwable t) {
+                Log.d("TAG", t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
+    private void doLogin() {
+        Call<User> call = apiInterface.doGetUser(user);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()){
+                    Log.d("TAG", response.code() + "");
+                    //TODO 토큰
                     activityUtils.newActivity(getActivity(), SplashActivity.class);
                     getActivity().finish();
                 }else {
@@ -87,7 +111,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Terms>> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Log.d("TAG", t.getMessage());
                 call.cancel();
             }
@@ -99,7 +123,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()){
             case R.id.txtLater:
                 // 서버로 회원가입 정보 넘겨서 추가하고 메인화면 띄우기
-                doPostUserData();
+                doCreateUser();
                 break;
             case R.id.btnSend:
                 if(binding.chkTerm.isChecked() == true){
