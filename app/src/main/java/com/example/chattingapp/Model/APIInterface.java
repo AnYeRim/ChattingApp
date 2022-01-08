@@ -1,9 +1,9 @@
 package com.example.chattingapp.Model;
 
 import com.example.chattingapp.Model.DTO.AgreeTerms;
-import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
+import com.example.chattingapp.Model.VO.JSONFriends;
 import com.example.chattingapp.Model.VO.JsonUser;
 
 import java.util.ArrayList;
@@ -29,6 +29,6 @@ public interface APIInterface {
     Call<User> doCreateUser(@Body User user);
 
     @GET("friends")
-    Call<ArrayList<Friends>> doGetFriendsList();
+    Call<JSONFriends> doGetFriendsList();
 
 }

@@ -55,7 +55,7 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
         void setItemTermsBinding(Friends data) {
             //Glide.with(mContext).load(data.getImageURL()).into(itemFriendsBinding.imgProfile);
             itemFriendsBinding.txtNicName.setText(data.getNikName());
-            itemFriendsBinding.txtMessage.setText(data.getMessage());
+            //itemFriendsBinding.txtMessage.setText(data.getMessage());
         }
 
         @Override
