@@ -23,7 +23,8 @@ public class PermissionActivity extends AppCompatActivity {
     private String[] initPms = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
-            Manifest.permission.CALL_PHONE
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.READ_SMS
     };
 
     @Override
@@ -65,7 +66,8 @@ public class PermissionActivity extends AppCompatActivity {
     public void requestPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, initPms[0])
                 || ActivityCompat.shouldShowRequestPermissionRationale(this, initPms[1])
-                || ActivityCompat.shouldShowRequestPermissionRationale(this, initPms[2])) {
+                || ActivityCompat.shouldShowRequestPermissionRationale(this, initPms[2])
+                || ActivityCompat.shouldShowRequestPermissionRationale(this, initPms[3])) {
             // 사용자가 권한 거부한 적 있을 때, 권한 필요한 이유 설명.
             // 거부 2번이상시 더이상 권한 창이 안뜨게 되어있어서 거부한 적 있으면 권한 설정창으로 이동하게 구현. (카톡도 이렇게 했길래)
             permissionUtils.requestPermissionMessage(this);
@@ -89,7 +91,6 @@ public class PermissionActivity extends AppCompatActivity {
                         return;
                     }
                 }
-
                 activityUtils.newActivity(this, SplashActivity.class);
                 finish();
 
