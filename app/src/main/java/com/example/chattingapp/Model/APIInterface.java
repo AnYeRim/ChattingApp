@@ -1,6 +1,7 @@
 package com.example.chattingapp.Model;
 
 import com.example.chattingapp.Model.DTO.AgreeTerms;
+import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.Model.VO.JsonUser;
@@ -27,5 +28,7 @@ public interface APIInterface {
     @POST("user")
     Call<User> doCreateUser(@Body User user);
 
+    @GET("friends")
+    Call<ArrayList<Friends>> doGetFriendsList();
 
 }
