@@ -65,6 +65,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
                     Log.d("TAG", response.code() + "");
                     doCreateAgreeTerms();
                 }else {
+                    Toast.makeText(getContext(),"유저 정보 insert 실패", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -87,6 +88,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
                     Log.d("TAG", response.code() + "");
                     doLogin();
                 }else {
+                    Toast.makeText(getContext(),"동의 내역 insert 실패", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -105,13 +107,16 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
             public void onResponse(Call<JsonUser> call, Response<JsonUser> response) {
                 if(response.isSuccessful()){
                     Log.d("TAG", response.code() + "");
-                    //TODO 토큰
-                    SharedPreferenceUtil.setData(getContext(), "token", response.body().getToken());
-                    SharedPreferenceUtil.setData(getContext(), "nikname", response.body().getUser().getNikname());
-                    activityUtils.newActivity(getActivity(), SplashActivity.class);
-                    getActivity().finish();
+                    if(response.body().getToken() == null){
+                        Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
+                    }else {
+                        SharedPreferenceUtil.setData(getContext(), "token", response.body().getToken());
+                        SharedPreferenceUtil.setData(getContext(), "nikname", response.body().getUser().getNikname());
+                        activityUtils.newActivity(getActivity(), SplashActivity.class);
+                        getActivity().finish();
+                    }
                 }else {
-                    Toast.makeText(getContext(),"회원가입 오류", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
                 }
             }
 
