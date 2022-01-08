@@ -27,8 +27,7 @@
         android:exported="false"/>
         <activity
             android:name=".View.Activity.MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ChattingApp"/>
+            android:exported="false"/>
         <activity
             android:name=".View.Activity.PermissionActivity"
             android:exported="true">

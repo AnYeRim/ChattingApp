@@ -57,16 +57,12 @@ public class FriendsFragment extends Fragment {
 
     private void getFriendsList() {
         Call<JSONFriends> call = apiInterface.doGetFriendsList();
-        System.out.println("--------------------------------------");
         call.enqueue(new Callback<JSONFriends>() {
             @Override
             public void onResponse(Call<JSONFriends> call, Response<JSONFriends> response) {
-                System.out.println("----------------------2---------------");
                 if (response.isSuccessful()) {
                     Log.d("TAG", response.code() + "");
-                    System.out.println("--------------------3-----------------");
                     friends = response.body().getFriends();
-                    System.out.println(friends.get(1).getNikName());
                     setRecyclerFriends();
                 } else {
 

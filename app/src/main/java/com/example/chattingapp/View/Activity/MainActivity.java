@@ -2,6 +2,7 @@ package com.example.chattingapp.View.Activity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         frg_chat = new ChatFragment();
         frg_etc = new EtcFragment();
 
+        binding.titleBar.txtTitle.setText("친구");
+        binding.titleBar.btnAddChat.setVisibility(View.GONE);
+        binding.titleBar.btnAddFriends.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, frg_friends).commit();
 
         binding.bottomTap.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -39,14 +43,23 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_friends:
+                        binding.titleBar.txtTitle.setText("친구");
+                        binding.titleBar.btnAddChat.setVisibility(View.GONE);
+                        binding.titleBar.btnAddFriends.setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frg_container,frg_friends).commit();
                         return true;
 
                     case R.id.menu_chat:
+                        binding.titleBar.txtTitle.setText("채팅");
+                        binding.titleBar.btnAddChat.setVisibility(View.VISIBLE);
+                        binding.titleBar.btnAddFriends.setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frg_container,frg_chat).commit();
                         return true;
 
                     case R.id.menu_etc:
+                        binding.titleBar.txtTitle.setText("더보기");
+                        binding.titleBar.btnAddChat.setVisibility(View.GONE);
+                        binding.titleBar.btnAddFriends.setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frg_container,frg_etc).commit();
                         return true;
                 }

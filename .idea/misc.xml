@@ -36,7 +36,13 @@
         <entry key="..\:/Users/tmvks/Documents/GitHub/ChattingApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.14583333333333334" />
         <entry key="..\:/Users/tmvks/Documents/GitHub/ChattingApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.14583333333333334" />
         <entry key="..\:/Users/tmvks/Documents/GitHub/ChattingApp/app/src/main/res/xml/network_security_config.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/activity_login.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/activity_main.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/activity_splash.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/fragment_etc.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/fragment_friends.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/item_friends.xml" value="0.4" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/title_bar.xml" value="0.536" />
       </map>
     </option>
   </component>
