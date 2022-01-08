@@ -28,8 +28,8 @@ public class FriendsFragment extends Fragment {
 
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
 
-        String test = SharedPreferenceUtil.getToken(getContext());
-        binding.myInfo.txtNicName.setText(test);
+        String nikName = SharedPreferenceUtil.getData(getContext(),"nikname");
+        binding.myInfo.txtNicName.setText(nikName);
 
         favorites = new ArrayList<Friends>();
         friends = new ArrayList<Friends>();

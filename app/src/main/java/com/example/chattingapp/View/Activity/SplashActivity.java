@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (SharedPreferenceUtil.getToken(getApplicationContext()) != null) {
+                if (SharedPreferenceUtil.getData(getApplicationContext(),"token") != null) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();

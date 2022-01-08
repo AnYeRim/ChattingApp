@@ -11,7 +11,7 @@ public class ActivityUtils {
     }
 
     public boolean checkToken(Context context){
-        if (SharedPreferenceUtil.getToken(context) != null) {
+        if (SharedPreferenceUtil.getData(context,"token") != null) {
             return true;
         }else {
             return false;

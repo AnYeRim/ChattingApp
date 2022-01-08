@@ -3,6 +3,7 @@ package com.example.chattingapp.Model;
 import com.example.chattingapp.Model.DTO.AgreeTerms;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
+import com.example.chattingapp.Model.VO.JsonUser;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public interface APIInterface {
 
     // https + get으로 해야함. http일때는 get은 위험하니 post로
     @POST("user/login")
-    Call<User> doGetUser(@Body User user);
+    Call<JsonUser> doGetUser(@Body User user);
 
     @POST("user")
     Call<User> doCreateUser(@Body User user);

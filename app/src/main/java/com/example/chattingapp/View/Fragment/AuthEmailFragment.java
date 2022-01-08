@@ -16,6 +16,7 @@ import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.AgreeTerms;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
+import com.example.chattingapp.Model.VO.JsonUser;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
@@ -98,22 +99,24 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
     }
 
     private void doLogin() {
-        Call<User> call = apiInterface.doGetUser(user);
-        call.enqueue(new Callback<User>() {
+        Call<JsonUser> call = apiInterface.doGetUser(user);
+        call.enqueue(new Callback<JsonUser>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<JsonUser> call, Response<JsonUser> response) {
                 if(response.isSuccessful()){
                     Log.d("TAG", response.code() + "");
                     //TODO 토큰
-                    SharedPreferenceUtil.setToken(getContext(), user.getNikname());
+                    SharedPreferenceUtil.setData(getContext(), "token", response.body().getToken());
+                    SharedPreferenceUtil.setData(getContext(), "nikname", response.body().getUser().getNikname());
                     activityUtils.newActivity(getActivity(), SplashActivity.class);
                     getActivity().finish();
                 }else {
+                    Toast.makeText(getContext(),"회원가입 오류", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<JsonUser> call, Throwable t) {
                 Log.d("TAG", t.getMessage());
                 call.cancel();
             }

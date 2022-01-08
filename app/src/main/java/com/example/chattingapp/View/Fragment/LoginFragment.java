@@ -45,6 +45,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
         switch (view.getId()) {
             case R.id.btnLogin:
                 //DB와 비교하여 로그인 하는 기능 구현
+
                 activityUtils.newActivity(getActivity(), SplashActivity.class);
                 getActivity().finish();
                 break;
