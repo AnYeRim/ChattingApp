@@ -36,8 +36,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
 
         binding.txtFindIDPW.setOnClickListener(this);
 
-        // 로그인 되어있으면 main화면으로 넘어가기
-
         return binding.getRoot();
     }
 

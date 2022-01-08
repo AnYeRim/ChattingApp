@@ -51,7 +51,7 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setTermsData() {
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        APIInterface apiInterface = APIClient.getClient(null).create(APIInterface.class);
         Call<ArrayList<Terms>> call = apiInterface.doGetTermsList();
         call.enqueue(new Callback<ArrayList<Terms>>() {
             @Override

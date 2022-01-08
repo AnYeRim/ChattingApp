@@ -57,7 +57,7 @@ public class PermissionActivity extends AppCompatActivity {
 
         // 시작하거나 권한설정창으로 나갔다 들어와서 다시 실행될 때, 권한 필요 여부 확인
         if (permissionUtils.checkNeedPermission(this, initPms) != true) {
-            activityUtils.newActivity(this, LoginActivity.class);
+            activityUtils.newActivity(this, SplashActivity.class);
             finish();
         }
     }
@@ -90,7 +90,7 @@ public class PermissionActivity extends AppCompatActivity {
                     }
                 }
 
-                activityUtils.newActivity(this, LoginActivity.class);
+                activityUtils.newActivity(this, SplashActivity.class);
                 finish();
 
             } else {

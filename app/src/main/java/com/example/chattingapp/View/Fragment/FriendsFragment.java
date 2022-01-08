@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.chattingapp.Model.DTO.Friends;
+import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Adapter.AdapterFriends;
 import com.example.chattingapp.databinding.FragmentFriendsBinding;
 
@@ -26,6 +27,9 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
+
+        String test = SharedPreferenceUtil.getToken(getContext());
+        binding.myInfo.txtNicName.setText(test);
 
         favorites = new ArrayList<Friends>();
         friends = new ArrayList<Friends>();

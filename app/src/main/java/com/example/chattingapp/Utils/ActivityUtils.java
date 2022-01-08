@@ -9,4 +9,12 @@ public class ActivityUtils {
         Intent intent = new Intent(mContext, mClass);
         mContext.startActivity(intent);
     }
+
+    public boolean checkToken(Context context){
+        if (SharedPreferenceUtil.getToken(context) != null) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

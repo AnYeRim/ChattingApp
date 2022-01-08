@@ -18,6 +18,7 @@ import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Activity.SplashActivity;
 import com.example.chattingapp.databinding.FragmentAuthEmailBinding;
 
@@ -45,7 +46,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         user = (User) getArguments().getSerializable("User");
         terms = (ArrayList<Terms>) getArguments().getSerializable("Terms");
 
-        apiInterface = APIClient.getClient().create(APIInterface.class);
+        apiInterface = APIClient.getClient(null).create(APIInterface.class);
 
         binding.txtLater.setOnClickListener(this);
         binding.btnSend.setOnClickListener(this);
@@ -104,6 +105,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
                 if(response.isSuccessful()){
                     Log.d("TAG", response.code() + "");
                     //TODO 토큰
+                    SharedPreferenceUtil.setToken(getContext(), user.getNikname());
                     activityUtils.newActivity(getActivity(), SplashActivity.class);
                     getActivity().finish();
                 }else {
@@ -136,9 +138,9 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
                 break;
             case R.id.btnOK:
                 // 인증번호 입력된 값과 보낸 값이 같은지 비교하고 맞으면 회원가입 완료하기
+                user.setEmail(binding.edtEmail.getText().toString());
                 if(true) {
-                    activityUtils.newActivity(getActivity(), SplashActivity.class);
-                    getActivity().finish();
+                    doCreateUser();
                 }
                 break;
         }
