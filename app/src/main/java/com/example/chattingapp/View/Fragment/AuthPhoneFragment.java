@@ -83,6 +83,7 @@ public class AuthPhoneFragment extends Fragment implements View.OnClickListener,
                 break;
             case R.id.btnOK:
                 //인증번호 확인하는 기능 구현
+                //TODO 이미 회원이면 가입 불가하도록
                 user.setPhone(binding.edtPhone.getText().toString());
 
                 Bundle bundle = new Bundle();
