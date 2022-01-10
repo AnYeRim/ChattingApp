@@ -3,7 +3,6 @@ package com.example.chattingapp.View.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.User;
+import com.example.chattingapp.Model.NetworkResponse;
 import com.example.chattingapp.Model.VO.JsonUser;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
@@ -24,8 +24,6 @@ import com.example.chattingapp.View.Activity.SplashActivity;
 import com.example.chattingapp.databinding.FragmentLoginBinding;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
@@ -56,30 +54,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
 
     private void doLogin() {
         Call<JsonUser> call = apiInterface.doGetUser(user);
-        call.enqueue(new Callback<JsonUser>() {
-            @Override
-            public void onResponse(Call<JsonUser> call, Response<JsonUser> response) {
-                if(response.isSuccessful()){
-                    Log.d("TAG", response.code() + "");
-                    if(response.body().getToken() == null){
-                        Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
-                    }else {
-                        SharedPreferenceUtil.setData(getContext(), "token", response.body().getToken());
-                        SharedPreferenceUtil.setData(getContext(), "nikname", response.body().getUser().getNikname());
-                        activityUtils.newActivity(getActivity(), SplashActivity.class);
-                        getActivity().finish();
-                    }
-                }else {
-                    Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<JsonUser> call, Throwable t) {
-                Log.d("TAG", t.getMessage());
-                call.cancel();
+        NetworkResponse<JsonUser> networkResponse = new NetworkResponse<JsonUser>();
+        call.enqueue(networkResponse);
+
+        if(networkResponse.getRes() != null){
+            if(networkResponse.getRes().getToken() == null){
+                Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
+            }else {
+                SharedPreferenceUtil.setData(getContext(), "token", networkResponse.getRes().getToken());
+                SharedPreferenceUtil.setData(getContext(), "nikname", networkResponse.getRes().getUser().getNikname());
+                activityUtils.newActivity(getActivity(), SplashActivity.class);
+                getActivity().finish();
             }
-        });
+        }else {
+            Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
+            call.cancel();
+        }
     }
 
     @Override

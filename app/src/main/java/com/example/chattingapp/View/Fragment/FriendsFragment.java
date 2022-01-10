@@ -1,7 +1,6 @@
 package com.example.chattingapp.View.Fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
+import com.example.chattingapp.Model.NetworkResponse;
 import com.example.chattingapp.Model.VO.JSONFriends;
 import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
@@ -21,8 +21,6 @@ import com.example.chattingapp.databinding.FragmentFriendsBinding;
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class FriendsFragment extends Fragment {
 
@@ -57,24 +55,16 @@ public class FriendsFragment extends Fragment {
 
     private void getFriendsList() {
         Call<JSONFriends> call = apiInterface.doGetFriendsList();
-        call.enqueue(new Callback<JSONFriends>() {
-            @Override
-            public void onResponse(Call<JSONFriends> call, Response<JSONFriends> response) {
-                if (response.isSuccessful()) {
-                    Log.d("TAG", response.code() + "");
-                    friends = response.body().getFriends();
-                    setRecyclerFriends();
-                } else {
 
-                }
-            }
+        NetworkResponse<JSONFriends> networkResponse = new NetworkResponse<JSONFriends>();
+        call.enqueue(networkResponse);
 
-            @Override
-            public void onFailure(Call<JSONFriends> call, Throwable t) {
-                Log.d("TAG", t.getMessage());
-                call.cancel();
-            }
-        });
+        if(networkResponse.getRes() != null){
+            friends = networkResponse.getRes().getFriends();
+            setRecyclerFriends();
+        }else {
+            call.cancel();
+        }
     }
 
     private void setRecyclerFavorites() {
