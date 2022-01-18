@@ -31,6 +31,11 @@
         <item name="android:textSize">12dp</item>
     </style>
 
+    <style name="txtContents4">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">10dp</item>
+    </style>
+
     <style name="edtTitle">
         <item name="android:textSize">16dp</item>
         <item name="android:paddingLeft">7dp</item>

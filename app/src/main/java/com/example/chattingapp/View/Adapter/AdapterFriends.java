@@ -34,7 +34,7 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull AdapterFriends.ViewHolder holder, int position) {
-        holder.setItemTermsBinding(data.get(position));
+        holder.setItemFriendsBinding(data.get(position));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
             itemFriendsBinding.linearFriends.setOnClickListener(this);
         }
 
-        void setItemTermsBinding(Friends data) {
+        void setItemFriendsBinding(Friends data) {
             //Glide.with(mContext).load(data.getImageURL()).into(itemFriendsBinding.imgProfile);
             itemFriendsBinding.txtNicName.setText(data.getNikName());
             //itemFriendsBinding.txtMessage.setText(data.getMessage());
@@ -62,7 +62,7 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
         public void onClick(View view) {
             int position = getAdapterPosition();
 
-            Toast.makeText(mContext,data.get(position).getNikName().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext,data.get(position).getNikName(), Toast.LENGTH_SHORT).show();
         }
     }
 }

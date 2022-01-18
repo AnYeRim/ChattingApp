@@ -13,7 +13,6 @@ import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.Model.NetworkResponse;
 import com.example.chattingapp.Model.VO.JSONFriends;
-import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Adapter.AdapterFriends;
 import com.example.chattingapp.databinding.FragmentFriendsBinding;
@@ -29,7 +28,6 @@ public class FriendsFragment extends Fragment {
     private ArrayList<Friends> favorites, friends;
     private AdapterFriends adapterFavorites, adapterFriends;
     private APIInterface apiInterface;
-    private ActivityUtils activityUtils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +40,6 @@ public class FriendsFragment extends Fragment {
         binding.myInfo.txtNicName.setText(nikName);
 
         apiInterface = APIClient.getClient(token).create(APIInterface.class);
-        activityUtils = new ActivityUtils();
         getFriendsList();
 
         favorites = new ArrayList<Friends>();

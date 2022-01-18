@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.R;
-import com.example.chattingapp.View.Fragment.ChatFragment;
+import com.example.chattingapp.View.Fragment.RoomFragment;
 import com.example.chattingapp.View.Fragment.EtcFragment;
 import com.example.chattingapp.View.Fragment.FriendsFragment;
 import com.example.chattingapp.databinding.ActivityMainBinding;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         frg_friends = new FriendsFragment();
-        frg_chat = new ChatFragment();
+        frg_chat = new RoomFragment();
         frg_etc = new EtcFragment();
 
         binding.titleBar.txtTitle.setText("친구");

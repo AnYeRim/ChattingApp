@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.Fragment.ChatFragment">
+    tools:context=".View.Fragment.RoomFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_room"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="채팅 화면" />
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>

@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/txtFavoites"
-        style="@style/txtContents3"
+        style="@style/txtContents4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="15dp"
@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/txtFriends"
-        style="@style/txtContents3"
+        style="@style/txtContents4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="15dp"
