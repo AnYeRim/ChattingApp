@@ -8,11 +8,11 @@
     <LinearLayout
         android:id="@+id/linearRoom"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="55dp"
         android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="13dp">
+        android:paddingHorizontal="18dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
 
         <ImageView
             android:id="@+id/btnBack"
