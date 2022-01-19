@@ -13,7 +13,10 @@ import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.Model.NetworkResponse;
 import com.example.chattingapp.Model.VO.JSONFriends;
+import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
+import com.example.chattingapp.View.Activity.InfoActivity;
 import com.example.chattingapp.View.Adapter.AdapterFriends;
 import com.example.chattingapp.databinding.FragmentFriendsBinding;
 
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends Fragment implements View.OnClickListener {
 
     private FragmentFriendsBinding binding;
 
@@ -46,6 +49,8 @@ public class FriendsFragment extends Fragment {
         friends = new ArrayList<Friends>();
         setRecyclerFriends();
         setRecyclerFavorites();
+
+        binding.myInfo.linearFriends.setOnClickListener(this);
 
         return binding.getRoot();
     }
@@ -76,4 +81,13 @@ public class FriendsFragment extends Fragment {
         binding.recyclerFriends.setAdapter(adapterFriends);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.myInfo:
+                ActivityUtils activityUtils = new ActivityUtils();
+                activityUtils.newActivity(getContext(), InfoActivity.class);
+                break;
+        }
+    }
 }
