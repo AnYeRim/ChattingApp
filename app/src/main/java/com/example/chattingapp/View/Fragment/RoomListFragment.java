@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.View.Adapter.AdapterRoom;
-import com.example.chattingapp.databinding.FragmentRoomBinding;
+import com.example.chattingapp.databinding.FragmentRoomListBinding;
 
 import java.util.ArrayList;
 
-public class RoomFragment extends Fragment {
+public class RoomListFragment extends Fragment {
 
-    private FragmentRoomBinding binding;
+    private FragmentRoomListBinding binding;
     private ArrayList<Room> room;
     private AdapterRoom adapterRoom;
 
@@ -24,7 +24,7 @@ public class RoomFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = FragmentRoomBinding.inflate(inflater, container, false);
+        binding = FragmentRoomListBinding.inflate(inflater, container, false);
 
         getRoomList();
         setRecyclerRoom();

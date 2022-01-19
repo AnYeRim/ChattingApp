@@ -38,6 +38,7 @@
         <entry key="..\:/Users/tmvks/Documents/GitHub/ChattingApp/app/src/main/res/xml/network_security_config.xml" value="0.12604166666666666" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/activity_login.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/activity_main.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/activity_room.xml" value="0.3641791044776119" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/activity_splash.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/fragment_chat.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/fragment_etc.xml" value="0.264" />
@@ -46,8 +47,9 @@
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/fragment_password.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/item_chat.xml" value="0.4" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/item_friends.xml" value="0.4" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/item_room.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/item_terms.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/title_bar.xml" value="0.536" />
+        <entry key="..\:/Users/tmvks/OneDrive/Documents/GitHub/ChattingApp/app/src/main/res/layout/title_bar.xml" value="0.264" />
       </map>
     </option>
   </component>

@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.View.Activity.RoomActivity;
 import com.example.chattingapp.databinding.ItemRoomBinding;
 
 import java.util.ArrayList;
@@ -84,7 +86,8 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
 
             System.out.println("클릭");
 
-            Toast.makeText(mContext, data.get(position).getRoomTitle(), Toast.LENGTH_SHORT).show();
+            ActivityUtils activityUtils = new ActivityUtils();
+            activityUtils.newActivity(mContext, RoomActivity.class);
         }
 
         @Override
