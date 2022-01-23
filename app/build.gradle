@@ -43,6 +43,11 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
+    // socket.io 서버,클라이언트 양방향 통신을 위해
+    implementation ('io.socket:socket.io-client:2.0.1') {
+        exclude group: 'org.json', module: 'json'
+    }
+
     //rxjava : 반응형. 순서대로 흐르기보다 주변환경이 변하는 것에 반응하여 이벤트 발생.
    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.7'
