@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
-import com.example.chattingapp.Model.NetworkResponse;
 import com.example.chattingapp.Model.VO.JSONFriends;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
@@ -23,6 +22,8 @@ import com.example.chattingapp.databinding.FragmentFriendsBinding;
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FriendsFragment extends Fragment implements View.OnClickListener {
 
@@ -58,15 +59,28 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
     private void getFriendsList() {
         Call<JSONFriends> call = apiInterface.doGetFriendsList();
 
-        NetworkResponse<JSONFriends> networkResponse = new NetworkResponse<JSONFriends>();
-        call.enqueue(networkResponse);
+        //NetworkResponse<JSONFriends> networkResponse = new NetworkResponse<JSONFriends>();
+        call.enqueue(new Callback<JSONFriends>() {
+            @Override
+            public void onResponse(Call<JSONFriends> call, Response<JSONFriends> response) {
+                if(response.isSuccessful()){
+                    friends = response.body().getFriends();
+                    setRecyclerFriends();
+                }
+            }
 
-        if(networkResponse.getRes() != null){
+            @Override
+            public void onFailure(Call<JSONFriends> call, Throwable t) {
+                call.cancel();
+            }
+        });
+
+        /*if(networkResponse.getRes() != null){
             friends = networkResponse.getRes().getFriends();
             setRecyclerFriends();
         }else {
             call.cancel();
-        }
+        }*/
     }
 
     private void setRecyclerFavorites() {

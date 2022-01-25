@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Terms;
-import com.example.chattingapp.Model.NetworkResponse;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.FragmentUtil;
 import com.example.chattingapp.View.Adapter.AdapterTerms;
@@ -24,6 +23,8 @@ import com.example.chattingapp.databinding.FragmentTermsBinding;
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TermsFragment extends Fragment implements View.OnClickListener {
 
@@ -52,15 +53,28 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
         APIInterface apiInterface = APIClient.getClient(null).create(APIInterface.class);
         Call<ArrayList<Terms>> call = apiInterface.doGetTermsList();
 
-        NetworkResponse<ArrayList<Terms>> networkResponse = new NetworkResponse<ArrayList<Terms>>();
-        call.enqueue(networkResponse);
+        //NetworkResponse<ArrayList<Terms>> networkResponse = new NetworkResponse<ArrayList<Terms>>();
+        call.enqueue(new Callback<ArrayList<Terms>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Terms>> call, Response<ArrayList<Terms>> response) {
+                if(response.isSuccessful()){
+                    resTerms = response.body();
+                    setRecyclerTerm();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ArrayList<Terms>> call, Throwable t) {
+                call.cancel();
+            }
+        });
+/*
         if(networkResponse.getRes() != null){
             resTerms = networkResponse.getRes();
             setRecyclerTerm();
         }else {
             call.cancel();
-        }
+        }*/
     }
 
     private void setRecyclerTerm() {
