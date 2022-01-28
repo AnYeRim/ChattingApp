@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_main"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".View.Activity.AddFriendActivity">
 
     <LinearLayout
         android:id="@+id/linearRoom"
@@ -29,53 +31,46 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="채팅방 title"
+            android:text="친구 추가"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/btnSearch"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+        <TextView
+            android:id="@+id/txtOK"
+            style="@style/txtTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="10dp"
-            android:background="@drawable/search2" />
-
-        <ImageView
-            android:id="@+id/btnMenu"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/menu" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearChatMessage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="1">
+            android:text="확인"
+            android:textStyle="bold"
+            android:enabled="false"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:orientation="vertical"
+        android:padding="15dp">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/add_message"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="10dp"/>
+    <EditText
+        android:id="@+id/edtFriendName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="친구 이름"
+        style="@style/edtTitle"/>
 
-        <EditText
-            android:id="@+id/edtMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <EditText
+        android:id="@+id/edtFriendPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="전화번호"
+        style="@style/edtTitle"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-없이 숫자만 입력해주세요"
+        style="@style/txtContents4"/>
     </LinearLayout>
 
 </LinearLayout>

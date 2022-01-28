@@ -62,7 +62,8 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
         public void onClick(View view) {
             int position = getAdapterPosition();
 
-            Toast.makeText(mContext,data.get(position).getNikName(), Toast.LENGTH_SHORT).show();
+            // TODO 친구 프로필, 배경사진 보이는 화면 -> 채팅 클릭시 FCM으로 해당 토큰에 푸시 알림.
+            Toast.makeText(mContext,data.get(position).getFb_token(), Toast.LENGTH_SHORT).show();
         }
     }
 }

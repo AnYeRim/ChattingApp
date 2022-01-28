@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.Model.SocketClient;
 import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Fragment.EtcFragment;
 import com.example.chattingapp.View.Fragment.FriendsFragment;
 import com.example.chattingapp.View.Fragment.RoomListFragment;
@@ -25,8 +26,9 @@ import org.json.JSONObject;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private ActivityUtils activityUtils;
     private ActivityMainBinding binding;
     private Fragment frg_friends, frg_chat, frg_etc;
     private Socket socket;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        activityUtils = new ActivityUtils();
+
         frg_friends = new FriendsFragment();
         frg_chat = new RoomListFragment();
         frg_etc = new EtcFragment();
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         binding.titleBar.btnAddChat.setVisibility(View.GONE);
         binding.titleBar.btnAddFriends.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, frg_friends).commit();
+
+        binding.titleBar.btnAddChat.setOnClickListener(this);
+        binding.titleBar.btnAddFriends.setOnClickListener(this);
 
         binding.bottomTap.setOnNavigationItemSelectedListener(new ItemSelectedListener());
 
@@ -80,6 +87,19 @@ public class MainActivity extends AppCompatActivity {
         }, 0);
     };
 
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btnAddChat:
+                //TODO 채팅방 만들기
+                break;
+            case R.id.btnAddFriends:
+                activityUtils.newActivity(this, AddFriendActivity.class);
+                break;
+        }
+    }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override

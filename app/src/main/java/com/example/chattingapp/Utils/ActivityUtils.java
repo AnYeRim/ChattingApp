@@ -10,11 +10,11 @@ public class ActivityUtils {
         mContext.startActivity(intent);
     }
 
-    public boolean checkToken(Context context){
-        if (SharedPreferenceUtil.getData(context,"token") != null) {
-            return true;
-        }else {
-            return false;
-        }
+    public String getToken(Context context){
+        return SharedPreferenceUtil.getData(context, "token");
+    }
+
+    public String getNikName(Context context){
+        return SharedPreferenceUtil.getData(context, "nikname");
     }
 }

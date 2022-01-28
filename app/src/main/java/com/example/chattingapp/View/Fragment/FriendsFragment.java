@@ -14,7 +14,6 @@ import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.Model.VO.JSONFriends;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
-import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Activity.InfoActivity;
 import com.example.chattingapp.View.Adapter.AdapterFriends;
 import com.example.chattingapp.databinding.FragmentFriendsBinding;
@@ -28,6 +27,7 @@ import retrofit2.Response;
 public class FriendsFragment extends Fragment implements View.OnClickListener {
 
     private FragmentFriendsBinding binding;
+    private ActivityUtils activityUtils;
 
     private ArrayList<Friends> favorites, friends;
     private AdapterFriends adapterFavorites, adapterFriends;
@@ -39,8 +39,10 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
 
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
 
-        String token = SharedPreferenceUtil.getData(getContext(), "token");
-        String nikName = SharedPreferenceUtil.getData(getContext(), "nikname");
+        activityUtils = new ActivityUtils();
+
+        String token = activityUtils.getToken(getContext());
+        String nikName = activityUtils.getNikName(getContext());
         binding.myInfo.txtNicName.setText(nikName);
 
         apiInterface = APIClient.getClient(token).create(APIInterface.class);
@@ -54,6 +56,13 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         binding.myInfo.linearFriends.setOnClickListener(this);
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setRecyclerFriends();
     }
 
     private void getFriendsList() {

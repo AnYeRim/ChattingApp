@@ -6,11 +6,17 @@ import com.google.gson.annotations.SerializedName;
 //VO는 Read를 목적으로 값이 저장되어있는 객체로 값의 변경이 없다. (서버에서 받은 값)
 public class Friends {
 
+    @SerializedName("fb_token")
+    private String fb_token;
+
     @SerializedName("friend_id")
     private String id;
 
     @SerializedName("friend_name")
     private String nikName;
+
+    @SerializedName("friend_phone")
+    private String phone;
 
 //    @SerializedName("")
 //    private String message;
@@ -18,10 +24,23 @@ public class Friends {
     @SerializedName("profile_url")
     private String imageURL;
 
-    public Friends(String id, String nikName, String imageURL) {
-        this.id = id;
-        this.nikName = nikName;
-        this.imageURL = imageURL;
+    public Friends() {
+    }
+
+    public String getFb_token() {
+        return fb_token;
+    }
+
+    public void setFb_token(String fb_token) {
+        this.fb_token = fb_token;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getId() {
