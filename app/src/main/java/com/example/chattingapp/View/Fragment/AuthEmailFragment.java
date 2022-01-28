@@ -1,6 +1,7 @@
 package com.example.chattingapp.View.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,9 @@ import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Activity.SplashActivity;
 import com.example.chattingapp.databinding.FragmentAuthEmailBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -53,6 +57,25 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         binding.btnOK.setOnClickListener(this);
 
         return binding.getRoot();
+    }
+
+    private void getFirebaseToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        user.setFb_token(token);
+                        Log.d("TAG", token);
+                        doCreateUser();
+                    }
+                });
     }
 
     private void doCreateUser() {
@@ -158,7 +181,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()){
             case R.id.txtLater:
                 // 서버로 회원가입 정보 넘겨서 추가하고 메인화면 띄우기
-                doCreateUser();
+                getFirebaseToken();
                 break;
             case R.id.btnSend:
                 if(binding.chkTerm.isChecked() == true){
@@ -179,4 +202,6 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         }
 
     }
+
+
 }

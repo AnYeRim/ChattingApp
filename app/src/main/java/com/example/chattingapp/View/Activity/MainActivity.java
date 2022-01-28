@@ -1,8 +1,11 @@
 package com.example.chattingapp.View.Activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,13 +19,17 @@ import com.example.chattingapp.View.Fragment.RoomListFragment;
 import com.example.chattingapp.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
     private Fragment frg_friends, frg_chat, frg_etc;
+    private Socket socket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +53,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        Socket socket = SocketClient.getInstance();
-/*
-        Emitter.Listener onConnect = new Emitter.Listener() {
-            @Override
-            public void call(final Object... args) {
-                //Socket on connect callback
+        if (socket == null || !socket.connected()) {
+            socket = SocketClient.getInstance();
+            socket.connect();
+            socket.emit("joinRoom", "room1");
+            JSONObject data = new JSONObject();
+            try {
+                data.put("roomName", "room1");
+                data.put("message", "test 메세지 입니다.");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        };
-        socket.on("connect", onConnect);*/
-        socket.connect();
+            socket.emit("chatting", data);
+            socket.on("sendMessage", onSendMessage);
+        }
     }
 
-    class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener{
+    Emitter.Listener onSendMessage = args -> {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run()
+            {
+                Toast.makeText(MainActivity.this, args[0].toString(), Toast.LENGTH_SHORT).show();
+            }
+        }, 0);
+    };
+
+
+    class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
