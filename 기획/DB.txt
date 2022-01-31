@@ -45,7 +45,7 @@ member_id (FK)
 
 - Message
 id (PK)
-user_id (FK)
+to_id (FK)
 room_id (FK)
 message
 type

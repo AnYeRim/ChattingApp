@@ -3,10 +3,18 @@ package com.example.chattingapp.Utils;
 import android.content.Context;
 import android.content.Intent;
 
+import java.io.Serializable;
+
 public class ActivityUtils {
 
     public void newActivity(Context mContext, Class mClass){
         Intent intent = new Intent(mContext, mClass);
+        mContext.startActivity(intent);
+    }
+
+    public void newActivity(Context mContext, Class mClass, Serializable data){
+        Intent intent = new Intent(mContext, mClass);
+        intent.putExtra("data", data);
         mContext.startActivity(intent);
     }
 

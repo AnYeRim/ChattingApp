@@ -4,13 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.View.Activity.InfoActivity;
 import com.example.chattingapp.databinding.ItemFriendsBinding;
 
 import java.util.ArrayList;
@@ -43,13 +44,16 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         private ItemFriendsBinding itemFriendsBinding;
+        private ActivityUtils activityUtils;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             itemFriendsBinding = ItemFriendsBinding.bind(itemView);
             itemFriendsBinding.linearFriends.setOnClickListener(this);
+            activityUtils = new ActivityUtils();
         }
 
         void setItemFriendsBinding(Friends data) {
@@ -63,7 +67,7 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
             int position = getAdapterPosition();
 
             // TODO 친구 프로필, 배경사진 보이는 화면 -> 채팅 클릭시 FCM으로 해당 토큰에 푸시 알림.
-            Toast.makeText(mContext,data.get(position).getFb_token(), Toast.LENGTH_SHORT).show();
+            activityUtils.newActivity(mContext, InfoActivity.class, data.get(position));
         }
     }
 }
