@@ -8,14 +8,14 @@ import java.io.Serializable;
 //VO는 Read를 목적으로 값이 저장되어있는 객체로 값의 변경이 없다. (서버에서 받은 값)
 public class Room implements Serializable {
 
-    @SerializedName("room_id")
+    @SerializedName("id")
     private String id;
 
     @SerializedName("profile_url")
     private String imageURL;
 
-    @SerializedName("room_title")
-    private String roomTitle;
+    @SerializedName("title")
+    private String title;
 
     @SerializedName("member_total")
     private String total;
@@ -23,7 +23,7 @@ public class Room implements Serializable {
     @SerializedName("room_alarm")
     private boolean alarm;
 
-    @SerializedName("room_update_date")
+    @SerializedName("update_date")
     private String updateDate;
 
     @SerializedName("message")
@@ -32,11 +32,11 @@ public class Room implements Serializable {
     @SerializedName("new_message")
     private int newMessage;
 
-    public Room(String id, String imageURL, String roomTitle, String message, String total,
+    public Room(String id, String imageURL, String title, String message, String total,
                 boolean alarm, String updateDate, int newMessage) {
         this.id = id;
         this.imageURL = imageURL;
-        this.roomTitle = roomTitle;
+        this.title = title;
         this.message = message;
         this.total = total;
         this.alarm = alarm;
@@ -63,12 +63,12 @@ public class Room implements Serializable {
         this.imageURL = imageURL;
     }
 
-    public String getRoomTitle() {
-        return roomTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setRoomTitle(String roomTitle) {
-        this.roomTitle = roomTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getMessage() {

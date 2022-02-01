@@ -46,8 +46,35 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     private void init(){
         Intent intent = getIntent();
         room = (Room) intent.getExtras().getSerializable("data");
-        binding.txtTitle.setText(room.getRoomTitle());
+        System.out.println("---------1---------------");
+        setRoomData();
         binding.btnSend.setOnClickListener(this);
+    }
+
+    private void setRoomData() {
+        System.out.println("---------2---------------");
+        System.out.println(room.getId());
+        Call<Room> call = apiInterface.doGetRoom(room.getId());
+
+        call.enqueue(new Callback<Room>() {
+            @Override
+            public void onResponse(Call<Room> call, Response<Room> response) {
+                if(response.isSuccessful()){
+                    System.out.println("---------3---------------");
+                    Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
+                    Room room = response.body();
+                    binding.txtTitle.setText(room.getTitle());
+                }
+                System.out.println("---------4---------------");
+            }
+
+            @Override
+            public void onFailure(Call<Room> call, Throwable t) {
+                call.cancel();
+                System.out.println("---------5---------------");
+                System.out.println(t.getMessage());
+            }
+        });
     }
 
     private void sendMessage(Message message) {

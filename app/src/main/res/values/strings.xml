@@ -4,4 +4,7 @@
     <string name="friends">친구</string>
     <string name="chat">채팅</string>
     <string name="etc">더보기</string>
+
+    <string name="channel_name">채널 이름</string>
+    <string name="channel_description">채널 설명</string>
 </resources>

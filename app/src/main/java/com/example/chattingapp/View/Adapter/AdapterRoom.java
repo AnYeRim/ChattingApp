@@ -59,7 +59,7 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
 
         void setItemRoomBinding(Room data) {
             //Glide.with(mContext).load(data.getImageURL()).into(itemFriendsBinding.imgProfile);
-            itemRoomBinding.txtRoomTitle.setText(data.getRoomTitle());
+            itemRoomBinding.txtRoomTitle.setText(data.getTitle());
             itemRoomBinding.txtTotal.setText(data.getTotal());
             itemRoomBinding.txtUpdateDate.setText(data.getUpdateDate());
             itemRoomBinding.txtMessage.setText(data.getMessage());
@@ -103,7 +103,7 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
             }
 
             AlertDialog.Builder dlg = new AlertDialog.Builder(mContext);
-            dlg.setTitle(data.get(position).getRoomTitle());
+            dlg.setTitle(data.get(position).getTitle());
             dlg.setItems(items,new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog,int which){
                     switch (which){
