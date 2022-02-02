@@ -148,6 +148,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
                     }else {
                         SharedPreferenceUtil.setData(getContext(), "token", response.body().getToken());
                         SharedPreferenceUtil.setData(getContext(), "nikname", response.body().getUser().getNikname());
+                        SharedPreferenceUtil.setData(getContext(), "userID", response.body().getUser().getId());
                         activityUtils.newActivity(getActivity(), SplashActivity.class);
                         getActivity().finish();
                     }

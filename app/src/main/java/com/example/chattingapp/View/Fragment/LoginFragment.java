@@ -3,6 +3,7 @@ package com.example.chattingapp.View.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,9 @@ import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Activity.SplashActivity;
 import com.example.chattingapp.databinding.FragmentLoginBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +57,24 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
         return binding.getRoot();
     }
 
+    private void getFirebaseToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        user.setFb_token(token);
+                        doLogin();
+                    }
+                });
+    }
+
     private void doLogin() {
         Call<JsonUser> call = apiInterface.doGetUser(user);
 
@@ -66,6 +88,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
                     }else {
                         SharedPreferenceUtil.setData(getContext(), "token", response.body().getToken());
                         SharedPreferenceUtil.setData(getContext(), "nikname", response.body().getUser().getNikname());
+                        SharedPreferenceUtil.setData(getContext(), "userID", response.body().getUser().getId());
                         activityUtils.newActivity(getActivity(), SplashActivity.class);
                         getActivity().finish();
                     }
@@ -103,7 +126,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
                 user.setPhone(binding.edtID.getText().toString());
                 user.setEmail(binding.edtID.getText().toString());
                 user.setPassword(binding.edtPW.getText().toString());
-                doLogin();
+                getFirebaseToken();
                 break;
             case R.id.btnJoin:
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new TermsFragment()).commit();

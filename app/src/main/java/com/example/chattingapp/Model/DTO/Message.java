@@ -17,8 +17,8 @@ public class Message implements Serializable {
     @SerializedName("message")
     private String message;
 
-    @SerializedName("to_id")
-    private String to_id;
+    @SerializedName("from_id")
+    private String from_id;
 
     @SerializedName("type")
     private String type;
@@ -56,12 +56,12 @@ public class Message implements Serializable {
         this.message = message;
     }
 
-    public String getRoomTitle() {
-        return to_id;
+    public String getFrom_id() {
+        return from_id;
     }
 
-    public void setRoomTitle(String to_id) {
-        this.to_id = to_id;
+    public void setFrom_id(String from_id) {
+        this.from_id = from_id;
     }
 
     public String getType() {

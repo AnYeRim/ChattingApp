@@ -47,7 +47,7 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void init(){
+    private void init() {
         // 풀스크린 설정
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -71,13 +71,43 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         int screenSizeType = (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK);
         int statusbar = 0;
 
-        if(screenSizeType != Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+        if (screenSizeType != Configuration.SCREENLAYOUT_SIZE_XLARGE) {
             int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
 
-            if (resourceId > 0) { statusbar = context.getResources().getDimensionPixelSize(resourceId);
+            if (resourceId > 0) {
+                statusbar = context.getResources().getDimensionPixelSize(resourceId);
             }
         }
         return statusbar;
+    }
+
+    private void findRoom() {
+        Call<Room> call = apiInterface.doFindRoom(friends.getId());
+
+        call.enqueue(new Callback<Room>() {
+            @Override
+            public void onResponse(Call<Room> call, Response<Room> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
+
+                    if(response.body() == null){
+                        createRoom();
+                    } else {
+                        Room room = response.body();
+                        Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
+                        intent.putExtra("data", room);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        getApplicationContext().startActivity(intent);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Room> call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 
     private void createRoom() {
@@ -89,14 +119,16 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<Room>() {
             @Override
             public void onResponse(Call<Room> call, Response<Room> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
+
                     Room room = response.body();
+
                     Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
                     intent.putExtra("data", room);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                     getApplicationContext().startActivity(intent);
-                    //activityUtils.newActivity(getApplicationContext(), RoomActivity.class, room);
                 }
             }
 
@@ -109,9 +141,9 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.imgChat:
-                createRoom();
+                findRoom();
                 break;
         }
     }

@@ -16,6 +16,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface APIInterface {
 
@@ -25,6 +26,7 @@ public interface APIInterface {
     @POST("agree-terms")
     Call<AgreeTerms> doCreateAgreeTerms(@Body AgreeTerms agreeTerms);
 
+
     // https + get으로 해야함. http일때는 get은 위험하니 post로
     @POST("user/login")
     Call<JsonUser> doGetUser(@Body User user);
@@ -32,19 +34,27 @@ public interface APIInterface {
     @POST("user")
     Call<User> doCreateUser(@Body User user);
 
+
     @GET("friends")
     Call<JSONFriends> doGetFriendsList();
 
     @POST("friends")
     Call<Friends> doAddFriends(@Body Friends friends);
 
-    @POST("room/message")
-    Call<Message> doSendMessage(@Body Message message);
+
+    @GET("room")
+    Call<Room> doFindRoom(@Query("friend_id") String friend_id);
 
     @POST("room")
-    Call<Room> doCreateRoom(@Body ArrayList<Friends> user);
+    Call<Room> doCreateRoom(@Body ArrayList<Friends> friends);
 
     @GET("room/{room_id}")
     Call<Room> doGetRoom(@Path("room_id") String room_id);
+
+    @GET("room/{room_id}/message")
+    Call<ArrayList<Message>> doGetMessage(@Path("room_id") String room_id);
+
+    @POST("room/message")
+    Call<Message> doSendMessage(@Body Message message);
 
 }

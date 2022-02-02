@@ -96,6 +96,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         binding.recyclerFavorites.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterFavorites = new AdapterFriends(getContext(), favorites);
         binding.recyclerFavorites.setAdapter(adapterFavorites);
+        adapterFavorites.notifyDataSetChanged();
     }
 
     private void setRecyclerFriends() {

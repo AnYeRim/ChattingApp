@@ -8,6 +8,9 @@ import java.io.Serializable;
 //VO는 Read를 목적으로 값이 저장되어있는 객체로 값의 변경이 없다. (서버에서 받은 값)
 public class User implements Serializable {
 
+    @SerializedName("id")
+    private String id;
+
     @SerializedName("fb_token")
     private String fb_token;
 
@@ -36,6 +39,14 @@ public class User implements Serializable {
     private boolean autoAddFriend;
 
     public User() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFb_token() {

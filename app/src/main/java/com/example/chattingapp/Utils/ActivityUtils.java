@@ -25,4 +25,8 @@ public class ActivityUtils {
     public String getNikName(Context context){
         return SharedPreferenceUtil.getData(context, "nikname");
     }
+
+    public String getUserID(Context context){
+        return SharedPreferenceUtil.getData(context, "userID");
+    }
 }
