@@ -20,4 +20,5 @@ public class JsonUser extends BaseJson {
     public User getUser() {
         return user;
     }
+
 }

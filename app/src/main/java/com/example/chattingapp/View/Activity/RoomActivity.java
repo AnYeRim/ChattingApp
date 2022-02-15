@@ -2,8 +2,11 @@ package com.example.chattingapp.View.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,13 +15,19 @@ import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Message;
 import com.example.chattingapp.Model.DTO.Room;
+import com.example.chattingapp.Model.SocketClient;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Adapter.AdapterMessage;
 import com.example.chattingapp.databinding.ActivityRoomBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +36,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
 
     private ActivityRoomBinding binding;
     private Room room;
+    private Socket socket;
 
     final String TAG = "RoomActivity";
 
@@ -56,13 +66,52 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = getIntent();
         room = (Room) intent.getExtras().getSerializable("data");
         setRoomData();
+        //setSocket();
     }
+
+    private void scrollDown() {
+        binding.recyclerMessage.post(new Runnable() {
+            @Override
+            public void run() {
+                binding.recyclerMessage.scrollToPosition(adapterMessage.getItemCount() - 1);
+            }
+        });
+    }
+
+    private void setSocket() {
+        if (socket == null || !socket.connected()) {
+            socket = SocketClient.getInstance();
+            socket.connect();
+            socket.emit("joinRoom", "room1");
+            JSONObject data = new JSONObject();
+            try {
+                data.put("roomName", "room1");
+                data.put("message", "test 메세지 입니다.");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            socket.emit("chatting", data);
+            socket.on("sendMessage", onSendMessage);
+        }
+    }
+
+    Emitter.Listener onSendMessage = args -> {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run()
+            {
+                Toast.makeText(RoomActivity.this, args[0].toString(), Toast.LENGTH_SHORT).show();
+            }
+        }, 0);
+    };
 
     private void setRecyclerMessage() {
         binding.recyclerMessage.setLayoutManager(new LinearLayoutManager(this));
         adapterMessage = new AdapterMessage(this, message);
         binding.recyclerMessage.setAdapter(adapterMessage);
         adapterMessage.notifyDataSetChanged();
+        scrollDown();
     }
 
     private void setRoomData() {
@@ -135,6 +184,8 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                 message.setRoom_id(room.getId());
                 message.setType("Text");
                 sendMessage(message);
+                break;
+            case R.id.btnMenu:
                 break;
         }
     }
