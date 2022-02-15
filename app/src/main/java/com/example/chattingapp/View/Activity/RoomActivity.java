@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +27,8 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
 
     private ActivityRoomBinding binding;
     private Room room;
+
+    final String TAG = "RoomActivity";
 
     private ActivityUtils activityUtils;
     private APIInterface apiInterface;
@@ -54,7 +55,6 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
 
         Intent intent = getIntent();
         room = (Room) intent.getExtras().getSerializable("data");
-        System.out.println("1-------");
         setRoomData();
     }
 
@@ -72,8 +72,6 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<Room> call, Response<Room> response) {
                 if(response.isSuccessful()){
-                    System.out.println("2-------");
-                    Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
                     Room room = response.body();
                     binding.txtTitle.setText(room.getTitle());
                     setMessageData();
@@ -82,8 +80,8 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFailure(Call<Room> call, Throwable t) {
+                Log.d(TAG,t.getMessage());
                 call.cancel();
-                System.out.println(t.getMessage());
             }
         });
     }
@@ -95,37 +93,35 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
                 if(response.isSuccessful()){
-                    Log.e("Tag",response.toString());
+                    binding.edtMessage.setText("");
                     setMessageData();
                 }
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
+                Log.d(TAG,t.getMessage());
                 call.cancel();
             }
         });
     }
 
     private void setMessageData() {
-        System.out.println("3-------");
         Call<ArrayList<Message>> call = apiInterface.doGetMessage(room.getId());
 
         call.enqueue(new Callback<ArrayList<Message>>() {
             @Override
             public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
                     message = response.body();
-                    System.out.println("4------"+message);
                     setRecyclerMessage();
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
+                Log.d(TAG,t.getMessage());
                 call.cancel();
-                System.out.println(t.getMessage());
             }
         });
     }

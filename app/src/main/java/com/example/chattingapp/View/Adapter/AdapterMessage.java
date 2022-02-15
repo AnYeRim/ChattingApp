@@ -1,6 +1,7 @@
 package com.example.chattingapp.View.Adapter;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,15 +59,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         void setItemMessageBinding(Message data) {
             itemMessageBinding.txtMessage.setText(data.getMessage());
             if(data.getFrom_id().equals(userID)){
-                itemMessageBinding.txtMessage.setTextAppearance(R.style.txtMyMessage);
-                /*itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.white));
+                // setTextAppearance는 스타일 전체 적용이 아니라, 텍스트 관련된 스타일만 적용되는 것이었음..
+                //itemMessageBinding.txtMessage.setTextAppearance(R.style.txtMyMessage);
+                itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.white));
                 itemMessageBinding.txtMessage.setBackgroundColor(mContext.getColor(R.color.main));
-                itemMessageBinding.txtMessage.setGravity(Gravity.RIGHT);*/
+                itemMessageBinding.linearMessage.setGravity(Gravity.RIGHT);
             }else {
-                /*itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.black));
+                //itemMessageBinding.txtMessage.setTextAppearance(R.style.txtOthersMessage);
+                itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.black));
                 itemMessageBinding.txtMessage.setBackgroundColor(mContext.getColor(R.color.white));
-                itemMessageBinding.txtMessage.setGravity(Gravity.LEFT);*/
-                itemMessageBinding.txtMessage.setTextAppearance(R.style.txtOthersMessage);
+                itemMessageBinding.linearMessage.setGravity(Gravity.LEFT);
             }
         }
 
