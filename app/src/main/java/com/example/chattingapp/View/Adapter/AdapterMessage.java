@@ -33,6 +33,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         return new AdapterMessage.ViewHolder(view);
     }
 
+    public void addData(Message message){
+        data.add(message);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull AdapterMessage.ViewHolder holder, int position) {
         holder.setItemMessageBinding(data.get(position));

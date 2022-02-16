@@ -1,6 +1,5 @@
 package com.example.chattingapp.View.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -63,9 +62,13 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
 
         binding.btnSend.setOnClickListener(this);
 
-        Intent intent = getIntent();
-        room = (Room) intent.getExtras().getSerializable("data");
-        setRoomData();
+        if(room == null){
+            room = (Room) getIntent().getExtras().getSerializable("data");
+        }
+
+        if(room.getTotal() == null){
+            setRoomData();
+        }
         //setSocket();
     }
 
@@ -74,6 +77,81 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 binding.recyclerMessage.scrollToPosition(adapterMessage.getItemCount() - 1);
+            }
+        });
+    }
+
+    private void setRecyclerMessage() {
+        binding.recyclerMessage.setLayoutManager(new LinearLayoutManager(this));
+        adapterMessage = new AdapterMessage(this, message);
+        binding.recyclerMessage.setAdapter(adapterMessage);
+        scrollDown();
+    }
+
+    private void setRoomData() {
+        Call<Room> call = apiInterface.doGetRoom(room.getId());
+
+        call.enqueue(new Callback<Room>() {
+            @Override
+            public void onResponse(Call<Room> call, Response<Room> response) {
+                if(response.isSuccessful()){
+                    room = response.body();
+                    binding.txtTitle.setText(room.getTitle());
+                    setMessageData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Room> call, Throwable t) {
+                Log.d(TAG,t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
+    private void sendMessage(Message message) {
+        binding.edtMessage.setText("");
+        adapterMessage.addData(message);
+        adapterMessage.notifyDataSetChanged();
+        scrollDown();
+
+        Call<Message> call = apiInterface.doSendMessage(message);
+
+        call.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getApplicationContext(),"메세지 보내기 성공", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getApplicationContext(),"메세지 보내기 실패", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Log.d(TAG,t.getMessage());
+                Toast.makeText(getApplicationContext(),"메세지 보내기 실패", Toast.LENGTH_SHORT).show();
+                call.cancel();
+            }
+        });
+    }
+
+    private void setMessageData() {
+        Call<ArrayList<Message>> call = apiInterface.doGetMessage(room.getId());
+
+        call.enqueue(new Callback<ArrayList<Message>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
+                if(response.isSuccessful()){
+                    message = response.body();
+                    setRecyclerMessage();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
+                Log.d(TAG,t.getMessage());
+                call.cancel();
             }
         });
     }
@@ -106,75 +184,6 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         }, 0);
     };
 
-    private void setRecyclerMessage() {
-        binding.recyclerMessage.setLayoutManager(new LinearLayoutManager(this));
-        adapterMessage = new AdapterMessage(this, message);
-        binding.recyclerMessage.setAdapter(adapterMessage);
-        adapterMessage.notifyDataSetChanged();
-        scrollDown();
-    }
-
-    private void setRoomData() {
-        Call<Room> call = apiInterface.doGetRoom(room.getId());
-
-        call.enqueue(new Callback<Room>() {
-            @Override
-            public void onResponse(Call<Room> call, Response<Room> response) {
-                if(response.isSuccessful()){
-                    Room room = response.body();
-                    binding.txtTitle.setText(room.getTitle());
-                    setMessageData();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Room> call, Throwable t) {
-                Log.d(TAG,t.getMessage());
-                call.cancel();
-            }
-        });
-    }
-
-    private void sendMessage(Message message) {
-        Call<Message> call = apiInterface.doSendMessage(message);
-
-        call.enqueue(new Callback<Message>() {
-            @Override
-            public void onResponse(Call<Message> call, Response<Message> response) {
-                if(response.isSuccessful()){
-                    binding.edtMessage.setText("");
-                    setMessageData();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Message> call, Throwable t) {
-                Log.d(TAG,t.getMessage());
-                call.cancel();
-            }
-        });
-    }
-
-    private void setMessageData() {
-        Call<ArrayList<Message>> call = apiInterface.doGetMessage(room.getId());
-
-        call.enqueue(new Callback<ArrayList<Message>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
-                if(response.isSuccessful()){
-                    message = response.body();
-                    setRecyclerMessage();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
-                Log.d(TAG,t.getMessage());
-                call.cancel();
-            }
-        });
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -182,6 +191,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                 Message message = new Message();
                 message.setMessage(binding.edtMessage.getText().toString());
                 message.setRoom_id(room.getId());
+                message.setFrom_id(activityUtils.getUserID(this));
                 message.setType("Text");
                 sendMessage(message);
                 break;

@@ -23,6 +23,9 @@ public class Message implements Serializable {
     @SerializedName("type")
     private String type;
 
+    @SerializedName("state")
+    private String state;
+
     @SerializedName("created_at")
     private String created_at;
 
@@ -30,6 +33,14 @@ public class Message implements Serializable {
     private String updated_at;
 
     public Message() {
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getMessage_id() {
