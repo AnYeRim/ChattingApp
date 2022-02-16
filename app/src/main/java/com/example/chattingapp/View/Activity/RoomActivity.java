@@ -69,7 +69,13 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         if(room.getTotal() == null){
             setRoomData();
         }
-        //setSocket();
+
+        if (socket == null || !socket.connected()) {
+            socket = SocketClient.getInstance();
+            socket.connect();
+            socket.emit("joinRoom", room.getId());
+            socket.on("sendMessage", onSendMessage);
+        }
     }
 
     private void scrollDown() {
@@ -112,8 +118,9 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     private void sendMessage(Message message) {
         binding.edtMessage.setText("");
         adapterMessage.addData(message);
-        adapterMessage.notifyDataSetChanged();
         scrollDown();
+
+        sendSocketMessage(message);
 
         Call<Message> call = apiInterface.doSendMessage(message);
 
@@ -156,21 +163,16 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void setSocket() {
-        if (socket == null || !socket.connected()) {
-            socket = SocketClient.getInstance();
-            socket.connect();
-            socket.emit("joinRoom", "room1");
+    private void sendSocketMessage(Message message) {
             JSONObject data = new JSONObject();
             try {
-                data.put("roomName", "room1");
-                data.put("message", "test 메세지 입니다.");
+                data.put("roomName", room.getId());
+                data.put("message", message.getMessage());
+                data.put("fromID", message.getFrom_id());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             socket.emit("chatting", data);
-            socket.on("sendMessage", onSendMessage);
-        }
     }
 
     Emitter.Listener onSendMessage = args -> {
@@ -179,7 +181,16 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run()
             {
-                Toast.makeText(RoomActivity.this, args[0].toString(), Toast.LENGTH_SHORT).show();
+                JSONObject data = (JSONObject) args[0];
+                Message message = new Message();
+                try {
+                    message.setMessage(data.getString("message"));
+                    message.setFrom_id(data.getString("fromID"));
+                    adapterMessage.addData(message);
+                    scrollDown();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, 0);
     };
