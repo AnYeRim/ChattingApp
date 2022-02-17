@@ -20,29 +20,17 @@ public class Room implements Serializable {
     @SerializedName("member_total")
     private String total;
 
-    @SerializedName("room_alarm")
-    private boolean alarm;
+    @SerializedName("alarm")
+    private String alarm;
 
-    @SerializedName("update_date")
+    @SerializedName("update_at")
     private String updateDate;
 
     @SerializedName("message")
     private String message;
 
-    @SerializedName("new_message")
-    private int newMessage;
-
-    public Room(String id, String imageURL, String title, String message, String total,
-                boolean alarm, String updateDate, int newMessage) {
-        this.id = id;
-        this.imageURL = imageURL;
-        this.title = title;
-        this.message = message;
-        this.total = total;
-        this.alarm = alarm;
-        this.updateDate = updateDate;
-        this.newMessage = newMessage;
-    }
+    @SerializedName("cnt_new_message")
+    private int cntNewMessage;
 
     public Room() {
     }
@@ -87,11 +75,11 @@ public class Room implements Serializable {
         this.total = total;
     }
 
-    public boolean isAlarm() {
+    public String isAlarm() {
         return alarm;
     }
 
-    public void setAlarm(boolean alarm) {
+    public void setAlarm(String alarm) {
         this.alarm = alarm;
     }
 
@@ -103,11 +91,11 @@ public class Room implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public int getNewMessage() {
-        return newMessage;
+    public int getCntNewMessage() {
+        return cntNewMessage;
     }
 
-    public void setNewMessage(int newMessage) {
-        this.newMessage = newMessage;
+    public void setCntNewMessage(int cntNewMessage) {
+        this.cntNewMessage = cntNewMessage;
     }
 }

@@ -82,18 +82,18 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void findRoom() {
-        Call<Room> call = apiInterface.doFindRoom(friends.getId());
+        Call<ArrayList<Room>> call = apiInterface.doFindRoom(friends.getId());
 
-        call.enqueue(new Callback<Room>() {
+        call.enqueue(new Callback<ArrayList<Room>>() {
             @Override
-            public void onResponse(Call<Room> call, Response<Room> response) {
+            public void onResponse(Call<ArrayList<Room>> call, Response<ArrayList<Room>> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
 
                     if(response.body() == null){
                         createRoom();
                     } else {
-                        Room room = response.body();
+                        Room room = response.body().get(0);
                         Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
                         intent.putExtra("data", room);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -104,7 +104,7 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(Call<Room> call, Throwable t) {
+            public void onFailure(Call<ArrayList<Room>> call, Throwable t) {
                 call.cancel();
             }
         });

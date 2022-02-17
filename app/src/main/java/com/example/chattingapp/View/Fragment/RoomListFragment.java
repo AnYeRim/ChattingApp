@@ -1,6 +1,7 @@
 package com.example.chattingapp.View.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,17 +9,27 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.chattingapp.Model.APIClient;
+import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Room;
+import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Adapter.AdapterRoom;
 import com.example.chattingapp.databinding.FragmentRoomListBinding;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RoomListFragment extends Fragment {
 
     private FragmentRoomListBinding binding;
     private ArrayList<Room> room;
     private AdapterRoom adapterRoom;
+    private APIInterface apiInterface;
+    private ActivityUtils activityUtils;
+    final private String TAG = "RoomListFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,31 +37,38 @@ public class RoomListFragment extends Fragment {
 
         binding = FragmentRoomListBinding.inflate(inflater, container, false);
 
-        getRoomList();
-        setRecyclerRoom();
+        init();
 
         return binding.getRoot();
     }
 
+    private void init() {
+        activityUtils = new ActivityUtils();
+        String token = activityUtils.getToken(getContext());
+        apiInterface = APIClient.getClient(token).create(APIInterface.class);
+
+        getRoomList();
+
+    }
+
     private void getRoomList() {
-        /*Call<JSONFriends> call = apiInterface.doGetFriendsList();
+        Call<ArrayList<Room>> call = apiInterface.doFindRoom(null);
+        call.enqueue(new Callback<ArrayList<Room>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Room>> call, Response<ArrayList<Room>> response) {
+                if(response.isSuccessful()){
+                    room = response.body();
+                    Log.d(TAG, room.get(0).getTotal().toString());
+                    setRecyclerRoom();
+                }
+            }
 
-        NetworkResponse<JSONFriends> networkResponse = new NetworkResponse<JSONFriends>();
-        call.enqueue(networkResponse);
-
-        if(networkResponse.getRes() != null){
-            friends = networkResponse.getRes().getFriends();
-            setRecyclerFriends();
-        }else {
-            call.cancel();
-        }*/
-        room = new ArrayList<Room>();
-        room.add(new Room("1",null,"채팅방 이름","채팅 메세지",
-                "1",false,"오후 8:24",3));
-        room.add(new Room("2",null,"채팅방 이름2","채팅 메세지2",
-                "1",true,"오전 7:59",0));
-        room.add(new Room("3",null,"채팅방 이름3","채팅 메세지3",
-                "1",false,"어제",0));
+            @Override
+            public void onFailure(Call<ArrayList<Room>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+                call.cancel();
+            }
+        });
     }
 
     private void setRecyclerRoom() {

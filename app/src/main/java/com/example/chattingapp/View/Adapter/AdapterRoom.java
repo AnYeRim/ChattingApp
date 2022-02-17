@@ -3,6 +3,7 @@ package com.example.chattingapp.View.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Activity.RoomActivity;
 import com.example.chattingapp.databinding.ItemRoomBinding;
 
@@ -63,19 +63,19 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
             itemRoomBinding.txtTotal.setText(data.getTotal());
             itemRoomBinding.txtUpdateDate.setText(data.getUpdateDate());
             itemRoomBinding.txtMessage.setText(data.getMessage());
-            itemRoomBinding.txtNewMessage.setText(Integer.toString(data.getNewMessage()));
+            itemRoomBinding.txtNewMessage.setText(Integer.toString(data.getCntNewMessage()));
 
             if(data.getTotal().equals("1")){
                 itemRoomBinding.txtTotal.setVisibility(View.GONE);
             }
 
-            if(data.isAlarm() == true){
+            if(data.isAlarm() == "Y"){
                 itemRoomBinding.imgAlarm.setVisibility(View.GONE);
             }else {
                 itemRoomBinding.imgAlarm.setVisibility(View.VISIBLE);
             }
 
-            if(data.getNewMessage() == 0){
+            if(data.getCntNewMessage() == 0){
                 itemRoomBinding.txtNewMessage.setVisibility(View.GONE);
             }
         }
@@ -84,10 +84,13 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
         public void onClick(View view) {
             int position = getAdapterPosition();
 
-            System.out.println("클릭");
+            Room room = data.get(position);
 
-            ActivityUtils activityUtils = new ActivityUtils();
-            activityUtils.newActivity(mContext, RoomActivity.class);
+            Intent intent = new Intent(mContext, RoomActivity.class);
+            intent.putExtra("data", room);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            mContext.startActivity(intent);
         }
 
         @Override
@@ -96,7 +99,7 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
 
             System.out.println("롱클릭");
             final String[] items;
-            if(data.get(position).isAlarm()){
+            if(data.get(position).isAlarm().equals("Y")){
                 items = new String[]{"채팅방 이름 설정","즐겨찾기에 추가","채팅방 알림 끄기","나가기"};
             }else {
                 items = new String[]{"채팅방 이름 설정","즐겨찾기에 추가","채팅방 알림 켜기","나가기"};
@@ -114,7 +117,11 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
                             Toast.makeText(mContext, "즐겨찾기에 추가", Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            data.get(position).setAlarm(!data.get(position).isAlarm());
+                            if(data.get(position).isAlarm().equals("Y")){
+                                data.get(position).setAlarm("N");
+                            }else {
+                                data.get(position).setAlarm("Y");
+                            }
                             Toast.makeText(mContext, "채팅방 알림", Toast.LENGTH_SHORT).show();
                             break;
                         case 3:

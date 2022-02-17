@@ -64,9 +64,6 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
 
         if(room == null){
             room = (Room) getIntent().getExtras().getSerializable("data");
-        }
-
-        if(room.getTotal() == null){
             setRoomData();
         }
 

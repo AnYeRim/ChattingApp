@@ -43,7 +43,7 @@ public interface APIInterface {
 
 
     @GET("room")
-    Call<Room> doFindRoom(@Query("friend_id") String friend_id);
+    Call<ArrayList<Room>> doFindRoom(@Query("friend_id") String friend_id);
 
     @POST("room")
     Call<Room> doCreateRoom(@Body ArrayList<Friends> friends);
