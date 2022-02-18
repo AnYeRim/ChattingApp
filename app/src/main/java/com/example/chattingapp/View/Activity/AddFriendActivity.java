@@ -42,6 +42,13 @@ public class AddFriendActivity extends AppCompatActivity implements TextWatcher 
         binding.edtFriendPhone.addTextChangedListener(this);
         binding.edtFriendName.addTextChangedListener(this);
 
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         binding.txtOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
