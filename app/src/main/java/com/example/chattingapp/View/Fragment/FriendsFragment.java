@@ -109,8 +109,11 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.myInfo:
-                ActivityUtils activityUtils = new ActivityUtils();
-                activityUtils.newActivity(getContext(), InfoActivity.class);
+                Friends friends = new Friends();
+                friends.setId(activityUtils.getUserID(getContext()));
+                friends.setNikName(activityUtils.getNikName(getContext()));
+
+                activityUtils.newActivity(getContext(), InfoActivity.class, friends);
                 break;
         }
     }
