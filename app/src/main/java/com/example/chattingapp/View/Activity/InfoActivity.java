@@ -64,6 +64,7 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         friends = (Friends) intent.getExtras().getSerializable("data");
         binding.txtNicName.setText(friends.getNikName());
         binding.imgChat.setOnClickListener(this);
+        binding.btnCancle.setOnClickListener(this);
     }
 
     public static int getStatusBarHeight(Context context) {
@@ -144,6 +145,9 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.imgChat:
                 findRoom();
+                break;
+            case R.id.btnCancle:
+                finish();
                 break;
         }
     }
