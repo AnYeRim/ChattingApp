@@ -61,6 +61,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         apiInterface = APIClient.getClient(token).create(APIInterface.class);
 
         binding.btnSend.setOnClickListener(this);
+        binding.btnBack.setOnClickListener(this);
 
         if(room == null){
             room = (Room) getIntent().getExtras().getSerializable("data");
@@ -204,6 +205,9 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                 sendMessage(message);
                 break;
             case R.id.btnMenu:
+                break;
+            case R.id.btnBack:
+                finish();
                 break;
         }
     }
