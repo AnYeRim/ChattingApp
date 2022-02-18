@@ -66,7 +66,7 @@ public class AddFriendActivity extends AppCompatActivity implements TextWatcher 
         call.enqueue(new Callback<Friends>() {
             @Override
             public void onResponse(Call<Friends> call, Response<Friends> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     finish();
                 }
             }

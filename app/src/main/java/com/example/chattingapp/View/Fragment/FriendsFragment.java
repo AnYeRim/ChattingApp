@@ -72,7 +72,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         call.enqueue(new Callback<JSONFriends>() {
             @Override
             public void onResponse(Call<JSONFriends> call, Response<JSONFriends> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     friends = response.body().getFriends();
                     setRecyclerFriends();
                 }

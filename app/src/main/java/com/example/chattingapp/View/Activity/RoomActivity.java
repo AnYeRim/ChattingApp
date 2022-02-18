@@ -98,7 +98,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<Room>() {
             @Override
             public void onResponse(Call<Room> call, Response<Room> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     room = response.body();
                     binding.txtTitle.setText(room.getTitle());
                     setMessageData();
@@ -125,7 +125,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     Toast.makeText(getApplicationContext(),"메세지 보내기 성공", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(getApplicationContext(),"메세지 보내기 실패", Toast.LENGTH_SHORT).show();
@@ -147,7 +147,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<ArrayList<Message>>() {
             @Override
             public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     message = response.body();
                     setRecyclerMessage();
                 }

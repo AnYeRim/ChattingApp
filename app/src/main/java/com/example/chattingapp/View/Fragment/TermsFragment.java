@@ -57,7 +57,7 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
         call.enqueue(new Callback<ArrayList<Terms>>() {
             @Override
             public void onResponse(Call<ArrayList<Terms>> call, Response<ArrayList<Terms>> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     resTerms = response.body();
                     setRecyclerTerm();
                 }

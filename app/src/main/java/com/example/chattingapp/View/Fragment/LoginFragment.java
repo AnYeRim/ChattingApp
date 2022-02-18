@@ -82,7 +82,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
         call.enqueue(new Callback<JsonUser>() {
             @Override
             public void onResponse(Call<JsonUser> call, Response<JsonUser> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     if(response.body().getToken() == null){
                         Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
                     }else {

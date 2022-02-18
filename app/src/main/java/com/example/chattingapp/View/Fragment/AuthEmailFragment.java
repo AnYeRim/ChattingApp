@@ -85,7 +85,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     doCreateAgreeTerms();
                 }
             }
@@ -115,7 +115,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         call.enqueue(new Callback<AgreeTerms>() {
             @Override
             public void onResponse(Call<AgreeTerms> call, Response<AgreeTerms> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     doLogin();
                 }
             }
@@ -142,7 +142,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         call.enqueue(new Callback<JsonUser>() {
             @Override
             public void onResponse(Call<JsonUser> call, Response<JsonUser> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
                     if(response.body().getToken() == null){
                         Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
                     }else {
