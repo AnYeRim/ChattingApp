@@ -17,7 +17,7 @@ public class Room implements Serializable {
     @SerializedName("title")
     private String title;
 
-    @SerializedName("member_total")
+    @SerializedName("members_total")
     private String total;
 
     @SerializedName("alarm")

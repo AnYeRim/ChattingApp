@@ -36,17 +36,17 @@ id (PK)
 title (defalt 참여자 이름들)
 alarm
 favorites
+members_id (','로 구분)
+members_total
 created_at
 updated_at
-
-- Member
-room_id (FK)
-member_id (FK)
 
 - Message
 id (PK)
 from_id (FK)
 room_id (FK)
+read_members_id (','로 구분)
+unread_total
 message
 type
 created_at
