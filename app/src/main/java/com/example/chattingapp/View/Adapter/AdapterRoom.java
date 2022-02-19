@@ -65,11 +65,11 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
             itemRoomBinding.txtMessage.setText(data.getMessage());
             itemRoomBinding.txtNewMessage.setText(Integer.toString(data.getCntNewMessage()));
 
-            if(data.getTotal().equals("1")){
+            if(data.getTotal().equals("1") || data.getTotal().equals("2")){
                 itemRoomBinding.txtTotal.setVisibility(View.GONE);
             }
 
-            if(data.isAlarm() == "Y"){
+            if(data.isAlarm().equals("Y")){
                 itemRoomBinding.imgAlarm.setVisibility(View.GONE);
             }else {
                 itemRoomBinding.imgAlarm.setVisibility(View.VISIBLE);
