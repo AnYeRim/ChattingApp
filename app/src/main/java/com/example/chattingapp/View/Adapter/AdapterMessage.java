@@ -1,12 +1,12 @@
 package com.example.chattingapp.View.Adapter;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chattingapp.Model.DTO.Message;
@@ -52,6 +52,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ItemMessageBinding itemMessageBinding;
         private ActivityUtils activityUtils;
         private String userID;
+        private ConstraintSet constraintSetRight;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,21 +60,38 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             activityUtils = new ActivityUtils();
             userID = activityUtils.getUserID(mContext);
+            setConstraintSetRight();
+        }
+
+        private void setConstraintSetRight() {
+            constraintSetRight = new ConstraintSet();
+
+            constraintSetRight.clone(itemMessageBinding.constraint);
+
+            constraintSetRight.clear(R.id.txtMessage, ConstraintSet.LEFT);
+            constraintSetRight.connect(R.id.txtMessage,ConstraintSet.RIGHT,
+                    R.id.constraint, ConstraintSet.RIGHT, 0);
+
+            constraintSetRight.clear(R.id.txtReadTotal, ConstraintSet.LEFT);
+            constraintSetRight.connect(R.id.txtReadTotal,ConstraintSet.RIGHT,
+                    R.id.txtMessage, ConstraintSet.LEFT, 0);
+
+            constraintSetRight.clear(R.id.txtCreatedDate, ConstraintSet.LEFT);
+            constraintSetRight.connect(R.id.txtCreatedDate,ConstraintSet.RIGHT,
+                    R.id.txtMessage, ConstraintSet.LEFT, 0);
         }
 
         void setItemMessageBinding(Message data) {
             itemMessageBinding.txtMessage.setText(data.getMessage());
+            itemMessageBinding.txtReadTotal.setText(data.getUnread_total());
+            itemMessageBinding.txtCreatedDate.setText(data.getCreated_at());
             if(data.getFrom_id().equals(userID)){
-                // setTextAppearance는 스타일 전체 적용이 아니라, 텍스트 관련된 스타일만 적용되는 것이었음..
-                //itemMessageBinding.txtMessage.setTextAppearance(R.style.txtMyMessage);
                 itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.white));
                 itemMessageBinding.txtMessage.setBackgroundColor(mContext.getColor(R.color.main));
-                itemMessageBinding.linearMessage.setGravity(Gravity.RIGHT);
+                constraintSetRight.applyTo(itemMessageBinding.constraint);
             }else {
-                //itemMessageBinding.txtMessage.setTextAppearance(R.style.txtOthersMessage);
                 itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.black));
                 itemMessageBinding.txtMessage.setBackgroundColor(mContext.getColor(R.color.white));
-                itemMessageBinding.linearMessage.setGravity(Gravity.LEFT);
             }
         }
 

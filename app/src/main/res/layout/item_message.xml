@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearMessage"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraint">
 
     <TextView
         android:id="@+id/txtMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="3dp"
-        android:padding="7dp"/>
+        android:padding="7dp"
+        style="@style/txtTitle3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="dddddd"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/txtReadTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/main"
+        android:textStyle="bold"
+        style="@style/txtContents4"
+        android:layout_marginHorizontal="3dp"
+        app:layout_constraintLeft_toRightOf="@+id/txtMessage"
+        app:layout_constraintBottom_toTopOf="@+id/txtCreatedDate"
+        android:text="99"/>
+
+    <TextView
+        android:id="@+id/txtCreatedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        style="@style/txtContents4"
+        android:layout_marginHorizontal="3dp"
+        app:layout_constraintLeft_toRightOf="@+id/txtMessage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="오전 07:30"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

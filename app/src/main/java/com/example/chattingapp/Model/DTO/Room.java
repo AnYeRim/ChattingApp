@@ -93,7 +93,7 @@ public class Room implements Serializable {
         DateFormat formatter = null;
         Date date = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         }
         try {
             date = dateFormat.parse(updateDate);
