@@ -113,7 +113,7 @@ public class Message implements Serializable {
                 e.printStackTrace();
             }
         }else {
-            long now = System.currentTimeMillis()+1000*60*60*9;
+            long now = System.currentTimeMillis();
             date = new Date(now);
         }
         return formatter.format(date);
