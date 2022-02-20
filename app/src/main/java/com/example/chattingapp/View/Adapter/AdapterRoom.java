@@ -60,12 +60,12 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
         void setItemRoomBinding(Room data) {
             //Glide.with(mContext).load(data.getImageURL()).into(itemFriendsBinding.imgProfile);
             itemRoomBinding.txtRoomTitle.setText(data.getTitle());
-            itemRoomBinding.txtTotal.setText(data.getTotal());
+            itemRoomBinding.txtTotal.setText(data.getTotal()+"");
             itemRoomBinding.txtUpdateDate.setText(data.getUpdateDate());
             itemRoomBinding.txtMessage.setText(data.getMessage());
             itemRoomBinding.txtNewMessage.setText(Integer.toString(data.getCntNewMessage()));
 
-            if(data.getTotal().equals("1") || data.getTotal().equals("2")){
+            if(data.getTotal() == 1 || data.getTotal() == 2){
                 itemRoomBinding.txtTotal.setVisibility(View.GONE);
             }
 

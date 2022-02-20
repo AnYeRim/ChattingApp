@@ -83,7 +83,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         void setItemMessageBinding(Message data) {
             itemMessageBinding.txtMessage.setText(data.getMessage());
-            itemMessageBinding.txtReadTotal.setText(data.getUnread_total());
+            itemMessageBinding.txtReadTotal.setText(data.getUnread_total()+"");
             itemMessageBinding.txtCreatedDate.setText(data.getCreated_at());
             if(data.getFrom_id().equals(userID)){
                 itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.white));

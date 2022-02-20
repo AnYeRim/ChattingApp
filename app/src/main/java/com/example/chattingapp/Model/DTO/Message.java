@@ -29,10 +29,10 @@ public class Message implements Serializable {
     private String type;
 
     @SerializedName("read_members_id")
-    private String read_members_id;
+    private int read_members_id;
 
     @SerializedName("unread_total")
-    private String unread_total;
+    private int unread_total;
 
     @SerializedName("created_at")
     private String created_at;
@@ -43,19 +43,19 @@ public class Message implements Serializable {
     public Message() {
     }
 
-    public String getRead_members_id() {
+    public int getRead_members_id() {
         return read_members_id;
     }
 
-    public void setRead_members_id(String read_members_id) {
+    public void setRead_members_id(int read_members_id) {
         this.read_members_id = read_members_id;
     }
 
-    public String getUnread_total() {
+    public int getUnread_total() {
         return unread_total;
     }
 
-    public void setUnread_total(String unread_total) {
+    public void setUnread_total(int unread_total) {
         this.unread_total = unread_total;
     }
 
@@ -101,19 +101,21 @@ public class Message implements Serializable {
 
     public String getCreated_at() {
         DateFormat dateFormat = null;
-        DateFormat formatter = null;
+        DateFormat formatter = new SimpleDateFormat("a hh:mm", Locale.KOREA);
         Date date = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(created_at != null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            }
+            try {
+                date = dateFormat.parse(created_at);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else {
+            long now = System.currentTimeMillis()+1000*60*60*9;
+            date = new Date(now);
         }
-        try {
-            date = dateFormat.parse(created_at);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        formatter = new SimpleDateFormat("a hh:mm", Locale.KOREA);
-
         return formatter.format(date);
     }
 

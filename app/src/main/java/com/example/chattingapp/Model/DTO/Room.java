@@ -23,7 +23,7 @@ public class Room implements Serializable {
     private String title;
 
     @SerializedName("members_total")
-    private String total;
+    private int total;
 
     @SerializedName("alarm")
     private String alarm;
@@ -72,11 +72,11 @@ public class Room implements Serializable {
         this.message = message;
     }
 
-    public String getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 

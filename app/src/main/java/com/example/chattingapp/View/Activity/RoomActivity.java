@@ -100,7 +100,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<Room> call, Response<Room> response) {
                 if(response.isSuccessful() && response.body() != null){
                     room = response.body();
-                    binding.txtTitle.setText(room.getTitle());
+                    binding.txtTitle.setText(room.getTitle()+" "+room.getTotal());
                     setMessageData();
                 }
             }
@@ -202,6 +202,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                 message.setRoom_id(room.getId());
                 message.setFrom_id(activityUtils.getUserID(this));
                 message.setType("Text");
+                message.setUnread_total(room.getTotal()-1);
                 sendMessage(message);
                 break;
             case R.id.btnMenu:
