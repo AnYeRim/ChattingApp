@@ -52,7 +52,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ItemMessageBinding itemMessageBinding;
         private ActivityUtils activityUtils;
         private String userID;
-        private ConstraintSet constraintSetRight;
+        private ConstraintSet constraintSetRight, constraintSetLeft;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,8 +65,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void setConstraintSetRight() {
             constraintSetRight = new ConstraintSet();
+            constraintSetLeft = new ConstraintSet();
 
             constraintSetRight.clone(itemMessageBinding.constraint);
+            constraintSetLeft.clone(itemMessageBinding.constraint);
 
             constraintSetRight.clear(R.id.txtMessage, ConstraintSet.LEFT);
             constraintSetRight.connect(R.id.txtMessage,ConstraintSet.RIGHT,
@@ -92,6 +94,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }else {
                 itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.black));
                 itemMessageBinding.txtMessage.setBackgroundColor(mContext.getColor(R.color.white));
+                constraintSetLeft.applyTo(itemMessageBinding.constraint);
             }
         }
 
