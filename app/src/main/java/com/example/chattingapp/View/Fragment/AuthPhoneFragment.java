@@ -75,11 +75,7 @@ public class AuthPhoneFragment extends Fragment implements View.OnClickListener,
             case R.id.btnAuth:
                 //입력한 번호로 인증번호 보내는 기능 구현
                 binding.edtPhone.setEnabled(false);
-                binding.btnAuth.setVisibility(View.GONE);
-                binding.btnReAuth.setVisibility(View.VISIBLE);
-                break;
-            case R.id.btnReAuth:
-                //입력한 번호로 인증번호 보내는 기능 구현
+                binding.btnAuth.setText("재인증");
                 break;
             case R.id.btnOK:
                 //인증번호 확인하는 기능 구현
