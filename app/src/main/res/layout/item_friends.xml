@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:paddingHorizontal="15dp"
     android:paddingVertical="7dp"
     android:id="@+id/linearFriends">
@@ -12,34 +13,31 @@
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:background="@drawable/profile_default"
-        android:layout_marginRight="10dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/txtNicName"
+        style="@style/txtTitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:text="이름"
-        style="@style/txtTitle2"
-        android:singleLine="true"
-        android:ellipsize="end"/>
+        app:layout_constraintTop_toTopOf="@+id/imgProfile"
+        app:layout_constraintStart_toEndOf="@+id/imgProfile"
+        app:layout_constraintBottom_toTopOf="@+id/txtMessage"/>
 
+    <!-- 아직 DB에 상태메세지 컬럼이 없음 -->
     <TextView
         android:id="@+id/txtMessage"
+        style="@style/txtContents3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="상태메세지"
-        style="@style/txtContents3"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:visibility="gone"/>
-    </LinearLayout>
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/txtNicName"
+        app:layout_constraintStart_toStartOf="@+id/txtNicName"
+        app:layout_constraintBottom_toBottomOf="@+id/imgProfile"/>
 
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
