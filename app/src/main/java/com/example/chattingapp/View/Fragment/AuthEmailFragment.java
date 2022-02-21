@@ -1,6 +1,8 @@
 package com.example.chattingapp.View.Fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AuthEmailFragment extends Fragment implements View.OnClickListener {
+public class AuthEmailFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
     private ActivityUtils activityUtils;
     private FragmentAuthEmailBinding binding;
@@ -55,6 +57,8 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
         binding.txtLater.setOnClickListener(this);
         binding.btnSend.setOnClickListener(this);
         binding.btnOK.setOnClickListener(this);
+        binding.edtEmail.addTextChangedListener(this);
+        binding.edtAuthNum.addTextChangedListener(this);
 
         return binding.getRoot();
     }
@@ -189,6 +193,7 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
                     // 입력한 이메일로 인증번호 보내기
                     binding.linearSendMail.setVisibility(View.GONE);
                     binding.linearAuthNum.setVisibility(View.VISIBLE);
+                    binding.edtEmail.setEnabled(false);
                 }else {
                     Toast.makeText(getActivity(),"개인정보 이용 동의해주세요", Toast.LENGTH_SHORT).show();
                 }
@@ -197,12 +202,33 @@ public class AuthEmailFragment extends Fragment implements View.OnClickListener 
                 // 인증번호 입력된 값과 보낸 값이 같은지 비교하고 맞으면 회원가입 완료하기
                 user.setEmail(binding.edtEmail.getText().toString());
                 if(true) {
-                    doCreateUser();
+                    getFirebaseToken();
                 }
                 break;
         }
 
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (binding.btnSend.isEnabled() == false && binding.edtEmail.length() > 0) {
+            binding.btnSend.setEnabled(true);
+        }else if (binding.edtEmail.length() == 0){
+            binding.btnSend.setEnabled(false);
+        }else if (binding.btnOK.isEnabled() == false && binding.edtAuthNum.length() > 0){
+            binding.btnOK.setEnabled(true);
+        }else if (binding.edtAuthNum.length() == 0){
+            binding.btnOK.setEnabled(false);
+        }
+    }
 }
