@@ -32,37 +32,45 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
     private ArrayList<Friends> favorites, friends;
     private AdapterFriends adapterFavorites, adapterFriends;
     private APIInterface apiInterface;
+    private String token, nikName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
-
-        activityUtils = new ActivityUtils();
-
-        String token = activityUtils.getToken(getContext());
-        String nikName = activityUtils.getNikName(getContext());
-        binding.myInfo.txtNicName.setText(nikName);
-
-        apiInterface = APIClient.getClient(token).create(APIInterface.class);
-        getFriendsList();
-
-        favorites = new ArrayList<Friends>();
-        friends = new ArrayList<Friends>();
-        setRecyclerFriends();
-        setRecyclerFavorites();
-
-        binding.myInfo.linearFriends.setOnClickListener(this);
-
+        init();
         return binding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void init() {
+        activityUtils = new ActivityUtils();
 
-        setRecyclerFriends();
+        token = activityUtils.getToken(getContext());
+        nikName = activityUtils.getNikName(getContext());
+        binding.myInfo.txtNicName.setText(nikName);
+
+        apiInterface = APIClient.getClient(token).create(APIInterface.class);
+
+        binding.myInfo.linearFriends.setOnClickListener(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(friends == null || favorites == null){
+            favorites = new ArrayList<>();
+            friends = new ArrayList<>();
+            getFriendsList();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(friends != null || favorites != null){
+            friends = null;
+            favorites = null;
+        }
     }
 
     private void getFriendsList() {
@@ -92,12 +100,14 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         }*/
     }
 
-    private void setRecyclerFavorites() {
+    //TODO 즐겨찾기하기
+    //TODO 즐겨찾기한 목록 가져오기
+/*    private void setRecyclerFavorites() {
         binding.recyclerFavorites.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterFavorites = new AdapterFriends(getContext(), favorites);
         binding.recyclerFavorites.setAdapter(adapterFavorites);
         adapterFavorites.notifyDataSetChanged();
-    }
+    }*/
 
     private void setRecyclerFriends() {
         binding.recyclerFriends.setLayoutManager(new LinearLayoutManager(getContext()));
