@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +14,7 @@ import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Message;
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.Model.SocketClient;
+import com.example.chattingapp.Model.VO.ResponseData;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Adapter.AdapterMessage;
@@ -72,15 +72,53 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             socket = SocketClient.getInstance();
             socket.connect();
             socket.emit("joinRoom", room.getId());
-            socket.on("sendMessage", onSendMessage);
+            socket.on("getSendMessage", onSendMessage);
+            //socket.on("getReadMessage", onReadMessage);
         }
     }
 
-    private void scrollDown() {
-        binding.recyclerMessage.post(new Runnable() {
+    private void setRoomData() {
+        Call<Room> call = apiInterface.doGetRoom(room.getId());
+
+        call.enqueue(new Callback<Room>() {
             @Override
-            public void run() {
-                binding.recyclerMessage.scrollToPosition(adapterMessage.getItemCount() - 1);
+            public void onResponse(Call<Room> call, Response<Room> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    room = response.body();
+                    String title = room.getTitle();
+                    if(room.getTotal() != 1 && room.getTotal() != 2){
+                        title += " "+ room.getTotal();
+                    }
+                    binding.txtTitle.setText(title);
+                    setMessageData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Room> call, Throwable t) {
+                Log.e(TAG,t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
+    private void setMessageData() {
+        Call<ArrayList<Message>> call = apiInterface.doGetMessage(room.getId());
+
+        call.enqueue(new Callback<ArrayList<Message>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    message = response.body();
+                    setRecyclerMessage();
+                    updateReadMessage();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
+                Log.e(TAG,t.getMessage());
+                call.cancel();
             }
         });
     }
@@ -92,23 +130,11 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         scrollDown();
     }
 
-    private void setRoomData() {
-        Call<Room> call = apiInterface.doGetRoom(room.getId());
-
-        call.enqueue(new Callback<Room>() {
+    private void scrollDown() {
+        binding.recyclerMessage.post(new Runnable() {
             @Override
-            public void onResponse(Call<Room> call, Response<Room> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    room = response.body();
-                    binding.txtTitle.setText(room.getTitle()+" "+room.getTotal());
-                    setMessageData();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Room> call, Throwable t) {
-                Log.d(TAG,t.getMessage());
-                call.cancel();
+            public void run() {
+                binding.recyclerMessage.scrollToPosition(adapterMessage.getItemCount() - 1);
             }
         });
     }
@@ -126,36 +152,16 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    Toast.makeText(getApplicationContext(),"메세지 보내기 성공", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"메세지 보내기 성공");
                 }else {
-                    Toast.makeText(getApplicationContext(),"메세지 보내기 실패", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"메세지 보내기 실패");
                 }
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Log.d(TAG,t.getMessage());
-                Toast.makeText(getApplicationContext(),"메세지 보내기 실패", Toast.LENGTH_SHORT).show();
-                call.cancel();
-            }
-        });
-    }
-
-    private void setMessageData() {
-        Call<ArrayList<Message>> call = apiInterface.doGetMessage(room.getId());
-
-        call.enqueue(new Callback<ArrayList<Message>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    message = response.body();
-                    setRecyclerMessage();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
-                Log.d(TAG,t.getMessage());
+                Log.e(TAG,"메세지 보내기 실패");
+                Log.e(TAG,t.getMessage());
                 call.cancel();
             }
         });
@@ -169,8 +175,9 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                 data.put("fromID", message.getFrom_id());
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.e(TAG,e.getMessage());
             }
-            socket.emit("chatting", data);
+            socket.emit("sendMessage", data);
     }
 
     Emitter.Listener onSendMessage = args -> {
@@ -186,12 +193,81 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                     message.setFrom_id(data.getString("fromID"));
                     adapterMessage.addData(message);
                     scrollDown();
+                    //readSocketMessage(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.e(TAG,e.getMessage());
                 }
             }
         }, 0);
     };
+/*
+    private void readSocketMessage(Message message) {
+        JSONObject data = new JSONObject();
+        try {
+            data.put("roomName", room.getId());
+            data.put("message", message.getMessage());
+            data.put("fromID", message.getFrom_id());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG,e.getMessage());
+        }
+        socket.emit("getReadMessage", data);
+    }
+
+    Emitter.Listener onReadMessage = args -> {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run()
+            {
+                JSONObject data = (JSONObject) args[0];
+                Message message = new Message();
+                try {
+                    message.setMessage(data.getString("message"));
+                    message.setFrom_id(data.getString("fromID"));
+                    adapterMessage.addData(message);
+                    scrollDown();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG,e.getMessage());
+                }
+            }
+        }, 0);
+    };*/
+
+    private void updateReadMessage() {
+        Call<ResponseData> call = apiInterface.doUpdateReadMessage();
+
+        call.enqueue(new Callback<ResponseData>() {
+            @Override
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    Log.d(TAG,"읽은 메세지 수 수정 성공");
+                    int affectedRows = response.body().getAffectedRows();
+                    String myID = activityUtils.getUserID(getApplicationContext());
+                    while (affectedRows != 0){
+                        for(int i=message.size()-1; i>0; i--){
+                            if(message.get(i).getFrom_id().equals(myID)){
+                                message.get(i).setRead_members_id(message.get(i).getRead_members_id()+"','"+myID);
+                                message.get(i).setUnread_total(message.get(i).getUnread_total()-1);
+                                affectedRows -= 1;
+                            }
+                        }
+                    }
+                    adapterMessage.notifyDataSetChanged();
+                }else {
+                    Log.d(TAG,"읽은 메세지 수 수정 실패");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData> call, Throwable t) {
+                Log.e(TAG,t.getMessage());
+                call.cancel();
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {

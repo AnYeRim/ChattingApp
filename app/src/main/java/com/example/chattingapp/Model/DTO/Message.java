@@ -29,7 +29,7 @@ public class Message implements Serializable {
     private String type;
 
     @SerializedName("read_members_id")
-    private int read_members_id;
+    private String read_members_id;
 
     @SerializedName("unread_total")
     private int unread_total;
@@ -43,11 +43,11 @@ public class Message implements Serializable {
     public Message() {
     }
 
-    public int getRead_members_id() {
+    public String getRead_members_id() {
         return read_members_id;
     }
 
-    public void setRead_members_id(int read_members_id) {
+    public void setRead_members_id(String read_members_id) {
         this.read_members_id = read_members_id;
     }
 

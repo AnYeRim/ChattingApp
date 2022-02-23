@@ -8,6 +8,7 @@ import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.Model.VO.JSONFriends;
 import com.example.chattingapp.Model.VO.JsonUser;
+import com.example.chattingapp.Model.VO.ResponseData;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -56,5 +58,8 @@ public interface APIInterface {
 
     @POST("room/message")
     Call<Message> doSendMessage(@Body Message message);
+
+    @PUT("room/message")
+    Call<ResponseData> doUpdateReadMessage();
 
 }

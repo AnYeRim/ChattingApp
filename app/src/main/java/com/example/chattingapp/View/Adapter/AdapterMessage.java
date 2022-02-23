@@ -74,8 +74,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             constraintSetRight.connect(R.id.txtMessage,ConstraintSet.RIGHT,
                     R.id.constraint, ConstraintSet.RIGHT, 0);
 
-            constraintSetRight.clear(R.id.txtReadTotal, ConstraintSet.LEFT);
-            constraintSetRight.connect(R.id.txtReadTotal,ConstraintSet.RIGHT,
+            constraintSetRight.clear(R.id.txtUnreadTotal, ConstraintSet.LEFT);
+            constraintSetRight.connect(R.id.txtUnreadTotal,ConstraintSet.RIGHT,
                     R.id.txtMessage, ConstraintSet.LEFT, 0);
 
             constraintSetRight.clear(R.id.txtCreatedDate, ConstraintSet.LEFT);
@@ -85,7 +85,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         void setItemMessageBinding(Message data) {
             itemMessageBinding.txtMessage.setText(data.getMessage());
-            itemMessageBinding.txtReadTotal.setText(data.getUnread_total()+"");
+            if(data.getUnread_total() == 0) {
+                itemMessageBinding.txtUnreadTotal.setText("");
+            }else {
+                itemMessageBinding.txtUnreadTotal.setText(data.getUnread_total() + "");
+            }
             itemMessageBinding.txtCreatedDate.setText(data.getCreated_at());
             if(data.getFrom_id().equals(userID)){
                 itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.white));
