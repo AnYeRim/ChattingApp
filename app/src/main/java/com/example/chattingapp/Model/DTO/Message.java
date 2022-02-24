@@ -31,6 +31,9 @@ public class Message implements Serializable {
     @SerializedName("read_members_id")
     private String read_members_id;
 
+    @SerializedName("my_read_status")
+    private String my_read_status;
+
     @SerializedName("unread_total")
     private int unread_total;
 
@@ -41,6 +44,14 @@ public class Message implements Serializable {
     private String updated_at;
 
     public Message() {
+    }
+
+    public String getMy_read_status() {
+        return my_read_status;
+    }
+
+    public void setMy_read_status(String my_read_status) {
+        this.my_read_status = my_read_status;
     }
 
     public String getRead_members_id() {

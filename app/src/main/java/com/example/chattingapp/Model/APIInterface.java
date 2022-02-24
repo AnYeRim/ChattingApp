@@ -56,10 +56,4 @@ public interface APIInterface {
     @GET("room/{room_id}/message")
     Call<ArrayList<Message>> doGetMessage(@Path("room_id") String room_id);
 
-    @POST("room/message")
-    Call<Message> doSendMessage(@Body Message message);
-
-    @PUT("room/message")
-    Call<ResponseData> doUpdateReadMessage();
-
 }
