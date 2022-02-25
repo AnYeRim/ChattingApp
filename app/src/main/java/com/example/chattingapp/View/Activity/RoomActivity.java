@@ -162,6 +162,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             data.put("type", message.getType());
             data.put("unread_total", message.getUnread_total());
             socket.emit("sendMessage", data);
+            Log.d(TAG,message.getMessage()+" 메세지 보내기 요청");
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
@@ -174,8 +175,10 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 try {
+                    Log.d(TAG,"보낸 메세지에 대한 응답 받음"+args[0]);
                     JSONObject data = (JSONObject) args[0];
                     if (data.getString("from_id").equals(userID)) {
+                        Log.d(TAG,"내가 보낸 메세지임");
                         for (int i = message.size() - 1; i > 0; i--) {
                             if (message.get(i).getMessage().equals(data.getString("message"))) {
                                 message.get(i).setMessage_id(data.getString("message_id"));
@@ -183,7 +186,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                     } else {
-                        Log.d(TAG,"onSendMessage message_id : "+data.getString("message_id"));
+                        Log.d(TAG,"상대방이 보낸 메세지임");
                         Message message = new Message();
                         message.setRoom_id(data.getString("room_id"));
                         message.setFrom_id(data.getString("from_id"));
@@ -206,7 +209,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     private void readSocketMessage() {
         try {
             for (int i = message.size() - 1; i > 0; i--) {
-                Log.d(TAG,"onSendMessage getMy_read_status : "+message.get(i).getMy_read_status());
+                Log.d(TAG,"읽은 상태 확인 : "+message.get(i).getMessage());
                 if (!message.get(i).getFrom_id().equals(userID)
                         && message.get(i).getMy_read_status().equals("안읽음")) {
                     JSONObject data = new JSONObject();
@@ -216,8 +219,9 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                     data.put("from_id", message.get(i).getFrom_id());
                     data.put("read_member_id", userID);
                     socket.emit("setReadMessage", data);
-                    Log.d(TAG,"readSocketMessage 읽음처리 보냈어!");
+                    Log.d(TAG,"서버로 읽음 처리 요청");
                 } else {
+                    Log.d(TAG,"더이상 읽음 처리 요청할 것 없음");
                     break;
                 }
             }
@@ -232,16 +236,15 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 try {
-                    Log.d(TAG,"onReadMessage");
+                    Log.d(TAG,"읽음 처리 요청에 대한 응답 받음"+args[0]);
                     JSONObject data = (JSONObject) args[0];
                     for (int i = message.size() - 1; i > 0; i--) {
-                        Log.d(TAG,"onReadMessage for : "+data);
-                        Log.d(TAG,"onReadMessage for : "+data);
+                        Log.d(TAG,i+" "+message.get(i).getMessage());
                         if (message.get(i).getMessage_id().equals(data.getString("message_id"))) {
-                            Log.d(TAG,"set 안읽은 수 수정");
-                            Log.d(TAG,"get("+i+") message "+message.get(i).getMessage());
-                            Log.d(TAG,"get("+i+") unread "+message.get(i).getUnread_total());
                             message.get(i).setUnread_total(message.get(i).getUnread_total() - 1);
+                            message.get(i).setMy_read_status("읽음");
+                            Log.d(TAG,i+" "+message.get(i).getMessage()
+                                    +" 수정 "+message.get(i).getUnread_total());
                             break;
                         }
                     }
@@ -260,6 +263,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSend:
+                Log.d(TAG,binding.edtMessage.getText()+" 메세지 보내기 버튼 클릭");
                 Message message = new Message();
                 message.setRoom_id(room.getId());
                 message.setFrom_id(userID);
