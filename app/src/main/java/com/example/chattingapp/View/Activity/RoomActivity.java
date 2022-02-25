@@ -85,7 +85,11 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        socket.disconnect();
+        if(socket != null || socket.connected()){
+            socket.disconnect();
+            socket.off("getSendMessage", onSendMessage);
+            socket.off("getReadMessage", onReadMessage);
+        }
     }
 
     private void setRoomData() {
