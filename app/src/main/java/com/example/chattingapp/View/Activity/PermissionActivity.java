@@ -45,9 +45,7 @@ public class PermissionActivity extends AppCompatActivity {
 
         activityUtils = new ActivityUtils();
 
-        binding.btnPermission.setOnClickListener(view -> {
-            showRequestPermissions();
-        });
+        binding.btnPermission.setOnClickListener(view -> showRequestPermissions());
 
     }
 
