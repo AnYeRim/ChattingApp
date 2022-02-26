@@ -1,10 +1,13 @@
 package com.example.chattingapp.Model;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -12,9 +15,12 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.R;
+import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Activity.RoomActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.List;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -40,7 +46,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Intent intent = new Intent(this, RoomActivity.class);
         intent.putExtra("data", room);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -52,11 +57,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+        ActivityManager manager = (ActivityManager) getSystemService( Activity.ACTIVITY_SERVICE );
+        List<ActivityManager.RunningTaskInfo> list = manager.getRunningTasks(1);
+        ActivityManager.RunningTaskInfo info=list.get(0);
+        switch (info.topActivity.getClassName()){
+            case "com.example.chattingapp.View.Activity.RoomActivity":
+                //TODO 현재 입장한 room_id와 푸시알림의 room_id 비교
+                //TODO 같으면 푸시를 띄우지 않고, 다르면 푸시를 띄운다.
+                break;
+            case "com.example.chattingapp.View.Activity.RoomListFragment":
+                //TODO 푸시알림을 띄우고, 푸시 데이터를 액티비티에 적용시킨다.
+                break;
+            default:
+                //TODO 푸시알림만 띄운다.
+                break;
+        }
+
         //호출
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(notificationId, builder.build());
-
-
     }
 
     private void createNotificationChannel() {
