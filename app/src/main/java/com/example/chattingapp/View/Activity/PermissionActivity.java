@@ -2,28 +2,34 @@ package com.example.chattingapp.View.Activity;
 
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.chattingapp.Utils.ActivityUtils;
-import com.example.chattingapp.Utils.PermissionUtils;
 import com.example.chattingapp.databinding.ActivityPermissionBinding;
 
 public class PermissionActivity extends AppCompatActivity {
 
-    private PermissionUtils permissionUtils;
     private ActivityUtils activityUtils;
     private ActivityPermissionBinding binding;
 
-    final String TAG = "PermissionActivity";
-    final int REQUEST_PERMISSIONS_CODE = 0;
+    private final String TAG = "PermissionActivity";
+    private final int REQUEST_PERMISSIONS_CODE = 0;
 
-    private String[] initPms = {
+    private final String[] initPms = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.CALL_PHONE,
@@ -37,41 +43,43 @@ public class PermissionActivity extends AppCompatActivity {
         binding = ActivityPermissionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        permissionUtils = new PermissionUtils();
         activityUtils = new ActivityUtils();
 
-        binding.btnPermission.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (permissionUtils.checkShouldShowRequestPermissionRationale(PermissionActivity.this, initPms)) {
-                    // 거부 2번 이상 시 더이상 권한 창이 안뜨게 되어있어서 거부한 적 있으면 권한 설정 창으로 이동하게 구현.
-                    permissionUtils.showDialogRequestPermission(PermissionActivity.this);
-                } else {
-                    // 첫 권한 요청 (요청 거부한 적 없을 때)
-                    requestPermissions(initPms, REQUEST_PERMISSIONS_CODE);
-                }
-            }
+        binding.btnPermission.setOnClickListener(view -> {
+            showRequestPermissions();
         });
 
     }
 
-    // 다른 액티비티가 전면에 나올 때
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(0, 0);
-    }
-
-    // 액티비티가 운영되기 직전
     @Override
     protected void onResume() {
         super.onResume();
 
-        // 시작하거나 앱 설정 창으로 이동했다가 되돌아왔을 때, 권한 필요 여부 확인
-        if (permissionUtils.checkNeedPermission(this, initPms) != true) {
-            activityUtils.newActivity(this, SplashActivity.class);
-            finish();
+        if (noNeedAgreePermissions()) {
+            showSplash();
         }
+    }
+
+    private boolean noNeedAgreePermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+
+        return !checkDeniedPermissions(getApplicationContext(), initPms);
+    }
+
+    private void showSplash() {
+        activityUtils.newActivity(this, SplashActivity.class);
+        finish();
+    }
+
+    private void showRequestPermissions() {
+        if (checkDeniedPermissions(PermissionActivity.this, initPms)) {
+            showDialogRequestPermissions(PermissionActivity.this);
+            return;
+        }
+
+        requestPermissions(initPms, REQUEST_PERMISSIONS_CODE);
     }
 
     // 권한 요청에 대한 결과 콜백
@@ -79,26 +87,81 @@ public class PermissionActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        // 요청 코드가 REQUEST_PERMISSIONS_CODE 이고, 요청한 퍼미션 개수만큼 수신되었는지 확인
-        if (requestCode == REQUEST_PERMISSIONS_CODE && grantResults.length == initPms.length) {
-            // 모든 권한을 허용하였는지 확인
-            for (int i = 0; i < grantResults.length; i++) {
-                Log.d(TAG,"grantResults["+i+"]"+grantResults[i]);
-                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    // 거부된 권한이 있다면, 권한이 필요한 이유와 함께 권한 재요청하는 다이어로그 창 띄우기
-                    permissionUtils.showDialogRequestPermission(this);
-                    return;
-                }
-            }
-            // 모든 권한이 허용되었다면 스플래시 화면을 띄우며 권한 화면 종료.
-            activityUtils.newActivity(this, SplashActivity.class);
-            finish();
-        } else {
-            Log.d(TAG,"Permission denied");
-            // 권한이 필요한 이유와 함께 권한 재요청하는 다이어로그 창 띄우기
-            permissionUtils.showDialogRequestPermission(this);
+        if (isDifferentResult(requestCode, grantResults)) {
+            Log.d(TAG, "Fail onRequestPermissionsResult");
+            return;
         }
 
+        if (checkDeniedPermissions(grantResults)) {
+            showDialogRequestPermissions(this);
+            return;
+        }
+
+        showSplash();
+    }
+
+    // 권한 거부한 경우, 사용자가 직접 권한 설정하도록 요청하는 창의 띄운다.
+    public void showDialogRequestPermissions(Context mContext) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        builder.setTitle("권한 요청");
+        builder.setMessage("앱을 실행하기 위해 다음 권한이 필요합니다.\n전화,주소록,저장공간 권한 허용해주세요.");
+
+        builder.setPositiveButton("설정", (dialogInterface, i) -> showSettingView(mContext));
+        builder.setNegativeButton("취소", null);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    // 앱 설정 창을 띄운다
+    private void showSettingView(Context mContext) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", mContext.getPackageName(), null);
+        intent.setData(uri);
+        mContext.startActivity(intent);
+    }
+
+    private boolean isDifferentResult(int requestCode, @NonNull int[] grantResults) {
+        return !(requestCode == REQUEST_PERMISSIONS_CODE) || grantResults.length != initPms.length;
+    }
+
+    private boolean checkDeniedPermissions(@NonNull int[] grantResults) {
+        for (int grantResult : grantResults) {
+            if (isDenied(grantResult)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkDeniedPermissions(Context mContext, String[] pmsList) {
+        for (String permission : pmsList) {
+            if (isDenied(ContextCompat.checkSelfPermission(mContext, permission))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkDeniedPermissions(Activity mActivity, String[] pmsList) {
+        for (String permission : pmsList) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isDenied(int grantResult) {
+        return grantResult == PackageManager.PERMISSION_DENIED;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
     }
 
 }
