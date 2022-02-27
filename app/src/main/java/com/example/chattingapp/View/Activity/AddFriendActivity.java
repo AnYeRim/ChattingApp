@@ -4,27 +4,24 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.databinding.ActivityAddFriendBinding;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddFriendActivity extends AppCompatActivity implements TextWatcher {
+public class AddFriendActivity extends BaseActivity implements TextWatcher {
 
     private ActivityAddFriendBinding binding;
-    private APIInterface apiInterface;
-    private ActivityUtils activityUtils;
-    private Friends friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,47 +30,42 @@ public class AddFriendActivity extends AppCompatActivity implements TextWatcher 
         binding = ActivityAddFriendBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        activityUtils = new ActivityUtils();
-        friends = new Friends();
+        disabledTextOK();
 
-        apiInterface = APIClient.getClient(activityUtils.getToken(this)).create(APIInterface.class);
-
-        binding.txtOK.setTextColor(Color.LTGRAY);
         binding.edtFriendPhone.addTextChangedListener(this);
         binding.edtFriendName.addTextChangedListener(this);
 
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        binding.txtOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                friends.setNikName(binding.edtFriendName.getText().toString());
-                friends.setPhone(binding.edtFriendPhone.getText().toString());
-                doAddFriend();
-            }
-        });
+        binding.btnBack.setOnClickListener(view -> finish());
+        binding.txtOK.setOnClickListener(view -> doAddFriend(getFriendData()));
     }
 
-    private void doAddFriend() {
-        Call<Friends> call = apiInterface.doAddFriends(friends);
+    @NonNull
+    private APIInterface getApiInterface() {
+        return APIClient.getClient(getToken()).create(APIInterface.class);
+    }
+
+    private Friends getFriendData() {
+        Friends friends = new Friends();
+        friends.setNikName(binding.edtFriendName.getText().toString());
+        friends.setPhone(binding.edtFriendPhone.getText().toString());
+        return friends;
+    }
+
+    private void doAddFriend(Friends friends) {
+        Call<Friends> call = getApiInterface().doAddFriends(friends);
 
         //NetworkResponse<User> networkResponse = new NetworkResponse<User>();
         call.enqueue(new Callback<Friends>() {
             @Override
-            public void onResponse(Call<Friends> call, Response<Friends> response) {
-                if(response.isSuccessful() && response.body() != null){
+            public void onResponse(@NonNull Call<Friends> call, @NonNull Response<Friends> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<Friends> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"친구추가 실패", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<Friends> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(), "친구추가 실패", Toast.LENGTH_SHORT).show();
                 call.cancel();
 
             }
@@ -99,12 +91,29 @@ public class AddFriendActivity extends AppCompatActivity implements TextWatcher 
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if (binding.edtFriendName.length() > 0 && binding.edtFriendPhone.length() > 0) {
-            binding.txtOK.setEnabled(true);
-            binding.txtOK.setTextColor(Color.BLACK);
-        }else{
-            binding.txtOK.setEnabled(false);
-            binding.txtOK.setTextColor(Color.LTGRAY);
+        if (isNotEmptyRequiredValues()) {
+            enabledTextOK();
+            return;
         }
+
+        disabledTextOK();
+    }
+
+    void disabledTextOK() {
+        binding.txtOK.setEnabled(false);
+        binding.txtOK.setTextColor(Color.LTGRAY);
+    }
+
+    void enabledTextOK() {
+        binding.txtOK.setEnabled(true);
+        binding.txtOK.setTextColor(Color.BLACK);
+    }
+
+    private boolean isNotEmptyRequiredValues() {
+        return isNotEmptyEdit(binding.edtFriendName) && isNotEmptyEdit(binding.edtFriendPhone);
+    }
+
+    private boolean isNotEmptyEdit(EditText editText) {
+        return editText.length() > 0;
     }
 }

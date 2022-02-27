@@ -6,20 +6,18 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.View.Fragment.EtcFragment;
 import com.example.chattingapp.View.Fragment.FriendsFragment;
 import com.example.chattingapp.View.Fragment.RoomListFragment;
 import com.example.chattingapp.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
 
-    private ActivityUtils activityUtils;
     private ActivityMainBinding binding;
     private Fragment frg_friends, frg_chat, frg_etc;
 
@@ -30,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        activityUtils = new ActivityUtils();
 
         frg_friends = new FriendsFragment();
         frg_chat = new RoomListFragment();
@@ -97,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //TODO 채팅방 만들기
                 break;
             case R.id.btnAddFriends:
-                activityUtils.newActivity(this, AddFriendActivity.class);
+                startActivity(AddFriendActivity.class);
                 break;
         }
     }

@@ -14,16 +14,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.databinding.ActivityPermissionBinding;
 
-public class PermissionActivity extends AppCompatActivity {
+public class PermissionActivity extends BaseActivity {
 
-    private ActivityUtils activityUtils;
     private ActivityPermissionBinding binding;
 
     private final String TAG = "PermissionActivity";
@@ -43,10 +41,7 @@ public class PermissionActivity extends AppCompatActivity {
         binding = ActivityPermissionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        activityUtils = new ActivityUtils();
-
         binding.btnPermission.setOnClickListener(view -> showRequestPermissions());
-
     }
 
     @Override
@@ -67,13 +62,13 @@ public class PermissionActivity extends AppCompatActivity {
     }
 
     private void showSplash() {
-        activityUtils.newActivity(this, SplashActivity.class);
+        startActivity(SplashActivity.class);
         finish();
     }
 
     private void showRequestPermissions() {
         if (checkDeniedPermissions(PermissionActivity.this, initPms)) {
-            showDialogRequestPermissions(PermissionActivity.this);
+            showDialogRequestPermissions();
             return;
         }
 
@@ -91,7 +86,7 @@ public class PermissionActivity extends AppCompatActivity {
         }
 
         if (checkDeniedPermissions(grantResults)) {
-            showDialogRequestPermissions(this);
+            showDialogRequestPermissions();
             return;
         }
 
@@ -99,17 +94,14 @@ public class PermissionActivity extends AppCompatActivity {
     }
 
     // 권한 거부한 경우, 사용자가 직접 권한 설정하도록 요청하는 창의 띄운다.
-    public void showDialogRequestPermissions(Context mContext) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-
-        builder.setTitle("권한 요청");
-        builder.setMessage("앱을 실행하기 위해 다음 권한이 필요합니다.\n전화,주소록,저장공간 권한 허용해주세요.");
-
-        builder.setPositiveButton("설정", (dialogInterface, i) -> showSettingView(mContext));
-        builder.setNegativeButton("취소", null);
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+    public void showDialogRequestPermissions() {
+        new AlertDialog.Builder(this)
+                .setTitle("권한 요청")
+                .setMessage("앱을 실행하기 위해 다음 권한이 필요합니다.\n전화,주소록,저장공간 권한 허용해주세요.")
+                .setPositiveButton("설정", (dialogInterface, i) -> showSettingView(this))
+                .setNegativeButton("취소", null)
+                .create()
+                .show();
     }
 
     // 앱 설정 창을 띄운다
