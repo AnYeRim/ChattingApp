@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.chattingapp.Model.APIClient;
@@ -14,12 +14,10 @@ import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Message;
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.Model.SocketClient;
-import com.example.chattingapp.Model.VO.ResponseData;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.View.Adapter.AdapterMessage;
 import com.example.chattingapp.databinding.ActivityRoomBinding;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,19 +30,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RoomActivity extends AppCompatActivity implements View.OnClickListener {
+public class RoomActivity extends BaseActivity implements View.OnClickListener {
 
     private ActivityRoomBinding binding;
-    private Room room;
+
+    private final String TAG = getClass().getSimpleName();
+
     private Socket socket;
-    private String userID, token;
-
-    private final String TAG = "RoomActivity";
-
-    private ActivityUtils activityUtils;
-    private APIInterface apiInterface;
-    private AdapterMessage adapterMessage;
+    private Room room;
     private ArrayList<Message> message;
+    private AdapterMessage adapterMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,23 +49,20 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        init();
-    }
-
-    private void init() {
-        activityUtils = new ActivityUtils();
-        token = activityUtils.getToken(this);
-        userID = activityUtils.getUserID(this);
-        apiInterface = APIClient.getClient(token).create(APIInterface.class);
-
         binding.btnSend.setOnClickListener(this);
         binding.btnBack.setOnClickListener(this);
 
         if (room == null) {
             room = (Room) getIntent().getExtras().getSerializable("data");
             setRoomData();
+            setSocket();
+            socket.emit("joinRoom", room.getId());
         }
+    }
 
+    @NonNull
+    private APIInterface getApiInterface() {
+        return APIClient.getClient(getToken()).create(APIInterface.class);
     }
 
     private void setSocket() {
@@ -85,7 +77,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(socket != null || socket.connected()){
+        if (socket != null && socket.connected()) {
             socket.disconnect();
             socket.off("getSendMessage", onSendMessage);
             socket.off("getReadMessage", onReadMessage);
@@ -93,24 +85,20 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setRoomData() {
-        Call<Room> call = apiInterface.doGetRoom(room.getId());
+        Call<Room> call = getApiInterface().doGetRoom(room.getId());
 
         call.enqueue(new Callback<Room>() {
             @Override
-            public void onResponse(Call<Room> call, Response<Room> response) {
-                if (response.isSuccessful() && response.body() != null) {
+            public void onResponse(@NonNull Call<Room> call, @NonNull Response<Room> response) {
+                if (isSuccessResponse(response)) {
                     room = response.body();
-                    String title = room.getTitle();
-                    if (room.getTotal() != 1 && room.getTotal() != 2) {
-                        title += " " + room.getTotal();
-                    }
-                    binding.txtTitle.setText(title);
+                    setTitle(room);
                     setMessageData();
                 }
             }
 
             @Override
-            public void onFailure(Call<Room> call, Throwable t) {
+            public void onFailure(@NonNull Call<Room> call, @NonNull Throwable t) {
                 Log.e(TAG, t.getMessage());
                 call.cancel();
             }
@@ -118,22 +106,20 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setMessageData() {
-        Call<ArrayList<Message>> call = apiInterface.doGetMessage(room.getId());
+        Call<ArrayList<Message>> call = getApiInterface().doGetMessage(room.getId());
 
         call.enqueue(new Callback<ArrayList<Message>>() {
             @Override
-            public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+            public void onResponse(@NonNull Call<ArrayList<Message>> call, @NonNull Response<ArrayList<Message>> response) {
+                if (isSuccessResponse(response)) {
                     message = response.body();
                     setRecyclerMessage();
-                    setSocket();
-                    socket.emit("joinRoom", room.getId());
                     readSocketMessage();
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
+            public void onFailure(@NonNull Call<ArrayList<Message>> call, @NonNull Throwable t) {
                 Log.e(TAG, t.getMessage());
                 call.cancel();
             }
@@ -148,29 +134,24 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void scrollDown() {
-        binding.recyclerMessage.post(new Runnable() {
-            @Override
-            public void run() {
-                binding.recyclerMessage.scrollToPosition(adapterMessage.getItemCount() - 1);
-            }
-        });
+        binding.recyclerMessage.post(() -> binding.recyclerMessage.scrollToPosition(adapterMessage.getItemCount() - 1));
+    }
+
+    boolean isSuccessResponse(Response response) {
+        return response.isSuccessful() && response.body() != null;
+    }
+
+    private void setTitle(Room room) {
+        String title = room.getTitle();
+        if (room.getTotal() > 2) {
+            title += " " + room.getTotal();
+        }
+        binding.txtTitle.setText(title);
     }
 
     private void sendSocketMessage(Message message) {
-        try {
-            JSONObject data = new JSONObject();
-            data.put("room_id", message.getRoom_id());
-            data.put("from_id", message.getFrom_id());
-            data.put("read_members_id", message.getRead_members_id());
-            data.put("message", message.getMessage());
-            data.put("type", message.getType());
-            data.put("unread_total", message.getUnread_total());
-            socket.emit("sendMessage", data);
-            Log.d(TAG,message.getMessage()+" 메세지 보내기 요청");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, e.getMessage());
-        }
+        Log.d(TAG, message + " 메세지 보내기 요청");
+        socket.emit("sendMessage", MessageToJson(message));
     }
 
     Emitter.Listener onSendMessage = args -> {
@@ -179,10 +160,9 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 try {
-                    Log.d(TAG,"보낸 메세지에 대한 응답 받음"+args[0]);
+                    Log.d(TAG, "보낸 메세지에 대한 응답 받음" + args[0]);
                     JSONObject data = (JSONObject) args[0];
-                    if (data.getString("from_id").equals(userID)) {
-                        Log.d(TAG,"내가 보낸 메세지임");
+                    if (isFromMe(data.getString("from_id"))) {
                         for (int i = message.size() - 1; i > 0; i--) {
                             if (message.get(i).getMessage().equals(data.getString("message"))) {
                                 message.get(i).setMessage_id(data.getString("message_id"));
@@ -190,16 +170,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                     } else {
-                        Log.d(TAG,"상대방이 보낸 메세지임");
-                        Message message = new Message();
-                        message.setRoom_id(data.getString("room_id"));
-                        message.setFrom_id(data.getString("from_id"));
-                        message.setMessage_id(data.getString("message_id"));
-                        message.setMessage(data.getString("message"));
-                        message.setUnread_total(data.getInt("unread_total"));
-                        message.setMy_read_status(data.getString("my_read_status"));
-                        adapterMessage.addData(message);
-                        scrollDown();
+                        addMessage(getMessage(data));
                         readSocketMessage();
                     }
                 } catch (JSONException e) {
@@ -210,75 +181,102 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         }, 0);
     };
 
-    private void readSocketMessage() {
+    boolean isFromMe(String from_id) throws JSONException {
+        return from_id.equals(getUserID());
+    }
+
+    @NonNull
+    private Message getMessage(JSONObject data) throws JSONException {
+        Message message = new Message();
+        message.setRoom_id(data.getString("room_id"));
+        message.setFrom_id(data.getString("from_id"));
+        message.setMessage_id(data.getString("message_id"));
+        message.setMessage(data.getString("message"));
+        message.setUnread_total(data.getInt("unread_total"));
+        message.setMy_read_status(data.getString("my_read_status"));
+        return message;
+    }
+
+    @NonNull
+    private Message getMessage() {
+        Message message = new Message();
+        message.setRoom_id(room.getId());
+        message.setFrom_id(getUserID());
+        message.setRead_members_id(getUserID());
+        message.setMessage(binding.edtMessage.getText().toString());
+        message.setType("Text");
+        message.setUnread_total(room.getTotal() - 1);
+        return message;
+    }
+
+    @NonNull
+    private JSONObject MessageToJson(Message message) {
         try {
-            for (int i = message.size() - 1; i > 0; i--) {
-                Log.d(TAG,"읽은 상태 확인 : "+message.get(i).getMessage());
-                if (!message.get(i).getFrom_id().equals(userID)
-                        && message.get(i).getMy_read_status().equals("안읽음")) {
-                    JSONObject data = new JSONObject();
-                    data.put("room_id", message.get(i).getRoom_id());
-                    data.put("message_id", message.get(i).getMessage_id());
-                    data.put("message", message.get(i).getMessage());
-                    data.put("from_id", message.get(i).getFrom_id());
-                    data.put("read_member_id", userID);
-                    socket.emit("setReadMessage", data);
-                    Log.d(TAG,"서버로 읽음 처리 요청");
-                } else {
-                    Log.d(TAG,"더이상 읽음 처리 요청할 것 없음");
-                    break;
-                }
-            }
+            JSONObject data = new JSONObject();
+            data.put("room_id", message.getRoom_id());
+            data.put("from_id", message.getFrom_id());
+            data.put("read_members_id", message.getRead_members_id());
+            data.put("message", message.getMessage());
+            data.put("message_id", message.getMessage_id());
+            data.put("type", message.getType());
+            data.put("unread_total", message.getUnread_total());
+            return data;
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
+        return null;
+    }
+
+    private void readSocketMessage() {
+        for (int i = message.size() - 1; i > 0; i--) {
+            if (isUnreadMessage(message.get(i))) {
+                socket.emit("setReadMessage", room.getId(), message.get(i).getMessage_id(), getUserID());
+            } else {
+                break;
+            }
+        }
+    }
+
+    private boolean isUnreadMessage(Message message) {
+        return !message.getFrom_id().equals(getUserID()) && message.getMy_read_status().equals("안읽음");
     }
 
     Emitter.Listener onReadMessage = args -> {
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Log.d(TAG,"읽음 처리 요청에 대한 응답 받음"+args[0]);
-                    JSONObject data = (JSONObject) args[0];
-                    for (int i = message.size() - 1; i > 0; i--) {
-                        Log.d(TAG,i+" "+message.get(i).getMessage());
-                        if (message.get(i).getMessage_id().equals(data.getString("message_id"))) {
-                            message.get(i).setUnread_total(message.get(i).getUnread_total() - 1);
-                            message.get(i).setMy_read_status("읽음");
-                            Log.d(TAG,i+" "+message.get(i).getMessage()
-                                    +" 수정 "+message.get(i).getUnread_total());
-                            break;
-                        }
-                    }
-                    adapterMessage.notifyDataSetChanged();
-                    scrollDown();
-                } catch (
-                        JSONException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, e.getMessage());
-                }
-            }
+        handler.postDelayed(() -> {
+            Log.d(TAG, "읽음 처리 요청에 대한 응답 받음" + args[0]);
+            setReadMessage((String) args[0]);
         }, 0);
     };
+
+    private void setReadMessage(String message_id) {
+        for (int i = message.size() - 1; i > 0; i--) {
+            if (message.get(i).getMessage_id().equals(message_id)) {
+                message.get(i).setUnread_total(message.get(i).getUnread_total() - 1);
+                message.get(i).setMy_read_status("읽음");
+                break;
+            }
+        }
+        adapterMessage.notifyDataSetChanged();
+        scrollDown();
+    }
+
+    @NonNull
+    private Message addMessage(Message massage) {
+        adapterMessage.addData(massage);
+        adapterMessage.notifyDataSetChanged();
+        scrollDown();
+        binding.edtMessage.setText("");
+        return massage;
+    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSend:
-                Log.d(TAG,binding.edtMessage.getText()+" 메세지 보내기 버튼 클릭");
-                Message message = new Message();
-                message.setRoom_id(room.getId());
-                message.setFrom_id(userID);
-                message.setMessage(binding.edtMessage.getText().toString());
-                message.setRead_members_id(userID);
-                message.setType("Text");
-                message.setUnread_total(room.getTotal() - 1);
-                adapterMessage.addData(message);
-                binding.edtMessage.setText("");
-                scrollDown();
-                sendSocketMessage(message);
+                sendSocketMessage(getMessage());
+                addMessage(getMessage());
                 break;
             case R.id.btnMenu:
                 break;

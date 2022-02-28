@@ -22,4 +22,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         return SharedPreferenceUtil.getData(this, "token");
     }
 
+    public String getUserID(){
+        return SharedPreferenceUtil.getData(this, "userID");
+    }
+
 }

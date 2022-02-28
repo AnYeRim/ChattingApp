@@ -35,7 +35,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     public void addData(Message message){
         data.add(message);
-        notifyDataSetChanged();
     }
 
     @Override
