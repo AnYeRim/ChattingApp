@@ -39,22 +39,8 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
         binding.txtOK.setOnClickListener(view -> doAddFriend(getFriendData()));
     }
 
-    @NonNull
-    private APIInterface getApiInterface() {
-        return APIClient.getClient(getToken()).create(APIInterface.class);
-    }
-
-    private Friends getFriendData() {
-        Friends friends = new Friends();
-        friends.setNikName(binding.edtFriendName.getText().toString());
-        friends.setPhone(binding.edtFriendPhone.getText().toString());
-        return friends;
-    }
-
     private void doAddFriend(Friends friends) {
         Call<Friends> call = getApiInterface().doAddFriends(friends);
-
-        //NetworkResponse<User> networkResponse = new NetworkResponse<User>();
         call.enqueue(new Callback<Friends>() {
             @Override
             public void onResponse(@NonNull Call<Friends> call, @NonNull Response<Friends> response) {
@@ -70,13 +56,18 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
 
             }
         });
-/*
-        if(networkResponse.getRes() != null){
-            doCreateAgreeTerms();
-        }else {
-            Toast.makeText(getContext(),"유저 정보 insert 실패", Toast.LENGTH_SHORT).show();
-            call.cancel();
-        }*/
+    }
+
+    @NonNull
+    private APIInterface getApiInterface() {
+        return APIClient.getClient(getToken()).create(APIInterface.class);
+    }
+
+    private Friends getFriendData() {
+        Friends friends = new Friends();
+        friends.setNikName(binding.edtFriendName.getText().toString());
+        friends.setPhone(binding.edtFriendPhone.getText().toString());
+        return friends;
     }
 
     @Override
@@ -91,12 +82,12 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if (isNotEmptyRequiredValues()) {
-            enabledTextOK();
+        if (isEmptyRequiredValues()) {
+            disabledTextOK();
             return;
         }
 
-        disabledTextOK();
+        enabledTextOK();
     }
 
     void disabledTextOK() {
@@ -109,11 +100,11 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
         binding.txtOK.setTextColor(Color.BLACK);
     }
 
-    private boolean isNotEmptyRequiredValues() {
-        return isNotEmptyEdit(binding.edtFriendName) && isNotEmptyEdit(binding.edtFriendPhone);
+    private boolean isEmptyRequiredValues() {
+        return isEmptyEdit(binding.edtFriendName) || isEmptyEdit(binding.edtFriendPhone);
     }
 
-    private boolean isNotEmptyEdit(EditText editText) {
-        return editText.length() > 0;
+    private boolean isEmptyEdit(EditText editText) {
+        return editText.length() == 0;
     }
 }
