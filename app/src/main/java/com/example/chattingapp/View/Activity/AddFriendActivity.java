@@ -44,7 +44,7 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
         call.enqueue(new Callback<Friends>() {
             @Override
             public void onResponse(@NonNull Call<Friends> call, @NonNull Response<Friends> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (isSuccessResponse(response)) {
                     finish();
                 }
             }
@@ -56,6 +56,10 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
 
             }
         });
+    }
+
+    boolean isSuccessResponse(Response response) {
+        return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
     @NonNull

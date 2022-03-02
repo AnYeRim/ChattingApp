@@ -56,7 +56,7 @@ public class RoomListFragment extends Fragment {
         call.enqueue(new Callback<ArrayList<Room>>() {
             @Override
             public void onResponse(Call<ArrayList<Room>> call, Response<ArrayList<Room>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (isSuccessResponse(response)) {
                     room = response.body();
                     Log.d(TAG, room.get(0).getTotal()+"");
                     setRecyclerRoom();
@@ -69,6 +69,10 @@ public class RoomListFragment extends Fragment {
                 call.cancel();
             }
         });
+    }
+
+    boolean isSuccessResponse(Response response) {
+        return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
     private void setRecyclerRoom() {

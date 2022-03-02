@@ -107,7 +107,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
     }
 
     boolean isSuccessResponse(Response response) {
-        return response.isSuccessful() && response.body() != null;
+        return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
     private void setTotal(int total) {

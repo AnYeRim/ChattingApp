@@ -6,9 +6,7 @@ import com.example.chattingapp.Model.DTO.Message;
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
-import com.example.chattingapp.Model.VO.JSONFriends;
-import com.example.chattingapp.Model.VO.JsonUser;
-import com.example.chattingapp.Model.VO.ResponseData;
+import com.example.chattingapp.Model.VO.ResponseUser;
 
 import java.util.ArrayList;
 
@@ -16,7 +14,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -31,14 +28,14 @@ public interface APIInterface {
 
     // https + get으로 해야함. http일때는 get은 위험하니 post로
     @POST("user/login")
-    Call<JsonUser> doGetUser(@Body User user);
+    Call<ResponseUser> doGetUser(@Body User user);
 
     @POST("user")
     Call<User> doCreateUser(@Body User user);
 
 
     @GET("friends")
-    Call<JSONFriends> doGetFriendsList();
+    Call<ArrayList<Friends>> doGetFriendsList();
 
     @POST("friends")
     Call<Friends> doAddFriends(@Body Friends friends);

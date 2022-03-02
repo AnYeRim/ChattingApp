@@ -120,7 +120,7 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<Room>() {
             @Override
             public void onResponse(Call<Room> call, Response<Room> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (isSuccessResponse(response)) {
                     Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
 
                     Room room = response.body();
@@ -138,6 +138,10 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
                 call.cancel();
             }
         });
+    }
+
+    boolean isSuccessResponse(Response response) {
+        return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
     @Override

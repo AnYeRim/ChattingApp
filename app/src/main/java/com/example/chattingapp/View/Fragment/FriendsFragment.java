@@ -1,6 +1,7 @@
 package com.example.chattingapp.View.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
-import com.example.chattingapp.Model.VO.JSONFriends;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Activity.InfoActivity;
@@ -26,6 +26,7 @@ import retrofit2.Response;
 
 public class FriendsFragment extends Fragment implements View.OnClickListener {
 
+    private final String TAG = getClass().getSimpleName();
     private FragmentFriendsBinding binding;
     private ActivityUtils activityUtils;
 
@@ -74,30 +75,26 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getFriendsList() {
-        Call<JSONFriends> call = apiInterface.doGetFriendsList();
-
-        //NetworkResponse<JSONFriends> networkResponse = new NetworkResponse<JSONFriends>();
-        call.enqueue(new Callback<JSONFriends>() {
+        Call<ArrayList<Friends>> call = apiInterface.doGetFriendsList();
+        call.enqueue(new Callback<ArrayList<Friends>>() {
             @Override
-            public void onResponse(Call<JSONFriends> call, Response<JSONFriends> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    friends = response.body().getFriends();
+            public void onResponse(Call<ArrayList<Friends>> call, Response<ArrayList<Friends>> response) {
+                if(isSuccessResponse(response)){
+                    friends = response.body();
                     setRecyclerFriends();
                 }
             }
 
             @Override
-            public void onFailure(Call<JSONFriends> call, Throwable t) {
+            public void onFailure(Call<ArrayList<Friends>> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
                 call.cancel();
             }
         });
+    }
 
-        /*if(networkResponse.getRes() != null){
-            friends = networkResponse.getRes().getFriends();
-            setRecyclerFriends();
-        }else {
-            call.cancel();
-        }*/
+    boolean isSuccessResponse(Response response) {
+        return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
     //TODO 즐겨찾기하기

@@ -2,6 +2,7 @@ package com.example.chattingapp.Tool;
 
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +13,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void startActivity(Class mClass) {
         Intent intent = new Intent(this, mClass);
         startActivity(intent);
+    }
+
+    public void showMessage(String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     public boolean isEmptyToken() {

@@ -52,12 +52,10 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
     private void setTermsData() {
         APIInterface apiInterface = APIClient.getClient(null).create(APIInterface.class);
         Call<ArrayList<Terms>> call = apiInterface.doGetTermsList();
-
-        //NetworkResponse<ArrayList<Terms>> networkResponse = new NetworkResponse<ArrayList<Terms>>();
         call.enqueue(new Callback<ArrayList<Terms>>() {
             @Override
             public void onResponse(Call<ArrayList<Terms>> call, Response<ArrayList<Terms>> response) {
-                if(response.isSuccessful() && response.body() != null){
+                if(isSuccessResponse(response)){
                     resTerms = response.body();
                     setRecyclerTerm();
                 }
@@ -68,13 +66,10 @@ public class TermsFragment extends Fragment implements View.OnClickListener {
                 call.cancel();
             }
         });
-/*
-        if(networkResponse.getRes() != null){
-            resTerms = networkResponse.getRes();
-            setRecyclerTerm();
-        }else {
-            call.cancel();
-        }*/
+    }
+
+    boolean isSuccessResponse(Response response) {
+        return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
     private void setRecyclerTerm() {

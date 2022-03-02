@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.User;
-import com.example.chattingapp.Model.VO.JsonUser;
+import com.example.chattingapp.Model.VO.ResponseUser;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
@@ -76,13 +76,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
     }
 
     private void doLogin() {
-        Call<JsonUser> call = apiInterface.doGetUser(user);
-
-        //NetworkResponse<JsonUser> networkResponse = new NetworkResponse<JsonUser>();
-        call.enqueue(new Callback<JsonUser>() {
+        Call<ResponseUser> call = apiInterface.doGetUser(user);
+        call.enqueue(new Callback<ResponseUser>() {
             @Override
-            public void onResponse(Call<JsonUser> call, Response<JsonUser> response) {
-                if(response.isSuccessful() && response.body() != null){
+            public void onResponse(Call<ResponseUser> call, Response<ResponseUser> response) {
+                if(isSuccessResponse(response)){
                     if(response.body().getToken() == null){
                         Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
                     }else {
@@ -96,25 +94,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
             }
 
             @Override
-            public void onFailure(Call<JsonUser> call, Throwable t) {
+            public void onFailure(Call<ResponseUser> call, Throwable t) {
                 Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });
+    }
 
-        /*if(networkResponse.getRes() != null){
-            if(networkResponse.getRes().getToken() == null){
-                Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
-            }else {
-                SharedPreferenceUtil.setData(getContext(), "token", networkResponse.getRes().getToken());
-                SharedPreferenceUtil.setData(getContext(), "nikname", networkResponse.getRes().getUser().getNikname());
-                activityUtils.newActivity(getActivity(), SplashActivity.class);
-                getActivity().finish();
-            }
-        }else {
-            Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
-            call.cancel();
-        }*/
+    boolean isSuccessResponse(Response response) {
+        return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
     @Override
