@@ -55,6 +55,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         if (room == null) {
             room = (Room) getIntent().getExtras().getSerializable("data");
             setRoomData();
+            setMessageData();
             setSocket();
             socket.emit("joinRoom", room.getId());
         }
@@ -92,8 +93,8 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             public void onResponse(@NonNull Call<Room> call, @NonNull Response<Room> response) {
                 if (isSuccessResponse(response)) {
                     room = response.body();
-                    setTitle(room);
-                    setMessageData();
+                    binding.txtTitle.setText(room.getTitle());
+                    setTotal(room.getTotal());
                 }
             }
 
@@ -105,6 +106,17 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    boolean isSuccessResponse(Response response) {
+        return response.isSuccessful() && response.body() != null;
+    }
+
+    private void setTotal(int total) {
+        binding.txtTotal.setText(total + "");
+        if (total <= 2) {
+            binding.txtTotal.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void setMessageData() {
         Call<ArrayList<Message>> call = getApiInterface().doGetMessage(room.getId());
 
@@ -112,9 +124,13 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onResponse(@NonNull Call<ArrayList<Message>> call, @NonNull Response<ArrayList<Message>> response) {
                 if (isSuccessResponse(response)) {
-                    message = response.body();
-                    setRecyclerMessage();
-                    readSocketMessage();
+                    try {
+                        message = response.body();
+                        setRecyclerMessage();
+                        readSocketMessage();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -134,59 +150,33 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void scrollDown() {
-        binding.recyclerMessage.post(() -> binding.recyclerMessage.scrollToPosition(adapterMessage.getItemCount() - 1));
+        binding.recyclerMessage.post(() -> binding.recyclerMessage.scrollToPosition(getLastMessagePosition()));
     }
 
-    boolean isSuccessResponse(Response response) {
-        return response.isSuccessful() && response.body() != null;
-    }
-
-    private void setTitle(Room room) {
-        String title = room.getTitle();
-        if (room.getTotal() > 2) {
-            title += " " + room.getTotal();
-        }
-        binding.txtTitle.setText(title);
-    }
-
-    private void sendSocketMessage(Message message) {
+    private void sendSocketMessage(int position) {
         Log.d(TAG, message + " 메세지 보내기 요청");
-        socket.emit("sendMessage", MessageToJson(message));
+        try {
+            socket.emit("sendMessage", MessageToJson(message.get(position)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    Emitter.Listener onSendMessage = args -> {
+    Emitter.Listener onSendMessage = data -> {
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Log.d(TAG, "보낸 메세지에 대한 응답 받음" + args[0]);
-                    JSONObject data = (JSONObject) args[0];
-                    if (isFromMe(data.getString("from_id"))) {
-                        for (int i = message.size() - 1; i > 0; i--) {
-                            if (message.get(i).getMessage().equals(data.getString("message"))) {
-                                message.get(i).setMessage_id(data.getString("message_id"));
-                                break;
-                            }
-                        }
-                    } else {
-                        addMessage(getMessage(data));
-                        readSocketMessage();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, e.getMessage());
-                }
+        handler.postDelayed(() -> {
+            Log.d(TAG, "상대방이 보낸 메세지 받음" + data[0]);
+            try {
+                addMessage(JsonToMessage((JSONObject) data[0]));
+                readSocketMessage();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }, 0);
     };
 
-    boolean isFromMe(String from_id) throws JSONException {
-        return from_id.equals(getUserID());
-    }
-
     @NonNull
-    private Message getMessage(JSONObject data) throws JSONException {
+    private Message JsonToMessage(JSONObject data) throws JSONException {
         Message message = new Message();
         message.setRoom_id(data.getString("room_id"));
         message.setFrom_id(data.getString("from_id"));
@@ -194,6 +184,57 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         message.setMessage(data.getString("message"));
         message.setUnread_total(data.getInt("unread_total"));
         message.setMy_read_status(data.getString("my_read_status"));
+        return message;
+    }
+
+    @NonNull
+    private JSONObject MessageToJson(Message message) throws JSONException {
+        JSONObject data = new JSONObject();
+        data.put("room_id", message.getRoom_id());
+        data.put("from_id", message.getFrom_id());
+        data.put("read_members_id", message.getRead_members_id());
+        data.put("message", message.getMessage());
+        data.put("message_id", message.getMessage_id());
+        data.put("type", message.getType());
+        data.put("unread_total", message.getUnread_total());
+        return data;
+    }
+
+    private void readSocketMessage() throws JSONException {
+        for (int i = getLastMessagePosition(); i > 0; i--) {
+            if (isUnreadMessage(message.get(i))) {
+                socket.emit("setReadMessage", i, MessageToJson(message.get(i)), getUserID());
+            } else {
+                return;
+            }
+        }
+    }
+
+    private boolean isUnreadMessage(Message message) {
+        return !message.getFrom_id().equals(getUserID()) && message.getMy_read_status().equals("안읽음");
+    }
+
+    Emitter.Listener onReadMessage = position -> {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> {
+            Log.d(TAG, "읽음 처리 요청에 대한 응답 받음" + position[0]);
+            changeReadMessage((int) position[0]);
+        }, 0);
+    };
+
+    private void changeReadMessage(int position) {
+        message.get(position).setUnread_total(message.get(position).getUnread_total() - 1);
+        message.get(position).setMy_read_status("읽음");
+        adapterMessage.notifyDataSetChanged();
+        scrollDown();
+    }
+
+    @NonNull
+    private Message addMessage(Message message) {
+        adapterMessage.addData(message);
+        adapterMessage.notifyDataSetChanged();
+        scrollDown();
+        binding.edtMessage.setText("");
         return message;
     }
 
@@ -209,74 +250,16 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         return message;
     }
 
-    @NonNull
-    private JSONObject MessageToJson(Message message) {
-        try {
-            JSONObject data = new JSONObject();
-            data.put("room_id", message.getRoom_id());
-            data.put("from_id", message.getFrom_id());
-            data.put("read_members_id", message.getRead_members_id());
-            data.put("message", message.getMessage());
-            data.put("message_id", message.getMessage_id());
-            data.put("type", message.getType());
-            data.put("unread_total", message.getUnread_total());
-            return data;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, e.getMessage());
-        }
-        return null;
-    }
-
-    private void readSocketMessage() {
-        for (int i = message.size() - 1; i > 0; i--) {
-            if (isUnreadMessage(message.get(i))) {
-                socket.emit("setReadMessage", room.getId(), message.get(i).getMessage_id(), getUserID());
-            } else {
-                break;
-            }
-        }
-    }
-
-    private boolean isUnreadMessage(Message message) {
-        return !message.getFrom_id().equals(getUserID()) && message.getMy_read_status().equals("안읽음");
-    }
-
-    Emitter.Listener onReadMessage = args -> {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(() -> {
-            Log.d(TAG, "읽음 처리 요청에 대한 응답 받음" + args[0]);
-            setReadMessage((String) args[0]);
-        }, 0);
-    };
-
-    private void setReadMessage(String message_id) {
-        for (int i = message.size() - 1; i > 0; i--) {
-            if (message.get(i).getMessage_id().equals(message_id)) {
-                message.get(i).setUnread_total(message.get(i).getUnread_total() - 1);
-                message.get(i).setMy_read_status("읽음");
-                break;
-            }
-        }
-        adapterMessage.notifyDataSetChanged();
-        scrollDown();
-    }
-
-    @NonNull
-    private Message addMessage(Message massage) {
-        adapterMessage.addData(massage);
-        adapterMessage.notifyDataSetChanged();
-        scrollDown();
-        binding.edtMessage.setText("");
-        return massage;
+    private int getLastMessagePosition() {
+        return adapterMessage.getItemCount() - 1;
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSend:
-                sendSocketMessage(getMessage());
                 addMessage(getMessage());
+                sendSocketMessage(getLastMessagePosition());
                 break;
             case R.id.btnMenu:
                 break;

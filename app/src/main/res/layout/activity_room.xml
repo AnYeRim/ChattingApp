@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/txtTitle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="채팅방 title"
         android:textStyle="bold"
@@ -27,7 +27,20 @@
         app:layout_constraintTop_toTopOf="@+id/btnBack"
         app:layout_constraintStart_toEndOf="@+id/btnBack"
         app:layout_constraintBottom_toBottomOf="@+id/btnBack"
-        app:layout_constraintEnd_toStartOf="@+id/btnSearch"/>
+        app:layout_constraintEnd_toStartOf="@+id/txtTotal"/>
+
+    <TextView
+        android:id="@+id/txtTotal"
+        style="@style/txtTitle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="3"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+        app:layout_constraintEnd_toStartOf="@+id/btnSearch"
+        app:layout_constraintStart_toEndOf="@+id/txtTitle"
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
 
     <ImageView
         android:id="@+id/btnSearch"
@@ -35,7 +48,7 @@
         android:layout_height="20dp"
         android:background="@drawable/search2"
         app:layout_constraintTop_toTopOf="@+id/btnBack"
-        app:layout_constraintStart_toEndOf="@+id/txtTitle"
+        app:layout_constraintStart_toEndOf="@+id/txtTotal"
         app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toStartOf="@+id/btnMenu" />
 
