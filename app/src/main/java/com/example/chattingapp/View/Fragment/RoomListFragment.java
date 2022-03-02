@@ -37,18 +37,17 @@ public class RoomListFragment extends Fragment {
 
         binding = FragmentRoomListBinding.inflate(inflater, container, false);
 
-        init();
-
-        return binding.getRoot();
-    }
-
-    private void init() {
         activityUtils = new ActivityUtils();
         String token = activityUtils.getToken(getContext());
         apiInterface = APIClient.getClient(token).create(APIInterface.class);
 
-        getRoomList();
+        return binding.getRoot();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getRoomList();
     }
 
     private void getRoomList() {
