@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.View.Activity.InfoActivity;
 import com.example.chattingapp.databinding.ItemFriendsBinding;
 
@@ -46,14 +46,12 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ItemFriendsBinding itemFriendsBinding;
-        private ActivityUtils activityUtils;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             itemFriendsBinding = ItemFriendsBinding.bind(itemView);
             itemFriendsBinding.linearFriends.setOnClickListener(this);
-            activityUtils = new ActivityUtils();
         }
 
         void setItemFriendsBinding(Friends data) {
@@ -66,7 +64,7 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
         public void onClick(View view) {
             int position = getAdapterPosition();
 
-            activityUtils.newActivity(mContext, InfoActivity.class, data.get(position));
+            ((BaseActivity) mContext).startActivity(InfoActivity.class, data.get(position));
         }
     }
 }

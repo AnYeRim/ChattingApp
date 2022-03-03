@@ -7,7 +7,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -15,7 +14,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
 import com.example.chattingapp.View.Activity.RoomActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;

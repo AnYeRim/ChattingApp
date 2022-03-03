@@ -51,17 +51,14 @@ public class AdapterTerms extends RecyclerView.Adapter<AdapterTerms.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public boolean checkRequired() {
+    public boolean isCheckedRequired() {
         for(int i = 0; i<getItemCount(); i++){
-            if(data.get(i).getRequired().equals("Y") && data.get(i).isChecked() == false){
+            if(data.get(i).getRequired().equals("Y") && !data.get(i).isChecked()){
                 return false;
             }
         }
-        return true;
-    }
 
-    public ArrayList<Terms> getData(){
-        return data;
+        return true;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

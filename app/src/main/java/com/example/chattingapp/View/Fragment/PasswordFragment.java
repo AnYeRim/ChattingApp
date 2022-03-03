@@ -6,43 +6,36 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.FragmentUtil;
+import com.example.chattingapp.Tool.BaseFragment;
 import com.example.chattingapp.databinding.FragmentPasswordBinding;
 
 import java.util.ArrayList;
 
-public class PasswordFragment extends Fragment implements View.OnClickListener, TextWatcher {
+public class PasswordFragment extends BaseFragment implements View.OnClickListener, TextWatcher {
 
     private FragmentPasswordBinding binding;
-    private FragmentUtil fragmentUtil;
     private User user;
-    private ArrayList<Terms> terms;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPasswordBinding.inflate(inflater, container, false);
 
-        fragmentUtil = new FragmentUtil();
-
-        terms = (ArrayList<Terms>) getArguments().getSerializable("Terms");
-        user = (User) getArguments().getSerializable("User");
-        binding.txtPhone.setText(user.getPhone());
-
         binding.btnOK.setOnClickListener(this);
         binding.txtBackBegin.setOnClickListener(this);
 
-        binding.edtPW.addTextChangedListener(this);
-        binding.edtCheckPW.addTextChangedListener(this);
+        binding.edtPassword.addTextChangedListener(this);
+        binding.edtCheckPassword.addTextChangedListener(this);
+
+        user = (User) getArguments().getSerializable("User");
+        binding.txtPhone.setText(user.getPhone());
 
         return binding.getRoot();
     }
@@ -51,39 +44,55 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnOK:
-                //비밀번호 규정에 맞게 입력했는지 체크 후 화면전환
                 if (checkPassword()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Terms", terms);
-                    bundle.putSerializable("User", user);
-                    fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container,
-                            new JoinInfoFragment(), bundle);
+                    user.setPassword(getPassword());
+                    changeFragment(R.id.frg_container, new JoinInfoFragment(), getBundle());
                 }
                 break;
             case R.id.txtBackBegin:
-                //로그인 화면으로 되돌아가기
-                fragmentUtil.changeFragment(getActivity().getSupportFragmentManager(), R.id.frg_container, new LoginFragment());
+                changeFragment(R.id.frg_container, new LoginFragment());
                 break;
         }
     }
 
     private boolean checkPassword() {
-        String pw = binding.edtPW.getText().toString();
-        String chkPW = binding.edtCheckPW.getText().toString();
-
-        if (pw.length() < 8 || pw.length() > 16
-                || chkPW.length() < 8 || chkPW.length() > 16) {
-            Toast.makeText(getActivity(), "비밀번호는 8~16자로 적어주세요.", Toast.LENGTH_SHORT).show();
+        if (outOfPasswordFormat(getPassword()) || outOfPasswordFormat(getCheckPassword())) {
+            showMessage("비밀번호는 8~16자로 적어주세요.");
             return false;
         }
 
-        if (pw.equals(chkPW)) {
-            user.setPassword(pw);
-            return true;
-        } else {
-            Toast.makeText(getActivity(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+        if (!getPassword().equals(getCheckPassword())) {
+            showMessage("비밀번호가 일치하지 않습니다.");
             return false;
         }
+
+        return true;
+    }
+
+    private boolean outOfPasswordFormat(String password) {
+        return password.length() < 8 || password.length() > 16;
+    }
+
+    @NonNull
+    private String getCheckPassword() {
+        return binding.edtCheckPassword.getText().toString();
+    }
+
+    @NonNull
+    private String getPassword() {
+        return binding.edtPassword.getText().toString();
+    }
+
+    @NonNull
+    private Bundle getBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Terms", getTerms());
+        bundle.putSerializable("User", user);
+        return bundle;
+    }
+
+    private ArrayList<Terms> getTerms() {
+        return (ArrayList<Terms>) getArguments().getSerializable("Terms");
     }
 
     @Override
@@ -98,11 +107,16 @@ public class PasswordFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if (binding.edtPW.length() >= 8 && binding.edtCheckPW.length() >= 8) {
+        setEnabledBtnOK();
+    }
+
+    private void setEnabledBtnOK() {
+        if (binding.edtPassword.length() >= 8 && binding.edtCheckPassword.length() >= 8) {
             binding.btnOK.setEnabled(true);
-        } else {
-            binding.btnOK.setEnabled(false);
+            return;
         }
+
+        binding.btnOK.setEnabled(false);
     }
 
 }

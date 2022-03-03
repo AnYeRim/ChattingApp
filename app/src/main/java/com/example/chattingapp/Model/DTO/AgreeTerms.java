@@ -15,8 +15,22 @@ public class AgreeTerms implements Serializable {
     @SerializedName("phone")
     private String user_phone;
 
-    public AgreeTerms(ArrayList<Terms> terms, String user_phone) {
+    public AgreeTerms() {
+    }
+
+    public ArrayList<Terms> getTerms() {
+        return terms;
+    }
+
+    public void setTerms(ArrayList<Terms> terms) {
         this.terms = terms;
+    }
+
+    public String getUser_phone() {
+        return user_phone;
+    }
+
+    public void setUser_phone(String user_phone) {
         this.user_phone = user_phone;
     }
 }

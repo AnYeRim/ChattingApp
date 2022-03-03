@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Room;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseFragment;
+import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Adapter.AdapterRoom;
 import com.example.chattingapp.databinding.FragmentRoomListBinding;
 
@@ -22,26 +23,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RoomListFragment extends Fragment {
+public class RoomListFragment extends BaseFragment {
+
+    final private String TAG = "RoomListFragment";
 
     private FragmentRoomListBinding binding;
     private ArrayList<Room> room;
-    private AdapterRoom adapterRoom;
-    private APIInterface apiInterface;
-    private ActivityUtils activityUtils;
-    final private String TAG = "RoomListFragment";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentRoomListBinding.inflate(inflater, container, false);
 
-        activityUtils = new ActivityUtils();
-        String token = activityUtils.getToken(getContext());
-        apiInterface = APIClient.getClient(token).create(APIInterface.class);
-
         return binding.getRoot();
+    }
+
+    @NonNull
+    private APIInterface getApiInterface() {
+        return APIClient.getClient(getToken()).create(APIInterface.class);
     }
 
     @Override
@@ -51,19 +51,18 @@ public class RoomListFragment extends Fragment {
     }
 
     private void getRoomList() {
-        Call<ArrayList<Room>> call = apiInterface.doFindRoom(null);
+        Call<ArrayList<Room>> call = getApiInterface().doFindRoom(null);
         call.enqueue(new Callback<ArrayList<Room>>() {
             @Override
-            public void onResponse(Call<ArrayList<Room>> call, Response<ArrayList<Room>> response) {
+            public void onResponse(@NonNull Call<ArrayList<Room>> call, @NonNull Response<ArrayList<Room>> response) {
                 if (isSuccessResponse(response)) {
                     room = response.body();
-                    Log.d(TAG, room.get(0).getTotal()+"");
                     setRecyclerRoom();
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Room>> call, Throwable t) {
+            public void onFailure(@NonNull Call<ArrayList<Room>> call, @NonNull Throwable t) {
                 Log.d(TAG, t.getMessage());
                 call.cancel();
             }
@@ -76,7 +75,11 @@ public class RoomListFragment extends Fragment {
 
     private void setRecyclerRoom() {
         binding.recyclerRoom.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapterRoom = new AdapterRoom(getActivity(), room);
+        AdapterRoom adapterRoom = new AdapterRoom(getActivity(), room);
         binding.recyclerRoom.setAdapter(adapterRoom);
+    }
+
+    private String getToken(){
+        return SharedPreferenceUtil.getData(getContext(), "token");
     }
 }

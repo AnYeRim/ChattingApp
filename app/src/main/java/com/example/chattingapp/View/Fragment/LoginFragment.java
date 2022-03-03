@@ -7,34 +7,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.User;
 import com.example.chattingapp.Model.VO.ResponseUser;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseFragment;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Activity.SplashActivity;
 import com.example.chattingapp.databinding.FragmentLoginBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginFragment extends Fragment implements View.OnClickListener, TextWatcher {
+public class LoginFragment extends BaseFragment implements View.OnClickListener, TextWatcher {
 
-    private ActivityUtils activityUtils;
+    private final String TAG = getClass().getSimpleName();
+
     private FragmentLoginBinding binding;
-    private APIInterface apiInterface;
     private User user;
 
     @Nullable
@@ -42,63 +38,64 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
 
-        user = new User();
-        activityUtils = new ActivityUtils();
-        apiInterface = APIClient.getClient(null).create(APIInterface.class);
-
         binding.edtID.addTextChangedListener(this);
         binding.edtPW.addTextChangedListener(this);
 
         binding.btnLogin.setOnClickListener(this);
         binding.btnJoin.setOnClickListener(this);
-
         binding.txtFindIDPW.setOnClickListener(this);
+
+        user = new User();
 
         return binding.getRoot();
     }
 
-    private void getFirebaseToken() {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
+    private void setFirebaseToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, task.getException().toString());
+                return;
+            }
 
-                        // Get new FCM registration token
-                        String token = task.getResult();
-                        user.setFb_token(token);
-                        doLogin();
-                    }
-                });
+            user.setFb_token(task.getResult());
+
+            doLogin();
+        });
     }
 
     private void doLogin() {
-        Call<ResponseUser> call = apiInterface.doGetUser(user);
+        Call<ResponseUser> call = getApiInterface().doGetUser(user);
         call.enqueue(new Callback<ResponseUser>() {
             @Override
-            public void onResponse(Call<ResponseUser> call, Response<ResponseUser> response) {
-                if(isSuccessResponse(response)){
-                    if(response.body().getToken() == null){
-                        Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
-                    }else {
-                        SharedPreferenceUtil.setData(getContext(), "token", response.body().getToken());
-                        SharedPreferenceUtil.setData(getContext(), "nikname", response.body().getUser().getNikname());
-                        SharedPreferenceUtil.setData(getContext(), "userID", response.body().getUser().getId());
-                        activityUtils.newActivity(getActivity(), SplashActivity.class);
-                        getActivity().finish();
-                    }
+            public void onResponse(@NonNull Call<ResponseUser> call, @NonNull Response<ResponseUser> response) {
+                if(response.code() == 400){
+                    showMessage("유저 정보가 올바르지 않습니다.");
+                }
+                if (isSuccessResponse(response)) {
+                    setSharedPreference("token", response.body().getToken());
+                    setSharedPreference("nikName", response.body().getUser().getNikname());
+                    setSharedPreference("userID", response.body().getUser().getId());
+                    startActivity(SplashActivity.class);
+                    getActivity().finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseUser> call, Throwable t) {
-                Toast.makeText(getContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<ResponseUser> call, @NonNull Throwable t) {
+                showMessage("로그인 실패");
+                Log.e(TAG, t.getMessage());
                 call.cancel();
             }
         });
+    }
+
+    void setSharedPreference(String token, String token2) {
+        SharedPreferenceUtil.setData(getContext(), token, token2);
+    }
+
+    @NonNull
+    private APIInterface getApiInterface() {
+        return APIClient.getClient(null).create(APIInterface.class);
     }
 
     boolean isSuccessResponse(Response response) {
@@ -110,17 +107,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
 
         switch (view.getId()) {
             case R.id.btnLogin:
-                //DB와 비교하여 로그인 하는 기능 구현
                 user.setPhone(binding.edtID.getText().toString());
                 user.setEmail(binding.edtID.getText().toString());
                 user.setPassword(binding.edtPW.getText().toString());
-                getFirebaseToken();
+                setFirebaseToken();
                 break;
             case R.id.btnJoin:
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new TermsFragment()).commit();
+                changeFragment(R.id.frg_container, new TermsFragment());
                 break;
             case R.id.txtFind_ID_PW:
-                //아이디 비번 찾는 화면으로 이동
+                //TODO 아이디 비번 찾는 화면으로 이동
                 break;
         }
     }
@@ -137,10 +133,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Tex
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if(binding.edtID.length() > 0 && binding.edtPW.length() > 0){
+        setEnabledBtnLogin();
+    }
+
+    private void setEnabledBtnLogin() {
+        if (binding.edtID.length() > 0 && binding.edtPW.length() > 0) {
             binding.btnLogin.setEnabled(true);
-        }else{
-            binding.btnLogin.setEnabled(false);
+            return;
         }
+
+        binding.btnLogin.setEnabled(false);
     }
 }

@@ -6,14 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseFragment;
+import com.example.chattingapp.Utils.SharedPreferenceUtil;
 import com.example.chattingapp.View.Activity.InfoActivity;
 import com.example.chattingapp.View.Adapter.AdapterFriends;
 import com.example.chattingapp.databinding.FragmentFriendsBinding;
@@ -24,35 +25,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FriendsFragment extends Fragment implements View.OnClickListener {
+public class FriendsFragment extends BaseFragment implements View.OnClickListener {
 
     private final String TAG = getClass().getSimpleName();
+
     private FragmentFriendsBinding binding;
-    private ActivityUtils activityUtils;
 
     private ArrayList<Friends> favorites, friends;
-    private AdapterFriends adapterFavorites, adapterFriends;
-    private APIInterface apiInterface;
-    private String token, nikName;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
-        init();
-        return binding.getRoot();
-    }
-
-    private void init() {
-        activityUtils = new ActivityUtils();
-
-        token = activityUtils.getToken(getContext());
-        nikName = activityUtils.getNikName(getContext());
-        binding.myInfo.txtNicName.setText(nikName);
-
-        apiInterface = APIClient.getClient(token).create(APIInterface.class);
 
         binding.myInfo.linearFriends.setOnClickListener(this);
+
+        binding.myInfo.txtNicName.setText(getNikName());
+
+        return binding.getRoot();
     }
 
     @Override
@@ -75,10 +64,10 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getFriendsList() {
-        Call<ArrayList<Friends>> call = apiInterface.doGetFriendsList();
+        Call<ArrayList<Friends>> call = getApiInterface().doGetFriendsList();
         call.enqueue(new Callback<ArrayList<Friends>>() {
             @Override
-            public void onResponse(Call<ArrayList<Friends>> call, Response<ArrayList<Friends>> response) {
+            public void onResponse(@NonNull Call<ArrayList<Friends>> call, @NonNull Response<ArrayList<Friends>> response) {
                 if(isSuccessResponse(response)){
                     friends = response.body();
                     setRecyclerFriends();
@@ -86,42 +75,62 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Friends>> call, Throwable t) {
+            public void onFailure(@NonNull Call<ArrayList<Friends>> call, @NonNull Throwable t) {
                 Log.e(TAG, t.getMessage());
                 call.cancel();
             }
         });
     }
 
+    @NonNull
+    private APIInterface getApiInterface() {
+        return APIClient.getClient(getToken()).create(APIInterface.class);
+    }
+
     boolean isSuccessResponse(Response response) {
         return response.code() == 200 && response.isSuccessful() && response.body() != null;
+    }
+
+    private void setRecyclerFriends() {
+        AdapterFriends adapterFriends = new AdapterFriends(getContext(), friends);
+
+        binding.recyclerFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerFriends.setAdapter(adapterFriends);
     }
 
     //TODO 즐겨찾기하기
     //TODO 즐겨찾기한 목록 가져오기
 /*    private void setRecyclerFavorites() {
         binding.recyclerFavorites.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterFavorites = new AdapterFriends(getContext(), favorites);
+        AdapterFriends adapterFavorites = new AdapterFriends(getContext(), favorites);
         binding.recyclerFavorites.setAdapter(adapterFavorites);
         adapterFavorites.notifyDataSetChanged();
     }*/
 
-    private void setRecyclerFriends() {
-        binding.recyclerFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterFriends = new AdapterFriends(getContext(), friends);
-        binding.recyclerFriends.setAdapter(adapterFriends);
-    }
-
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.myInfo:
-                Friends friends = new Friends();
-                friends.setId(activityUtils.getUserID(getContext()));
-                friends.setNikName(activityUtils.getNikName(getContext()));
-
-                activityUtils.newActivity(getContext(), InfoActivity.class, friends);
-                break;
+        if (view.getId() == R.id.myInfo) {
+            startActivity(InfoActivity.class, getFriends());
         }
+    }
+
+    @NonNull
+    private Friends getFriends() {
+        Friends friends = new Friends();
+        friends.setId(getUserID());
+        friends.setNikName(getNikName());
+        return friends;
+    }
+
+    private String getToken(){
+        return SharedPreferenceUtil.getData(getContext(), "token");
+    }
+
+    private String getUserID(){
+        return SharedPreferenceUtil.getData(getContext(), "userID");
+    }
+
+    private String getNikName(){
+        return SharedPreferenceUtil.getData(getContext(), "nikName");
     }
 }

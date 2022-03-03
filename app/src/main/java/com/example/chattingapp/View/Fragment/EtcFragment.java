@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.example.chattingapp.R;
+import com.example.chattingapp.Tool.BaseFragment;
 
-public class EtcFragment extends Fragment {
+public class EtcFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
