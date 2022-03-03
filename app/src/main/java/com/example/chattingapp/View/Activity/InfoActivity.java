@@ -4,17 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.databinding.ActivityInfoBinding;
 
 import java.util.ArrayList;
@@ -23,13 +24,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InfoActivity extends AppCompatActivity implements View.OnClickListener {
+public class InfoActivity extends BaseActivity implements View.OnClickListener {
+
+    private final String TAG = getClass().getSimpleName();
 
     private ActivityInfoBinding binding;
     private Friends friends;
-
-    private ActivityUtils activityUtils;
-    private APIInterface apiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,73 +39,58 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        activityUtils = new ActivityUtils();
-        String token = activityUtils.getToken(this);
-        apiInterface = APIClient.getClient(token).create(APIInterface.class);
+        binding.imgChat.setOnClickListener(this);
+        binding.btnCancle.setOnClickListener(this);
 
-        init();
+        friends = (Friends) getIntent().getExtras().getSerializable("data");
+        binding.txtNicName.setText(friends.getNikName());
+
+        setFullScreen();
+        setBackgroundTopPadding(getStatusBarHeight(this));
 
     }
 
-    private void init() {
-        // 풀스크린 설정
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    private void setFullScreen() {
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
 
-        // 풀스크린으로 하면서 버튼이 status바 자리로 이동함.
-        // status바 높이만큼 백그라운드 패딩 세팅
-        binding.imgBackground.setPadding(0,
-                getStatusBarHeight(this),
-                0,
-                0);
-
-        Intent intent = getIntent();
-        friends = (Friends) intent.getExtras().getSerializable("data");
-        binding.txtNicName.setText(friends.getNikName());
-        binding.imgChat.setOnClickListener(this);
-        binding.btnCancle.setOnClickListener(this);
+    private void setBackgroundTopPadding(int topPadding) {
+        binding.imgBackground.setPadding(0, topPadding, 0, 0);
     }
 
     public static int getStatusBarHeight(Context context) {
-        // status바의 높이 구하기
         int screenSizeType = (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK);
-        int statusbar = 0;
+        int statusBar = 0;
 
         if (screenSizeType != Configuration.SCREENLAYOUT_SIZE_XLARGE) {
             int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
 
             if (resourceId > 0) {
-                statusbar = context.getResources().getDimensionPixelSize(resourceId);
+                statusBar = context.getResources().getDimensionPixelSize(resourceId);
             }
         }
-        return statusbar;
+        return statusBar;
     }
 
     private void findRoom() {
-        Call<ArrayList<Room>> call = apiInterface.doFindRoom(friends.getId());
-
+        Call<ArrayList<Room>> call = getApiInterface().doFindRoom(friends.getId());
         call.enqueue(new Callback<ArrayList<Room>>() {
             @Override
-            public void onResponse(Call<ArrayList<Room>> call, Response<ArrayList<Room>> response) {
+            public void onResponse(@NonNull Call<ArrayList<Room>> call, @NonNull Response<ArrayList<Room>> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
-
-                    if(response.body() == null){
+                    if (response.body() == null) {
                         createRoom();
-                    } else {
-                        Room room = response.body().get(0);
-                        Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
-                        intent.putExtra("data", room);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                        getApplicationContext().startActivity(intent);
+                        return;
                     }
+
+                    Room room = response.body().get(0);
+                    startActivity(RoomActivity.class, room);
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Room>> call, Throwable t) {
+            public void onFailure(@NonNull Call<ArrayList<Room>> call, @NonNull Throwable t) {
+                Log.d(TAG, t.getMessage());
                 call.cancel();
             }
         });
@@ -115,29 +100,27 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<Friends> member = new ArrayList<>();
         member.add(friends);
 
-        Call<Room> call = apiInterface.doCreateRoom(member);
-
+        Call<Room> call = getApiInterface().doCreateRoom(member);
         call.enqueue(new Callback<Room>() {
             @Override
-            public void onResponse(Call<Room> call, Response<Room> response) {
+            public void onResponse(@NonNull Call<Room> call, @NonNull Response<Room> response) {
                 if (isSuccessResponse(response)) {
-                    Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
-
                     Room room = response.body();
-
-                    Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
-                    intent.putExtra("data", room);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                    getApplicationContext().startActivity(intent);
+                    startActivity(RoomActivity.class, room);
                 }
             }
 
             @Override
-            public void onFailure(Call<Room> call, Throwable t) {
+            public void onFailure(@NonNull Call<Room> call, @NonNull Throwable t) {
+                Log.d(TAG, t.getMessage());
                 call.cancel();
             }
         });
+    }
+
+    @NonNull
+    private APIInterface getApiInterface() {
+        return APIClient.getClient(getToken()).create(APIInterface.class);
     }
 
     boolean isSuccessResponse(Response response) {

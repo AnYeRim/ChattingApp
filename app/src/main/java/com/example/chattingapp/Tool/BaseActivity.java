@@ -8,10 +8,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
 
+import java.io.Serializable;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
     public void startActivity(Class mClass) {
         Intent intent = new Intent(this, mClass);
+        startActivity(intent);
+    }
+
+    public void startActivity(Class mClass, Serializable data){
+        Intent intent = new Intent(this, mClass);
+        intent.putExtra("data", data);
         startActivity(intent);
     }
 
