@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chattingapp.Model.DTO.Message;
 import com.example.chattingapp.R;
-import com.example.chattingapp.Utils.ActivityUtils;
+import com.example.chattingapp.View.Activity.RoomActivity;
 import com.example.chattingapp.databinding.ItemMessageBinding;
 
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     @NonNull
     @Override
     public AdapterMessage.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_message,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_message, parent, false);
         return new AdapterMessage.ViewHolder(view);
     }
 
-    public void addData(Message message){
+    public void addData(Message message) {
         data.add(message);
     }
 
@@ -49,7 +49,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ItemMessageBinding itemMessageBinding;
-        private ActivityUtils activityUtils;
         private String userID;
         private ConstraintSet constraintSetRight, constraintSetLeft;
 
@@ -57,48 +56,57 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             super(itemView);
             itemMessageBinding = ItemMessageBinding.bind(itemView);
 
-            activityUtils = new ActivityUtils();
-            userID = activityUtils.getUserID(mContext);
-            setConstraintSetRight();
+            userID = ((RoomActivity) mContext).getUserID();
+            initConstraintSet();
         }
 
-        private void setConstraintSetRight() {
-            constraintSetRight = new ConstraintSet();
+        private void initConstraintSet() {
             constraintSetLeft = new ConstraintSet();
-
-            constraintSetRight.clone(itemMessageBinding.constraint);
             constraintSetLeft.clone(itemMessageBinding.constraint);
 
+            constraintSetRight = new ConstraintSet();
+            constraintSetRight.clone(itemMessageBinding.constraint);
+
             constraintSetRight.clear(R.id.txtMessage, ConstraintSet.LEFT);
-            constraintSetRight.connect(R.id.txtMessage,ConstraintSet.RIGHT,
-                    R.id.constraint, ConstraintSet.RIGHT, 0);
+            constraintSetRight.connect(R.id.txtMessage, ConstraintSet.RIGHT, R.id.constraint, ConstraintSet.RIGHT, 0);
 
             constraintSetRight.clear(R.id.txtUnreadTotal, ConstraintSet.LEFT);
-            constraintSetRight.connect(R.id.txtUnreadTotal,ConstraintSet.RIGHT,
-                    R.id.txtMessage, ConstraintSet.LEFT, 0);
+            constraintSetRight.connect(R.id.txtUnreadTotal, ConstraintSet.RIGHT, R.id.txtMessage, ConstraintSet.LEFT, 0);
 
             constraintSetRight.clear(R.id.txtCreatedDate, ConstraintSet.LEFT);
-            constraintSetRight.connect(R.id.txtCreatedDate,ConstraintSet.RIGHT,
-                    R.id.txtMessage, ConstraintSet.LEFT, 0);
+            constraintSetRight.connect(R.id.txtCreatedDate, ConstraintSet.RIGHT, R.id.txtMessage, ConstraintSet.LEFT, 0);
         }
 
         void setItemMessageBinding(Message data) {
             itemMessageBinding.txtMessage.setText(data.getMessage());
-            if(data.getUnread_total() == 0) {
-                itemMessageBinding.txtUnreadTotal.setText("");
-            }else {
-                itemMessageBinding.txtUnreadTotal.setText(data.getUnread_total() + "");
-            }
             itemMessageBinding.txtCreatedDate.setText(data.getCreated_at());
-            if(data.getFrom_id().equals(userID)){
-                itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.white));
-                itemMessageBinding.txtMessage.setBackgroundColor(mContext.getColor(R.color.main));
-                constraintSetRight.applyTo(itemMessageBinding.constraint);
-            }else {
-                itemMessageBinding.txtMessage.setTextColor(mContext.getColor(R.color.black));
-                itemMessageBinding.txtMessage.setBackgroundColor(mContext.getColor(R.color.white));
-                constraintSetLeft.applyTo(itemMessageBinding.constraint);
+
+            setUnReadTotal(data.getUnread_total());
+            setMessageStyleByFromId(data.getFrom_id());
+        }
+
+        private void setMessageStyleByFromId(String fromId) {
+            if (fromId.equals(userID)) {
+                setMessageStyle(R.color.white, R.color.main, constraintSetRight);
+                return;
             }
+
+            setMessageStyle(R.color.black, R.color.white, constraintSetLeft);
+        }
+
+        private void setUnReadTotal(int total) {
+            if (total == 0) {
+                itemMessageBinding.txtUnreadTotal.setText("");
+                return;
+            }
+
+            itemMessageBinding.txtUnreadTotal.setText(String.valueOf(total));
+        }
+
+        private void setMessageStyle(int textColor, int backColor, ConstraintSet align) {
+            itemMessageBinding.txtMessage.setTextColor(mContext.getColor(textColor));
+            itemMessageBinding.txtMessage.setBackgroundColor(mContext.getColor(backColor));
+            align.applyTo(itemMessageBinding.constraint);
         }
 
     }
