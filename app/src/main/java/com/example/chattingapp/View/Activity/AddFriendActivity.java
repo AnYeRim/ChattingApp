@@ -58,7 +58,7 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
         });
     }
 
-    boolean isSuccessResponse(Response response) {
+    private boolean isSuccessResponse(Response response) {
         return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
@@ -94,12 +94,12 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
         enabledTextOK();
     }
 
-    void disabledTextOK() {
+    private void disabledTextOK() {
         binding.txtOK.setEnabled(false);
         binding.txtOK.setTextColor(Color.LTGRAY);
     }
 
-    void enabledTextOK() {
+    private void enabledTextOK() {
         binding.txtOK.setEnabled(true);
         binding.txtOK.setTextColor(Color.BLACK);
     }

@@ -69,7 +69,7 @@ public class RoomListFragment extends BaseFragment {
         });
     }
 
-    boolean isSuccessResponse(Response response) {
+    private boolean isSuccessResponse(Response response) {
         return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 

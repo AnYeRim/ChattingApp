@@ -72,7 +72,7 @@ public class TermsFragment extends BaseFragment implements View.OnClickListener 
         return  APIClient.getClient(null).create(APIInterface.class);
     }
 
-    boolean isSuccessResponse(Response response) {
+    private boolean isSuccessResponse(Response response) {
         return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 

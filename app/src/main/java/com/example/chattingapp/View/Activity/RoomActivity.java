@@ -106,7 +106,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
-    boolean isSuccessResponse(Response response) {
+    private boolean isSuccessResponse(Response response) {
         return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 

@@ -136,11 +136,11 @@ public class AuthEmailFragment extends BaseFragment implements View.OnClickListe
         return APIClient.getClient(null).create(APIInterface.class);
     }
 
-    boolean isSuccessResponse(Response response) {
+    private boolean isSuccessResponse(Response response) {
         return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
-    void setSharedPreference(String data_name, String data) {
+    private void setSharedPreference(String data_name, String data) {
         SharedPreferenceUtil.setData(getContext(), data_name, data);
     }
 

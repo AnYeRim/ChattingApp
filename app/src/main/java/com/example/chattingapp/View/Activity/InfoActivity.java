@@ -123,7 +123,7 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
         return APIClient.getClient(getToken()).create(APIInterface.class);
     }
 
-    boolean isSuccessResponse(Response response) {
+    private boolean isSuccessResponse(Response response) {
         return response.code() == 200 && response.isSuccessful() && response.body() != null;
     }
 
