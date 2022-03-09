@@ -41,7 +41,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onResume() {
         super.onResume();
-        showSelectedItem(binding.bottomTap.getSelectedItemId());
+        if(getIntent().getExtras() != null){
+            int selectedItem = getIntent().getExtras().getInt("selectedItem");
+            showSelectedItem(selectedItem);
+        }else {
+            showSelectedItem(binding.bottomTap.getSelectedItemId());
+        }
     }
 
     private void showSelectedItem(int selectedItemId) {
