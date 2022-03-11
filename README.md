@@ -20,11 +20,8 @@
 <img src="https://user-images.githubusercontent.com/49059414/157840339-28266df1-43a3-4f40-b912-76cfc9c62351.jpg"  width="300" height="600"/> <img src="https://user-images.githubusercontent.com/49059414/157840380-f57ed8cb-3099-4e2c-accf-de77732e2a3b.jpg"  width="300" height="600"/>  
 
 ### 로그인 (+ 자동 로그인)
-<img src="https://user-images.githubusercontent.com/49059414/157840553-16a86d4e-ebd8-4fcb-841d-9649e197ad60.jpg"  width="300" height="600"/> 
-<img src="https://user-images.githubusercontent.com/49059414/157840564-567e4101-60b2-4403-a811-8bfbf0c0c442.jpg"  width="300" height="600"/>  
+<img src="https://user-images.githubusercontent.com/49059414/157840553-16a86d4e-ebd8-4fcb-841d-9649e197ad60.jpg"  width="300" height="600"/> <img src="https://user-images.githubusercontent.com/49059414/157840564-567e4101-60b2-4403-a811-8bfbf0c0c442.jpg"  width="300" height="600"/>  
 
 ### 1:1 채팅
-<img src="https://user-images.githubusercontent.com/49059414/157840770-ff5a2e3c-023e-4fd5-8d93-2da1f1124794.jpg"  width="300" height="600"/>
-<img src="https://user-images.githubusercontent.com/49059414/157840831-6240cb0c-3e12-47b3-9ceb-e7805125f9a0.jpg"  width="300" height="600"/>  
-<img src="https://user-images.githubusercontent.com/49059414/157840775-5a5f7174-eb81-4d12-a09b-cd5df308e9fe.jpg"  width="300" height="600"/> 
-<img src="https://user-images.githubusercontent.com/49059414/157840835-1ee09013-a994-4c8b-bf01-cd1d6847db6c.jpg"  width="300" height="600"/>   
+<img src="https://user-images.githubusercontent.com/49059414/157840770-ff5a2e3c-023e-4fd5-8d93-2da1f1124794.jpg"  width="300" height="600"/> <img src="https://user-images.githubusercontent.com/49059414/157840831-6240cb0c-3e12-47b3-9ceb-e7805125f9a0.jpg"  width="300" height="600"/>  
+<img src="https://user-images.githubusercontent.com/49059414/157840775-5a5f7174-eb81-4d12-a09b-cd5df308e9fe.jpg"  width="300" height="600"/> <img src="https://user-images.githubusercontent.com/49059414/157840835-1ee09013-a994-4c8b-bf01-cd1d6847db6c.jpg"  width="300" height="600"/>   
