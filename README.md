@@ -3,8 +3,8 @@
 ### 기능
   - [권한 동의](https://github.com/AnYeRim/ChattingApp/blob/main/README.md#%EA%B6%8C%ED%95%9C-%EB%8F%99%EC%9D%98)
   - [회원 가입](https://github.com/AnYeRim/ChattingApp/blob/main/README.md#%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85)
-  - 로그인 (+ 자동 로그인)
-  - 1:1 채팅 (소켓 통신, FCM)
+  - [로그인 (+ 자동 로그인)](https://github.com/AnYeRim/ChattingApp/blob/main/README.md#%EB%A1%9C%EA%B7%B8%EC%9D%B8--%EC%9E%90%EB%8F%99-%EB%A1%9C%EA%B7%B8%EC%9D%B8)
+  - [1:1 채팅 (소켓 통신, FCM)](https://github.com/AnYeRim/ChattingApp/blob/main/README.md#11-%EC%B1%84%ED%8C%85)
 
 ### 실행 화면
 
