@@ -13,6 +13,7 @@
 
 ### 권한 동의
 | <img src="https://user-images.githubusercontent.com/49059414/157839408-969eb5a4-b71d-4d73-ad5c-53a5bf209bc7.jpg"  width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157839649-3228c1d9-f041-4c91-9698-81dc2fea5307.jpg"  width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157839668-d6a321cc-c354-4251-9ef5-8527b2de87dd.jpg"  width="250" height="528"/>  |
+|------|---|---|
 
 ### 회원가입
 | <img src="https://user-images.githubusercontent.com/49059414/157840322-6ccc19e2-600e-440c-9b66-f1811df160f3.jpg" width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157840326-812d71ef-db3a-4e4c-9f4d-2e931b4e899a.jpg" width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157840333-a91acd7b-638f-4eb9-b598-51f4ef790d95.jpg" width="250" height="528"/>  
