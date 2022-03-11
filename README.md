@@ -17,6 +17,7 @@
 
 ### 회원가입
 | <img src="https://user-images.githubusercontent.com/49059414/157840322-6ccc19e2-600e-440c-9b66-f1811df160f3.jpg" width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157840326-812d71ef-db3a-4e4c-9f4d-2e931b4e899a.jpg" width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157840333-a91acd7b-638f-4eb9-b598-51f4ef790d95.jpg" width="250" height="528"/>  
+|------|---|---|
 | <img src="https://user-images.githubusercontent.com/49059414/157840334-fc5510b3-4f6e-4c06-a192-39c235a22d38.jpg" width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157840339-28266df1-43a3-4f40-b912-76cfc9c62351.jpg" width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157840380-f57ed8cb-3099-4e2c-accf-de77732e2a3b.jpg" width="250" height="528"/>  
 
 ``` C
