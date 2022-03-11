@@ -14,6 +14,30 @@
 ### 권한 동의
 | <img src="https://user-images.githubusercontent.com/49059414/157839408-969eb5a4-b71d-4d73-ad5c-53a5bf209bc7.jpg"  width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157839649-3228c1d9-f041-4c91-9698-81dc2fea5307.jpg"  width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157839668-d6a321cc-c354-4251-9ef5-8527b2de87dd.jpg"  width="250" height="528"/>  |
 |------|---|---|
+1. 필요한 권한에 동의되어있으면 스플래시 화면을 띄운다.
+``` C
+@Override
+    protected void onResume() {
+        super.onResume();
+
+        if (noNeedAgreePermissions()) {
+            showSplash();
+        }
+    }
+``` 
+2. 아직 권한 동의가 되어있지 않으면, 동의 요청 창을 띄운다.
+``` C
+private void showRequestPermissions() {
+        if (checkDeniedPermissions(PermissionActivity.this, initPms)) {
+            showDialogRequestPermissions();
+            return;
+        }
+
+        requestPermissions(initPms, REQUEST_PERMISSIONS_CODE);
+    }
+```
+이 때 이미 거부한 적이 있는 경우, (권한 설정창으로 이동시키는) 권한 요청 다이얼로그를 띄운다.
+(requestPermissions로 권한 요청하여 2번 이상 거부되면 더이상 권한 요청 창이 띄워지지 않기 때문에, 권한 설정 창으로 이동시키도록 구현)
 
 ### 회원가입
 | <img src="https://user-images.githubusercontent.com/49059414/157840322-6ccc19e2-600e-440c-9b66-f1811df160f3.jpg" width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157840326-812d71ef-db3a-4e4c-9f4d-2e931b4e899a.jpg" width="250" height="528"/> | <img src="https://user-images.githubusercontent.com/49059414/157840333-a91acd7b-638f-4eb9-b598-51f4ef790d95.jpg" width="250" height="528"/>  
