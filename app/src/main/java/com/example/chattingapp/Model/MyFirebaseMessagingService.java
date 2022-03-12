@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.Person;
+import androidx.core.graphics.drawable.IconCompat;
 
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.R;
@@ -22,17 +23,13 @@ import com.example.chattingapp.View.Activity.RoomActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private final String CHANNEL_ID = "chatAPP";
     private final int notificationId = 0;
-
-    private Person[] sender = new Person[3];
-    private String[] senderName = new String[3];
-    private String[] message = new String[3];
+    private final String GROUP_KEY_CHATTING = "CHATTING";
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -66,36 +63,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         createNotificationChannel();
 
-        setMessageArray(title, body);
-
         //호출
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(notificationId, getBuilder(title, body).build());
+        notificationManager.notify(Integer.parseInt(roomID), getMessageBuilder(title, body,roomID).build());
+        notificationManager.notify(0, getSummaryBuilder().build());
+
     }
 
     @NonNull
-    private NotificationCompat.Builder getBuilder(String title, String body) {
+    private NotificationCompat.Builder getSummaryBuilder() {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.icon_splash)
-                .setContentTitle(title)
-                .setContentText(body)
                 .setContentIntent(getRoomListIntent())
-                .setStyle(getStyle())
+                .setStyle(new NotificationCompat.InboxStyle())
                 .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setGroup(GROUP_KEY_CHATTING)
+                .setGroupSummary(true);
     }
 
     @NonNull
-    private NotificationCompat.MessagingStyle getStyle() {
-        return new NotificationCompat.MessagingStyle(getMyPerson())
-                .addMessage(message[0], System.currentTimeMillis(), sender[0])
-                .addMessage(message[1], System.currentTimeMillis(), sender[1])
-                .addMessage(message[2], System.currentTimeMillis(), sender[2]);
+    private NotificationCompat.Builder getMessageBuilder(String title, String body, String roomID) {
+        return new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.icon_splash)
+                .setContentIntent(getRoomIntent(roomID))
+                .setStyle(new NotificationCompat.MessagingStyle(getPerson(getNikName()))
+                        .addMessage(body, System.currentTimeMillis(), getPerson(title)))
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setGroup(GROUP_KEY_CHATTING);
     }
 
     @NonNull
-    private Person getMyPerson() {
-        return new Person.Builder().setName(SharedPreferenceUtil.getData(this, "nikName")).build();
+    private Person getPerson(String name) {
+        return new Person.Builder()
+                .setIcon(IconCompat.createWithResource(this, R.drawable.profile_default))
+                .setName(name)
+                .build();
+    }
+
+    private String getNikName() {
+        return SharedPreferenceUtil.getData(this, "nikName");
     }
 
     private PendingIntent getRoomListIntent() {
@@ -113,38 +120,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, RoomActivity.class);
         intent.putExtra("data", room);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, Integer.parseInt(roomID), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
-    }
-
-    private void setMessageArray(String title, String body) {
-        int index = Arrays.asList(senderName).indexOf(title);
-        // 이전 목록에 동일 보낸이가 없으면
-        if (index == -1) {
-            // 빈 곳 없으면 한 칸씩 밀고 맨 끝에 넣기
-            if(sender[0] != null && sender[1] != null && sender [2] != null){
-                for(int i = 0; i <3; i++){
-                    setMessageData(i, sender[i+1], senderName[i+1], message[i+1]);
-                }
-                setMessageData(2, new Person.Builder().setName(title).build(), title, body);
-            }
-            // 빈 곳을 찾아 데이터 넣기
-            for (int i = 0; i < 3; i++) {
-                if(sender[i] == null) {
-                    setMessageData(i, new Person.Builder().setName(title).build(), title, body);
-                    break;
-                }
-            }
-        }else {
-            // 이전 목록에 이미 보낸이가 있으면 해당 배열에 추가
-            setMessageData(index, new Person.Builder().setName(title).build(), title, body);
-        }
-    }
-
-    private void setMessageData(int i, Person person, String title, String body) {
-        sender[i] = person;
-        senderName[i] = title;
-        message[i] = body;
     }
 
     private void createNotificationChannel() {
