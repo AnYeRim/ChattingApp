@@ -1,5 +1,6 @@
 package com.example.chattingapp.View.Activity;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -56,6 +57,7 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             room = (Room) getIntent().getExtras().getSerializable("data");
             setRoomData();
             setMessageData();
+            deleteNotification();
             setSocket();
             socket.emit("joinRoom", room.getId());
         }
@@ -169,16 +171,25 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
             try {
                 addMessage(JsonToMessage((JSONObject) data[0]));
                 readSocketMessage();
+
+                //new Handler().postDelayed(() -> deleteNotification(), 1000);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }, 0);
     };
 
+    private void deleteNotification() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(room.getId());
+        // TODO 푸시 알림이 없으면, 그룹으로 묶느라고 사용한 Summary 알림도 지워져야한다.
+    }
+
     @NonNull
     private Message JsonToMessage(JSONObject data) throws JSONException {
         Message message = new Message();
-        message.setRoom_id(data.getString("room_id"));
+        message.setRoom_id(data.getInt("room_id"));
         message.setFrom_id(data.getString("from_id"));
         message.setMessage_id(data.getString("message_id"));
         message.setMessage(data.getString("message"));

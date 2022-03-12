@@ -48,9 +48,9 @@ public interface APIInterface {
     Call<Room> doCreateRoom(@Body ArrayList<Friends> friends);
 
     @GET("room/{room_id}")
-    Call<Room> doGetRoom(@Path("room_id") String room_id);
+    Call<Room> doGetRoom(@Path("room_id") int room_id);
 
     @GET("room/{room_id}/message")
-    Call<ArrayList<Message>> doGetMessage(@Path("room_id") String room_id);
+    Call<ArrayList<Message>> doGetMessage(@Path("room_id") int room_id);
 
 }

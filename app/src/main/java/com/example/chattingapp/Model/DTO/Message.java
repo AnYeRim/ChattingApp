@@ -17,7 +17,7 @@ public class Message implements Serializable {
     private String message_id;
 
     @SerializedName("room_id")
-    private String room_id;
+    private int room_id;
 
     @SerializedName("message")
     private String message;
@@ -78,11 +78,11 @@ public class Message implements Serializable {
         this.message_id = message_id;
     }
 
-    public String getRoom_id() {
+    public int getRoom_id() {
         return room_id;
     }
 
-    public void setRoom_id(String room_id) {
+    public void setRoom_id(int room_id) {
         this.room_id = room_id;
     }
 

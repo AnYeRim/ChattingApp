@@ -28,7 +28,7 @@ import java.util.List;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private final String CHANNEL_ID = "chatAPP";
-    private final int notificationId = 0;
+    private final int NOTIFICATION_GROUP_ID = 0;
     private final String GROUP_KEY_CHATTING = "CHATTING";
 
     @Override
@@ -43,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-        String roomID = remoteMessage.getData().get("roomID");
+        int roomID = Integer.parseInt(remoteMessage.getData().get("roomID"));
 
         ActivityManager manager = (ActivityManager) getSystemService(Activity.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> list = manager.getRunningTasks(1);
@@ -65,9 +65,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //호출
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(Integer.parseInt(roomID), getMessageBuilder(title, body,roomID).build());
-        notificationManager.notify(0, getSummaryBuilder().build());
-
+        notificationManager.notify(roomID, getMessageBuilder(title, body, roomID).build());
+        notificationManager.notify(NOTIFICATION_GROUP_ID, getSummaryBuilder().build());
     }
 
     @NonNull
@@ -75,22 +74,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.icon_splash)
                 .setContentIntent(getRoomListIntent())
-                .setStyle(new NotificationCompat.InboxStyle())
-                .setAutoCancel(true)
                 .setGroup(GROUP_KEY_CHATTING)
                 .setGroupSummary(true);
     }
 
     @NonNull
-    private NotificationCompat.Builder getMessageBuilder(String title, String body, String roomID) {
+    private NotificationCompat.Builder getMessageBuilder(String title, String body, int roomID) {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.icon_splash)
                 .setContentIntent(getRoomIntent(roomID))
                 .setStyle(new NotificationCompat.MessagingStyle(getPerson(getNikName()))
                         .addMessage(body, System.currentTimeMillis(), getPerson(title)))
                 .setAutoCancel(true)
+                .addAction(getAction("읽음", getRoomIntent(roomID)))
+                .addAction(getAction("답장", getRoomIntent(roomID)))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setGroup(GROUP_KEY_CHATTING);
+    }
+
+    @NonNull
+    NotificationCompat.Action getAction(String title, PendingIntent intent) {
+        return new NotificationCompat.Action.Builder(0, title, intent).build();
     }
 
     @NonNull
@@ -107,20 +111,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private PendingIntent getRoomListIntent() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("selectedItem",R.id.menu_chat);
+        intent.putExtra("selectedItem", R.id.menu_chat);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
     }
 
-    private PendingIntent getRoomIntent(String roomID) {
+    private PendingIntent getRoomIntent(int roomID) {
         Room room = new Room();
         room.setId(roomID);
 
         Intent intent = new Intent(this, RoomActivity.class);
         intent.putExtra("data", room);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, Integer.parseInt(roomID), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, roomID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
     }
 
