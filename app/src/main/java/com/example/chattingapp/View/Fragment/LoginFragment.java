@@ -89,8 +89,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         });
     }
 
-    private void setSharedPreference(String token, String token2) {
-        SharedPreferenceUtil.setData(getContext(), token, token2);
+    private void setSharedPreference(String data_name, String data) {
+        SharedPreferenceUtil.setData(getContext(), data_name, data);
     }
 
     @NonNull
@@ -104,7 +104,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.btnLogin:
                 user.setPhone(binding.edtID.getText().toString());

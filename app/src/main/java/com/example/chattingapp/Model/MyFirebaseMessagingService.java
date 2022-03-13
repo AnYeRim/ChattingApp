@@ -1,6 +1,5 @@
 package com.example.chattingapp.Model;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
@@ -36,7 +35,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onNewToken(s);
     }
 
-    @SuppressLint("RestrictedApi")
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);

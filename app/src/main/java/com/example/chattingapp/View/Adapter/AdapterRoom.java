@@ -2,7 +2,6 @@ package com.example.chattingapp.View.Adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,31 +106,29 @@ public class AdapterRoom extends RecyclerView.Adapter<AdapterRoom.ViewHolder> {
 
             AlertDialog.Builder dlg = new AlertDialog.Builder(mContext);
             dlg.setTitle(data.get(position).getTitle());
-            dlg.setItems(items,new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog,int which){
-                    switch (which){
-                        case 0:
-                            Toast.makeText(mContext, "채팅방 이름 설정", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 1:
-                            Toast.makeText(mContext, "즐겨찾기에 추가", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 2:
-                            if(data.get(position).isAlarm().equals("Y")){
-                                data.get(position).setAlarm("N");
-                            }else {
-                                data.get(position).setAlarm("Y");
-                            }
-                            Toast.makeText(mContext, "채팅방 알림", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 3:
-                            Toast.makeText(mContext, "나가기", Toast.LENGTH_SHORT).show();
-                            break;
+            dlg.setItems(items, (dialog, which) -> {
+                switch (which){
+                    case 0:
+                        Toast.makeText(mContext, "채팅방 이름 설정", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(mContext, "즐겨찾기에 추가", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        if(data.get(position).isAlarm().equals("Y")){
+                            data.get(position).setAlarm("N");
+                        }else {
+                            data.get(position).setAlarm("Y");
+                        }
+                        Toast.makeText(mContext, "채팅방 알림", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+                        Toast.makeText(mContext, "나가기", Toast.LENGTH_SHORT).show();
+                        break;
 
-                    }
-                    notifyDataSetChanged();
-                    Toast.makeText(mContext,items[which],Toast.LENGTH_SHORT).show();
                 }
+                notifyDataSetChanged();
+                Toast.makeText(mContext,items[which],Toast.LENGTH_SHORT).show();
             });
             dlg.show();
 
