@@ -103,8 +103,8 @@ public class Room implements Serializable {
         long now = System.currentTimeMillis();
         Date nowDate = new Date(now);
 
-        if(date.getDate() == nowDate.getDate()+1){
-            formatter = new SimpleDateFormat("a H:mm", Locale.KOREA);
+        if(date.getDate() == nowDate.getDate()){
+            formatter = new SimpleDateFormat("a hh:mm", Locale.KOREA);
         }else if(date.getYear() == nowDate.getYear()){
             formatter = new SimpleDateFormat("MM월 dd일", Locale.KOREA);
         }else {
