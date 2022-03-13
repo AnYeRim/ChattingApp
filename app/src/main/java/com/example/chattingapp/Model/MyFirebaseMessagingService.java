@@ -1,7 +1,5 @@
 package com.example.chattingapp.Model;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.Person;
 import androidx.core.graphics.drawable.IconCompat;
 
+import com.example.chattingapp.ChattingApp;
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Utils.SharedPreferenceUtil;
@@ -21,8 +20,6 @@ import com.example.chattingapp.View.Activity.MainActivity;
 import com.example.chattingapp.View.Activity.RoomActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import java.util.List;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -43,15 +40,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String body = remoteMessage.getData().get("body");
         int roomID = Integer.parseInt(remoteMessage.getData().get("roomID"));
 
-        ActivityManager manager = (ActivityManager) getSystemService(Activity.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> list = manager.getRunningTasks(1);
-        ActivityManager.RunningTaskInfo info = list.get(0);
-        switch (info.topActivity.getClassName()) {
-            case "com.example.chattingapp.View.Activity.RoomActivity":
+        String currentActivity = ChattingApp.getCurrentActivity().getClass().getSimpleName();
+        switch (currentActivity) {
+            case "RoomActivity":
                 //TODO 현재 입장한 room_id와 푸시알림의 room_id 비교
                 //TODO 같으면 푸시를 띄우지 않고, 다르면 푸시를 띄운다.
                 break;
-            case "com.example.chattingapp.View.Activity.RoomListFragment":
+            case "RoomListFragment":
                 //TODO 푸시알림을 띄우고, 푸시 데이터를 액티비티에 적용시킨다.
                 break;
             default:
