@@ -1,76 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".View.Activity.AddFriendActivity">
+<layout>
 
-    <LinearLayout
-        android:id="@+id/linearRoom"
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.chattingapp.viewModel.AddFriendViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="18dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp">
-
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="20dp"
-            android:layout_height="18dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/arrow_back" />
-
-        <TextView
-            android:id="@+id/txtTitle"
-            style="@style/txtTitle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="친구 추가"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txtOK"
-            style="@style/txtTitle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="확인"
-            android:textStyle="bold"
-            android:enabled="false"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="15dp">
+        tools:context=".View.Activity.AddFriendActivity">
 
-    <EditText
-        android:id="@+id/edtFriendName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="친구 이름"
-        style="@style/edtTitle"/>
+        <LinearLayout
+            android:id="@+id/linearRoom"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
 
-    <EditText
-        android:id="@+id/edtFriendPhone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="전화번호"
-        style="@style/edtTitle"/>
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="20dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/arrow_back" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-없이 숫자만 입력해주세요"
-        style="@style/txtContents4"/>
+            <TextView
+                android:id="@+id/txtTitle"
+                style="@style/txtTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="친구 추가"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtOK"
+                style="@style/txtTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:enabled="@{viewModel.enabledOK}"
+                android:textColor="@{viewModel.color}"
+                android:text="확인"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <EditText
+                android:id="@+id/edtFriendName"
+                style="@style/edtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="친구 이름" />
+
+            <EditText
+                android:id="@+id/edtFriendPhone"
+                style="@style/edtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="전화번호" />
+
+            <TextView
+                style="@style/txtContents4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-없이 숫자만 입력해주세요" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</layout>

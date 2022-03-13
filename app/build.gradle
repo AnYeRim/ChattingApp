@@ -26,13 +26,18 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    buildFeatures {
-        viewBinding = true
+    dataBinding {
+        enabled = true
     }
 }
 
 dependencies {
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.0-alpha02"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata:2.5.0-alpha02"
 
+    // recyclerView
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     // retrofit2 + okhttp3 : 응답속도와 같은 성능, 간단한 구현방식 + 모니터링 및 인터셉트 처리

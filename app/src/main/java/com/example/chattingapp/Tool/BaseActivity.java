@@ -1,6 +1,5 @@
 package com.example.chattingapp.Tool;
 
-import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -32,11 +31,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public String getToken(){
-        return SharedPreferenceUtil.getData(this, "token");
+        return SharedPreferenceUtil.getData("token");
     }
 
     public String getUserID(){
-        return SharedPreferenceUtil.getData(this, "userID");
+        return SharedPreferenceUtil.getData( "userID");
     }
 
 }

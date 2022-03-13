@@ -6,6 +6,7 @@ import com.example.chattingapp.Model.DTO.Message;
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.Model.DTO.Terms;
 import com.example.chattingapp.Model.DTO.User;
+import com.example.chattingapp.Model.VO.ResponseData;
 import com.example.chattingapp.Model.VO.ResponseUser;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public interface APIInterface {
     Call<ArrayList<Friends>> doGetFriendsList();
 
     @POST("friends")
-    Call<Friends> doAddFriends(@Body Friends friends);
+    Call<ResponseData> doAddFriends(@Body Friends friends);
 
 
     @GET("room")

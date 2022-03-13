@@ -10,6 +10,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.chattingapp.ChattingApp;
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Message;
@@ -46,6 +47,8 @@ public class RoomActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        ChattingApp.setCurrentActivity(this);
 
         binding = ActivityRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

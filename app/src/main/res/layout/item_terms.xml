@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <CheckBox
-        android:id="@+id/chkTerm"
-        android:layout_width="wrap_content"
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="약관 title"
-        style="@style/txtTitle3"
-        android:padding="7dp"
-        android:layout_weight="1"/>
+        android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/btnDetail"
-        style="@style/btnDetail"
-        android:layout_margin="7dp"
-        android:layout_gravity="center_vertical"/>
+        <CheckBox
+            android:id="@+id/chkTerm"
+            style="@style/txtTitle3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="7dp"
+            android:text="약관 title" />
 
-</LinearLayout>
+        <ImageButton
+            android:id="@+id/btnDetail"
+            style="@style/btnDetail"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="7dp" />
+
+    </LinearLayout>
+</layout>

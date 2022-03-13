@@ -141,7 +141,7 @@ public class AuthEmailFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void setSharedPreference(String data_name, String data) {
-        SharedPreferenceUtil.setData(getContext(), data_name, data);
+        SharedPreferenceUtil.setData(data_name, data);
     }
 
     @NonNull

@@ -80,6 +80,6 @@ public class RoomListFragment extends BaseFragment {
     }
 
     private String getToken(){
-        return SharedPreferenceUtil.getData(getContext(), "token");
+        return SharedPreferenceUtil.getData("token");
     }
 }

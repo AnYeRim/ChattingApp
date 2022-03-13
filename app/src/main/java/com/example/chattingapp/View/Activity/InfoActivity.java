@@ -1,15 +1,14 @@
 package com.example.chattingapp.View.Activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.chattingapp.ChattingApp;
 import com.example.chattingapp.Model.APIClient;
 import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
@@ -35,6 +34,8 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        ChattingApp.setCurrentActivity(this);
 
         binding = ActivityInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

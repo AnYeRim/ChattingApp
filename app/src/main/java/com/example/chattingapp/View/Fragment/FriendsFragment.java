@@ -123,14 +123,14 @@ public class FriendsFragment extends BaseFragment implements View.OnClickListene
     }
 
     private String getToken(){
-        return SharedPreferenceUtil.getData(getContext(), "token");
+        return SharedPreferenceUtil.getData("token");
     }
 
     private String getUserID(){
-        return SharedPreferenceUtil.getData(getContext(), "userID");
+        return SharedPreferenceUtil.getData("userID");
     }
 
     private String getNikName(){
-        return SharedPreferenceUtil.getData(getContext(), "nikName");
+        return SharedPreferenceUtil.getData("nikName");
     }
 }

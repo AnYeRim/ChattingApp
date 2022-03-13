@@ -1,43 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/constraint">
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/constraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/txtMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="250dp"
-        android:layout_marginVertical="3dp"
-        android:padding="7dp"
-        style="@style/txtLongContents2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="ddddddddddddddddddddddddddddddd"/>
+        <TextView
+            android:id="@+id/txtMessage"
+            style="@style/txtLongContents2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="3dp"
+            android:maxWidth="250dp"
+            android:padding="7dp"
+            android:text="ddddddddddddddddddddddddddddddd"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtUnreadTotal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/main"
-        android:textStyle="bold"
-        style="@style/txtContents4"
-        android:layout_marginHorizontal="3dp"
-        app:layout_constraintLeft_toRightOf="@+id/txtMessage"
-        app:layout_constraintBottom_toTopOf="@+id/txtCreatedDate"
-        android:text="99"/>
+        <TextView
+            android:id="@+id/txtUnreadTotal"
+            style="@style/txtContents4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="3dp"
+            android:text="99"
+            android:textColor="@color/main"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/txtCreatedDate"
+            app:layout_constraintLeft_toRightOf="@+id/txtMessage" />
 
-    <TextView
-        android:id="@+id/txtCreatedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        style="@style/txtContents4"
-        android:layout_marginHorizontal="3dp"
-        app:layout_constraintLeft_toRightOf="@+id/txtMessage"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="오전 07:30"/>
+        <TextView
+            android:id="@+id/txtCreatedDate"
+            style="@style/txtContents4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="3dp"
+            android:text="오전 07:30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/txtMessage" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

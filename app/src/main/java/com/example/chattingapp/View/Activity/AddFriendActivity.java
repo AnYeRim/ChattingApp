@@ -1,77 +1,40 @@
 package com.example.chattingapp.View.Activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.chattingapp.Model.APIClient;
-import com.example.chattingapp.Model.APIInterface;
-import com.example.chattingapp.Model.DTO.Friends;
+import com.example.chattingapp.ChattingApp;
+import com.example.chattingapp.R;
 import com.example.chattingapp.Tool.BaseActivity;
+import com.example.chattingapp.viewModel.AddFriendViewModel;
 import com.example.chattingapp.databinding.ActivityAddFriendBinding;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AddFriendActivity extends BaseActivity implements TextWatcher {
 
     private ActivityAddFriendBinding binding;
+    private AddFriendViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityAddFriendBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        ChattingApp.setCurrentActivity(this);
 
-        disabledTextOK();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_friend);
+
+        viewModel = new ViewModelProvider(this).get(AddFriendViewModel.class);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
 
         binding.edtFriendPhone.addTextChangedListener(this);
         binding.edtFriendName.addTextChangedListener(this);
 
         binding.btnBack.setOnClickListener(view -> finish());
-        binding.txtOK.setOnClickListener(view -> doAddFriend(getFriendData()));
-    }
-
-    private void doAddFriend(Friends friends) {
-        Call<Friends> call = getApiInterface().doAddFriends(friends);
-        call.enqueue(new Callback<Friends>() {
-            @Override
-            public void onResponse(@NonNull Call<Friends> call, @NonNull Response<Friends> response) {
-                if (isSuccessResponse(response)) {
-                    finish();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Friends> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(), "친구추가 실패", Toast.LENGTH_SHORT).show();
-                call.cancel();
-
-            }
-        });
-    }
-
-    private boolean isSuccessResponse(Response response) {
-        return response.code() == 200 && response.isSuccessful() && response.body() != null;
-    }
-
-    @NonNull
-    private APIInterface getApiInterface() {
-        return APIClient.getClient(getToken()).create(APIInterface.class);
-    }
-
-    private Friends getFriendData() {
-        Friends friends = new Friends();
-        friends.setNikName(binding.edtFriendName.getText().toString());
-        friends.setPhone(binding.edtFriendPhone.getText().toString());
-        return friends;
+        binding.txtOK.setOnClickListener(view -> viewModel.addData(getFriendName(),getFriendPhone()));
     }
 
     @Override
@@ -86,29 +49,15 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if (isEmptyRequiredValues()) {
-            disabledTextOK();
-            return;
-        }
-
-        enabledTextOK();
+        viewModel.checkText(getFriendName(), getFriendPhone());
     }
 
-    private void disabledTextOK() {
-        binding.txtOK.setEnabled(false);
-        binding.txtOK.setTextColor(Color.LTGRAY);
+    public String getFriendName() {
+        return binding.edtFriendName.getText().toString();
     }
 
-    private void enabledTextOK() {
-        binding.txtOK.setEnabled(true);
-        binding.txtOK.setTextColor(Color.BLACK);
+    public String getFriendPhone() {
+        return binding.edtFriendPhone.getText().toString();
     }
 
-    private boolean isEmptyRequiredValues() {
-        return isEmptyEdit(binding.edtFriendName) || isEmptyEdit(binding.edtFriendPhone);
-    }
-
-    private boolean isEmptyEdit(EditText editText) {
-        return editText.length() == 0;
-    }
 }

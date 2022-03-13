@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.chattingapp.ChattingApp;
 import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.databinding.ActivityPermissionBinding;
 
@@ -37,6 +38,8 @@ public class PermissionActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ChattingApp.setCurrentActivity(this);
 
         binding = ActivityPermissionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

@@ -90,7 +90,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void setSharedPreference(String data_name, String data) {
-        SharedPreferenceUtil.setData(getContext(), data_name, data);
+        SharedPreferenceUtil.setData(data_name, data);
     }
 
     @NonNull

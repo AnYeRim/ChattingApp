@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.chattingapp.ChattingApp;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.View.Fragment.EtcFragment;
@@ -25,6 +26,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        ChattingApp.setCurrentActivity(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

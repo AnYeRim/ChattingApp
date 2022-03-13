@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.chattingapp.ChattingApp;
 import com.example.chattingapp.R;
 import com.example.chattingapp.View.Fragment.LoginFragment;
 import com.example.chattingapp.databinding.ActivityLoginBinding;
@@ -16,6 +17,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        ChattingApp.setCurrentActivity(this);
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

@@ -1,59 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
+<layout>
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="채팅 어플 이용 안내"
-        android:textAlignment="center"
-        style="@style/txtTitle1"
-        android:layout_marginVertical="20dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="채팅을 이용하려면\n다음 권한을 허용해주세요"
-        android:textAlignment="center"
-        style="@style/txtLongContents1"
-        android:layout_marginBottom="40dp"/>
+        <TextView
+            style="@style/txtTitle1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="채팅 어플 이용 안내"
+            android:textAlignment="center" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="전화"
-        style="@style/txtTitle2"
-        android:padding="7dp"/>
+        <TextView
+            style="@style/txtLongContents1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:text="채팅을 이용하려면\n다음 권한을 허용해주세요"
+            android:textAlignment="center" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="저장"
-        style="@style/txtTitle2"
-        android:padding="7dp" />
+        <TextView
+            style="@style/txtTitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="전화" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="주소록"
-        style="@style/txtTitle2"
-        android:padding="7dp"/>
+        <TextView
+            style="@style/txtTitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="저장" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="위 권한에 동의 후 채팅 어플이 시작됩니다.\n 아래 허용하기 버튼을 눌러 권한을 허용해주세요"
-        android:padding="7dp"/>
+        <TextView
+            style="@style/txtTitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="주소록" />
 
-    <Button
-        android:id="@+id/btnPermission"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="허용하기"
-        style="@style/btnEnabled"
-        android:layout_marginTop="20dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="위 권한에 동의 후 채팅 어플이 시작됩니다.\n 아래 허용하기 버튼을 눌러 권한을 허용해주세요" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnPermission"
+            style="@style/btnEnabled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="허용하기" />
+
+    </LinearLayout>
+</layout>

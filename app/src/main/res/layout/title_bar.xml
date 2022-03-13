@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="55dp"
-    android:orientation="horizontal"
-    android:paddingHorizontal="18dp"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp">
+<layout>
 
-    <TextView
-        android:id="@+id/txtTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/txtTitle1"
-        android:text="title"
-        android:textStyle="bold"
-        android:layout_weight="1"
-        android:layout_gravity="center"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
 
-    <ImageView
-        android:id="@+id/btnSearch"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/search2"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="10dp"/>
+        <TextView
+            android:id="@+id/txtTitle"
+            style="@style/txtTitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="title"
+            android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/btnAddFriends"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/add_friend"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="10dp"/>
+        <ImageView
+            android:id="@+id/btnSearch"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/search2" />
 
-    <ImageView
-        android:id="@+id/btnAddChat"
-        android:layout_width="20dp"
-        android:layout_height="22dp"
-        android:background="@drawable/add_chat2"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="10dp"/>
+        <ImageView
+            android:id="@+id/btnAddFriends"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/add_friend" />
 
-    <ImageView
-        android:id="@+id/btnSetting"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/setting"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"/>
+        <ImageView
+            android:id="@+id/btnAddChat"
+            android:layout_width="20dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/add_chat2" />
 
+        <ImageView
+            android:id="@+id/btnSetting"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/setting" />
 
-</LinearLayout>
+    </LinearLayout>
+</layout>

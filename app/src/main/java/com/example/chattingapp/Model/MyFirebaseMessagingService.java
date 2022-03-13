@@ -104,7 +104,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private String getNikName() {
-        return SharedPreferenceUtil.getData(this, "nikName");
+        return SharedPreferenceUtil.getData("nikName");
     }
 
     private PendingIntent getRoomListIntent() {
