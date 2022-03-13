@@ -3,32 +3,21 @@ package com.example.chattingapp.View.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.chattingapp.ChattingApp;
-import com.example.chattingapp.Model.APIClient;
-import com.example.chattingapp.Model.APIInterface;
-import com.example.chattingapp.Model.DTO.Friends;
-import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.databinding.ActivityInfoBinding;
+import com.example.chattingapp.viewModel.InfoViewModel;
 
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class InfoActivity extends BaseActivity implements View.OnClickListener {
-
-    private final String TAG = getClass().getSimpleName();
+public class InfoActivity extends BaseActivity {
 
     private ActivityInfoBinding binding;
-    private Friends friends;
+    private InfoViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +26,22 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
 
         ChattingApp.setCurrentActivity(this);
 
-        binding = ActivityInfoBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_info);
 
-        binding.imgChat.setOnClickListener(this);
-        binding.btnCancle.setOnClickListener(this);
+        viewModel = new ViewModelProvider(this).get(InfoViewModel.class);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
 
-        friends = (Friends) getIntent().getExtras().getSerializable("data");
-        binding.txtNicName.setText(friends.getNikName());
+        binding.imgChat.setOnClickListener(view -> viewModel.findRoom());
+        binding.btnCancle.setOnClickListener(view -> finish());
 
+        init();
+    }
+
+    private void init(){
         setFullScreen();
         setBackgroundTopPadding(getStatusBarHeight(this));
-
+        viewModel.init();
     }
 
     private void setFullScreen() {
@@ -59,7 +52,7 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
         binding.imgBackground.setPadding(0, topPadding, 0, 0);
     }
 
-    public static int getStatusBarHeight(Context context) {
+    public int getStatusBarHeight(Context context) {
         int screenSizeType = (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK);
         int statusBar = 0;
 
@@ -73,70 +66,5 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
         return statusBar;
     }
 
-    private void findRoom() {
-        Call<ArrayList<Room>> call = getApiInterface().doFindRoom(friends.getId());
-        call.enqueue(new Callback<ArrayList<Room>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<Room>> call, @NonNull Response<ArrayList<Room>> response) {
-                if (response.isSuccessful()) {
-                    if (response.body() == null) {
-                        createRoom();
-                        return;
-                    }
-
-                    Room room = response.body().get(0);
-                    startActivity(RoomActivity.class, room);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ArrayList<Room>> call, @NonNull Throwable t) {
-                Log.d(TAG, t.getMessage());
-                call.cancel();
-            }
-        });
-    }
-
-    private void createRoom() {
-        ArrayList<Friends> member = new ArrayList<>();
-        member.add(friends);
-
-        Call<Room> call = getApiInterface().doCreateRoom(member);
-        call.enqueue(new Callback<Room>() {
-            @Override
-            public void onResponse(@NonNull Call<Room> call, @NonNull Response<Room> response) {
-                if (isSuccessResponse(response)) {
-                    Room room = response.body();
-                    startActivity(RoomActivity.class, room);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Room> call, @NonNull Throwable t) {
-                Log.d(TAG, t.getMessage());
-                call.cancel();
-            }
-        });
-    }
-
-    @NonNull
-    private APIInterface getApiInterface() {
-        return APIClient.getClient(getToken()).create(APIInterface.class);
-    }
-
-    private boolean isSuccessResponse(Response response) {
-        return response.code() == 200 && response.isSuccessful() && response.body() != null;
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.imgChat:
-                findRoom();
-                break;
-            case R.id.btnCancle:
-                finish();
-                break;
-        }
-    }
 }
+

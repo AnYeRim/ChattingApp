@@ -6,17 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.chattingapp.Model.APIClient;
-import com.example.chattingapp.Model.APIInterface;
 import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.Model.VO.ResponseData;
-import com.example.chattingapp.Utils.SharedPreferenceUtil;
+import com.example.chattingapp.Tool.BaseRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FriendRepository {
+public class FriendRepository extends BaseRepository {
 
     private final String TAG ="FriendRepository";
 
@@ -38,19 +36,6 @@ public class FriendRepository {
             }
         });
         return data;
-    }
-
-    public boolean isSuccessResponse(Response response) {
-        return response.code() == 200 && response.isSuccessful() && response.body() != null;
-    }
-
-    @NonNull
-    public APIInterface getApiInterface() {
-        return APIClient.getClient(getToken()).create(APIInterface.class);
-    }
-
-    public String getToken(){
-        return SharedPreferenceUtil.getData("token");
     }
 
 }
