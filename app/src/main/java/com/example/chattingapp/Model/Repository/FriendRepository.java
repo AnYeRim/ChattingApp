@@ -3,7 +3,6 @@ package com.example.chattingapp.Model.Repository;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.chattingapp.Model.DTO.Friends;
@@ -18,7 +17,7 @@ public class FriendRepository extends BaseRepository {
 
     private final String TAG ="FriendRepository";
 
-    public LiveData<ResponseData> doAddFriend(Friends friends) {
+    public MutableLiveData<ResponseData> doAddFriend(Friends friends) {
         final MutableLiveData<ResponseData> data = new MutableLiveData<>();
         Call<ResponseData> call = getApiInterface().doAddFriends(friends);
         call.enqueue(new Callback<ResponseData>() {

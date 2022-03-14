@@ -20,9 +20,9 @@ public class RoomRepository extends BaseRepository {
 
     private final String TAG ="RoomRepository";
 
-    public LiveData<ArrayList<Room>> findRoom(String friend_id) {
+    public LiveData<ArrayList<Room>> findRoom() {
         final MutableLiveData<ArrayList<Room>> data = new MutableLiveData<>();
-        Call<ArrayList<Room>> call = getApiInterface().doFindRoom(friend_id);
+        Call<ArrayList<Room>> call = getApiInterface().doFindRoom(null);
         call.enqueue(new Callback<ArrayList<Room>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<Room>> call, @NonNull Response<ArrayList<Room>> response) {
@@ -41,7 +41,31 @@ public class RoomRepository extends BaseRepository {
         return data;
     }
 
-    public LiveData<Room> createRoom(ArrayList<Friends> member) {
+    public MutableLiveData<Room> findRoom(String friend_id) {
+        final MutableLiveData<Room> data = new MutableLiveData<>();
+        Call<ArrayList<Room>> call = getApiInterface().doFindRoom(friend_id);
+        call.enqueue(new Callback<ArrayList<Room>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<Room>> call, @NonNull Response<ArrayList<Room>> response) {
+                if (response.isSuccessful()) {
+                    if(response.body() == null){
+                        data.setValue(null);
+                        return;
+                    }
+                    data.setValue(response.body().get(0));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<Room>> call, @NonNull Throwable t) {
+                Log.d(TAG, t.getMessage());
+                call.cancel();
+            }
+        });
+        return data;
+    }
+
+    public MutableLiveData<Room> createRoom(ArrayList<Friends> member) {
         final MutableLiveData<Room> data = new MutableLiveData<>();
         Call<Room> call = getApiInterface().doCreateRoom(member);
         call.enqueue(new Callback<Room>() {

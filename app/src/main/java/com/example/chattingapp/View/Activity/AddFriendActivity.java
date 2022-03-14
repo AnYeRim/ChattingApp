@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.chattingapp.ChattingApp;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Tool.BaseActivity;
-import com.example.chattingapp.viewModel.AddFriendViewModel;
 import com.example.chattingapp.databinding.ActivityAddFriendBinding;
+import com.example.chattingapp.viewModel.AddFriendViewModel;
 
 public class AddFriendActivity extends BaseActivity implements TextWatcher {
 
@@ -34,7 +34,21 @@ public class AddFriendActivity extends BaseActivity implements TextWatcher {
         binding.edtFriendName.addTextChangedListener(this);
 
         binding.btnBack.setOnClickListener(view -> finish());
-        binding.txtOK.setOnClickListener(view -> viewModel.addData(getFriendName(),getFriendPhone()));
+        binding.txtOK.setOnClickListener(view -> {
+            viewModel.addFriend(getFriendName(), getFriendPhone());
+            getAddFriendResult();
+        });
+
+    }
+
+    private void getAddFriendResult() {
+        viewModel.getResult().observe(this, result -> {
+            if (result.getAffectedRows() == 0) {
+                showMessage("해당 번호인 유저가 없습니다.");
+            } else {
+                finish();
+            }
+        });
     }
 
     @Override

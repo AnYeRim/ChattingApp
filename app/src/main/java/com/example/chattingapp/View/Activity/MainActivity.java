@@ -29,11 +29,10 @@ public class MainActivity extends BaseActivity{
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
 
-        viewModel.init();
         replaceFragment();
 
         binding.titleBar.btnAddChat.setOnClickListener(view -> {/*TODO 채팅방 만들기*/});
-        binding.titleBar.btnAddFriends.setOnClickListener(view -> viewModel.onClickAddFriends());
+        binding.titleBar.btnAddFriends.setOnClickListener(view -> startActivity(AddFriendActivity.class));
 
         binding.bottomTab.setOnItemSelectedListener(item -> viewModel.onSelectedBottomTab(item.getTitle().toString()));
 

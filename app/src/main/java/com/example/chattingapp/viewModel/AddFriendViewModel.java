@@ -1,16 +1,14 @@
 package com.example.chattingapp.viewModel;
 
 import android.graphics.Color;
-import android.widget.Toast;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.chattingapp.ChattingApp;
 import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.Model.Repository.FriendRepository;
+import com.example.chattingapp.Model.VO.ResponseData;
 
 public class AddFriendViewModel extends ViewModel {
 
@@ -19,37 +17,33 @@ public class AddFriendViewModel extends ViewModel {
     private MutableLiveData<Boolean> enabledOK;
     private MutableLiveData<Integer> color;
 
+    private MutableLiveData<ResponseData> result;
+
+    public AddFriendViewModel() {
+        repository = new FriendRepository();
+        result = new MutableLiveData<>();
+    }
+
     public LiveData<Boolean> getEnabledOK() {
         if (enabledOK == null) {
-            enabledOK = new MutableLiveData<>();
+            enabledOK = new MutableLiveData<>(false);
         }
         return enabledOK;
     }
 
     public LiveData<Integer> getColor() {
         if (color == null) {
-            color = new MutableLiveData<>();
+            color = new MutableLiveData<>(Color.LTGRAY);
         }
         return color;
     }
 
-    public FriendRepository getRepository() {
-        if (repository == null) {
-            repository = new FriendRepository();
-        }
-
-        return repository;
+    public LiveData<ResponseData> getResult() {
+        return result;
     }
 
-    public void addData(String friendName, String friendPhone) {
-        getRepository().doAddFriend(toFriends(friendName, friendPhone)).observe(
-                (LifecycleOwner) ChattingApp.getCurrentActivity(), result -> {
-            if (result.getAffectedRows() != 0) {
-                ChattingApp.getCurrentActivity().finish();
-            } else {
-                Toast.makeText(ChattingApp.getCurrentActivity(), "해당 번호인 유저가 없습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void addFriend(String friendName, String friendPhone) {
+        result = repository.doAddFriend(toFriends(friendName, friendPhone));
     }
 
     public Friends toFriends(String friendName, String friendPhone) {

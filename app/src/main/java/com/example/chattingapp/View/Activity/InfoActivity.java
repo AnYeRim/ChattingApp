@@ -1,7 +1,5 @@
 package com.example.chattingapp.View.Activity;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.chattingapp.ChattingApp;
+import com.example.chattingapp.Model.DTO.Friends;
 import com.example.chattingapp.R;
 import com.example.chattingapp.Tool.BaseActivity;
 import com.example.chattingapp.databinding.ActivityInfoBinding;
@@ -21,7 +20,6 @@ public class InfoActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         ChattingApp.setCurrentActivity(this);
@@ -32,38 +30,45 @@ public class InfoActivity extends BaseActivity {
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
 
-        binding.imgChat.setOnClickListener(view -> viewModel.findRoom());
-        binding.btnCancle.setOnClickListener(view -> finish());
-
         init();
+
+        binding.imgChat.setOnClickListener(view -> {
+            viewModel.findRoom(getFriends().getId());
+            getFindRoomResult();
+        });
+        binding.btnCancle.setOnClickListener(view -> finish());
     }
 
-    private void init(){
+    private void init() {
         setFullScreen();
-        setBackgroundTopPadding(getStatusBarHeight(this));
-        viewModel.init();
+
+        binding.txtNicName.setText(getFriends().getNikName());
+        viewModel.setBackgroundTopPadding(this);
+    }
+
+    private void getFindRoomResult() {
+        viewModel.getFindRoom().observe(this, room -> {
+                    if (room == null) {
+                        viewModel.createRoom(getFriends());
+                        getCreateRoomResult();
+                        return;
+                    }
+                    startActivity(RoomActivity.class, room);
+                }
+        );
+    }
+
+    private void getCreateRoomResult() {
+        viewModel.getCreateRoom().observe(this, room -> startActivity(RoomActivity.class, room)
+        );
+    }
+
+    private Friends getFriends() {
+        return (Friends) getIntent().getExtras().getSerializable("data");
     }
 
     private void setFullScreen() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
-
-    private void setBackgroundTopPadding(int topPadding) {
-        binding.imgBackground.setPadding(0, topPadding, 0, 0);
-    }
-
-    public int getStatusBarHeight(Context context) {
-        int screenSizeType = (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK);
-        int statusBar = 0;
-
-        if (screenSizeType != Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-            int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-
-            if (resourceId > 0) {
-                statusBar = context.getResources().getDimensionPixelSize(resourceId);
-            }
-        }
-        return statusBar;
     }
 
 }

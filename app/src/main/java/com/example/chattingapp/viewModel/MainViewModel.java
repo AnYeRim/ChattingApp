@@ -5,26 +5,23 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.example.chattingapp.Tool.BaseViewModel;
-import com.example.chattingapp.View.Activity.AddFriendActivity;
 import com.example.chattingapp.View.Fragment.EtcFragment;
 import com.example.chattingapp.View.Fragment.FriendsFragment;
 import com.example.chattingapp.View.Fragment.RoomListFragment;
 
-public class MainViewModel extends BaseViewModel {
+public class MainViewModel extends ViewModel {
 
     private MutableLiveData<Fragment> fragment;
     private MutableLiveData<String> title;
     private MutableLiveData<Integer> visibilityAddChat, visibilityAddFriends;
 
-    public void init(){
-        if(fragment == null){
-            fragment = new MutableLiveData<>();
-            title = new MutableLiveData<>();
-            visibilityAddChat = new MutableLiveData<>();
-            visibilityAddFriends = new MutableLiveData<>();
-        }
+    public MainViewModel() {
+        fragment = new MutableLiveData<>();
+        title = new MutableLiveData<>();
+        visibilityAddChat = new MutableLiveData<>();
+        visibilityAddFriends = new MutableLiveData<>();
     }
 
     public LiveData<String> getTitle() {
@@ -41,10 +38,6 @@ public class MainViewModel extends BaseViewModel {
 
     public LiveData<Fragment> getFragment() {
         return fragment;
-    }
-
-    public void onClickAddFriends() {
-        startActivity(AddFriendActivity.class);
     }
 
     public boolean onSelectedBottomTab(String title) {
