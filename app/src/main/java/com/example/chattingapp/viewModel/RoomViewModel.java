@@ -25,7 +25,7 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class RoomViewModel extends ViewModel {
-
+// TODO 보내는 쪽은 정상적으로 1번씩 소켓 응답 받는데, 받는 쪽에서 2번씩 소켓 응답을 받아 오류 발생
     private final String TAG ="RoomViewModel";
 
     private RoomRepository repository;
