@@ -19,7 +19,7 @@ public class SplashActivity extends BaseActivity {
         Handler handler = new Handler();
         handler.postDelayed(() -> {
             if (isEmptyToken()) {
-                startActivity(LoginActivity.class);
+                startActivity(LoginJoinActivity.class);
             }else {
                 startActivity(MainActivity.class);
             }

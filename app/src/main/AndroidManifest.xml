@@ -29,7 +29,7 @@
             android:name=".View.Activity.SplashActivity"
             android:exported="false" />
         <activity
-            android:name=".View.Activity.LoginActivity"
+            android:name=".View.Activity.LoginJoinActivity"
             android:exported="false" />
         <activity
             android:name=".View.Activity.MainActivity"
