@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.chattingapp.Model.DTO.Friends;
-import com.example.chattingapp.Model.DTO.Message;
 import com.example.chattingapp.Model.DTO.Room;
 import com.example.chattingapp.Tool.BaseRepository;
 
@@ -86,45 +85,4 @@ public class RoomRepository extends BaseRepository {
         return data;
     }
 
-    public MutableLiveData<Room> getRoom(int id) {
-        final MutableLiveData<Room> data = new MutableLiveData<>();
-        Call<Room> call = getApiInterface().doGetRoom(id);
-
-        call.enqueue(new Callback<Room>() {
-            @Override
-            public void onResponse(@NonNull Call<Room> call, @NonNull Response<Room> response) {
-                if (isSuccessResponse(response)) {
-                    data.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Room> call, @NonNull Throwable t) {
-                Log.e(TAG, t.getMessage());
-                call.cancel();
-            }
-        });
-        return data;
-    }
-
-    public MutableLiveData<ArrayList<Message>> getMessage(int id) {
-        final MutableLiveData<ArrayList<Message>> data = new MutableLiveData<>();
-        Call<ArrayList<Message>> call = getApiInterface().doGetMessage(id);
-
-        call.enqueue(new Callback<ArrayList<Message>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<Message>> call, @NonNull Response<ArrayList<Message>> response) {
-                if (isSuccessResponse(response)) {
-                    data.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ArrayList<Message>> call, @NonNull Throwable t) {
-                Log.e(TAG, t.getMessage());
-                call.cancel();
-            }
-        });
-        return data;
-    }
 }
